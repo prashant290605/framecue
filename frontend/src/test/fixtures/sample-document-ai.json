@@ -1,7 +1,7 @@
 {
  "ai_evaluations": {
   "C001-0009650-0037020": {
-   "cache_key": "3fdd4b12788e15dd4b385d88f165cd658dab8462e8ff9aac2d048d73dec6996f",
+   "cache_key": "cd6e9a0357f6d75914d78a3ba721507fd169cecfe21961645f04a0b66102f51e",
    "cliffhanger_event_ids": [
     "E001-S02-0017"
    ],
@@ -30,7 +30,7 @@
    "why_it_works": "Clear conflict between two people with an open ending."
   },
   "C001-0025750-0073460": {
-   "cache_key": "e265e068c74e1dcfdf4b375b0e4b192fcc2dd0aa9bc36020d21218c994502556",
+   "cache_key": "bf77c9a981bb0c4564623d5ba14ee2d752c99bf6f8a65f70708f17ef4c504fee",
    "cliffhanger_event_ids": [
     "E001-S03-0032"
    ],
@@ -59,7 +59,7 @@
    "why_it_works": "Clear conflict between two people with an open ending."
   },
   "C001-0033260-0056690": {
-   "cache_key": "6acc56332f8188975cd1dfb9b5488dc910e5d77362f2df3bb73a1ca3fdb6b29e",
+   "cache_key": "40a163c05428a9ad2187fecbd7a1bfa7f6a8a317ed61deeda03b2eac51eaecbc",
    "cliffhanger_event_ids": [
     "E001-S03-0025"
    ],
@@ -88,7 +88,7 @@
    "why_it_works": "Clear conflict between two people with an open ending."
   },
   "C001-0049760-0073460": {
-   "cache_key": "d71f6056b3b62be23c3e90abf2d006cf36e63d1e5ac655bd609e1e02bb5608a3",
+   "cache_key": "5f290e9e0c062ccc6dd58c7d88d4f644b4d1bd9efede7aef39977dcd232ea2b8",
    "cliffhanger_event_ids": [
     "E001-S03-0032"
    ],
@@ -117,7 +117,7 @@
    "why_it_works": "Clear conflict between two people with an open ending."
   },
   "C001-0053030-0073460": {
-   "cache_key": "ada3b6c11cb6ec61115e8bf79adc3871e16b9751d63d094ad8d8db4169330aa9",
+   "cache_key": "ea2b714fb2e07c9ca819d4602e7fec04b3d0f7b790f74d0bdb73d1496ef3d1cd",
    "cliffhanger_event_ids": [
     "E001-S03-0032"
    ],
@@ -146,7 +146,7 @@
    "why_it_works": "Clear conflict between two people with an open ending."
   },
   "C002-0000000-0034120": {
-   "cache_key": "c32d6f11ff7399594ab7c210554f24815f8490e65f532f67640d344f1abc4a86",
+   "cache_key": "7409c9d058d8c35e28c7bb52a387d2ee207af86a0def794587b31260dfc9c633",
    "cliffhanger_event_ids": [
     "E002-S02-0013"
    ],
@@ -175,7 +175,7 @@
    "why_it_works": "Clear conflict between two people with an open ending."
   },
   "C002-0006920-0064650": {
-   "cache_key": "4d42fe05455fe1fcf62526fb8fb76f85b4b160106add2996550f93ffa407e0a4",
+   "cache_key": "68ff6663fd908624618a50b4584cada0a440edef3c215ab6f8fba9b8d27447ff",
    "cliffhanger_event_ids": [
     "E002-S03-0028"
    ],
@@ -204,7 +204,7 @@
    "why_it_works": "Clear conflict between two people with an open ending."
   },
   "C002-0009770-0064650": {
-   "cache_key": "142a93e8d4a90c8ee337542d847fed71b257cc4de028877eb1137a3681310008",
+   "cache_key": "ca410f49131ca434173feb365038e65cd23d0372968ac2974a5b021afb42d78e",
    "cliffhanger_event_ids": [
     "E002-S03-0028"
    ],
@@ -233,7 +233,7 @@
    "why_it_works": "Clear conflict between two people with an open ending."
   },
   "C002-0015510-0064650": {
-   "cache_key": "407474415fcf603d702c93228d9bb591bc67c0e01d3deef66119ed9dcfcdbef5",
+   "cache_key": "21a8011f18d5b2eb9a072aa6e107fa654d1673d85f2bf6416cd8a61b1e333810",
    "cliffhanger_event_ids": [
     "E002-S03-0028"
    ],
@@ -262,7 +262,7 @@
    "why_it_works": "Clear conflict between two people with an open ending."
   },
   "C002-0018770-0064650": {
-   "cache_key": "b637fbee40a18c5c54a67dfac101098a8ce9d9bda7fec2dba112bf9041a8f0bb",
+   "cache_key": "0c5b9c9317bcace14e62007632a6ab1ff2b8e93e9a50a05ed5527a83bf6f1f12",
    "cliffhanger_event_ids": [
     "E002-S03-0028"
    ],
@@ -3257,7 +3257,7 @@
    "ai_evaluated_count": 5,
    "best_ai_candidate_id": "C001-0053030-0073460",
    "candidate_count": 12,
-   "continuity_notes": "Fictional sample written for PromoLens. Not derived from any real screenplay.",
+   "continuity_notes": "Fictional sample written for FrameCue. Not derived from any real screenplay.",
    "duration_ms": 73460,
    "duration_timestamp": "01:13.46",
    "episode_number": 1,
@@ -3294,7 +3294,7 @@
    "ai_evaluated_count": 5,
    "best_ai_candidate_id": "C002-0018770-0064650",
    "candidate_count": 16,
-   "continuity_notes": "Fictional sample written for PromoLens. Not derived from any real screenplay.",
+   "continuity_notes": "Fictional sample written for FrameCue. Not derived from any real screenplay.",
    "duration_ms": 64650,
    "duration_timestamp": "01:04.65",
    "episode_number": 2,
@@ -3331,7 +3331,7 @@
    "ai_evaluated_count": 0,
    "best_ai_candidate_id": null,
    "candidate_count": 16,
-   "continuity_notes": "Fictional sample written for PromoLens. Not derived from any real screenplay.",
+   "continuity_notes": "Fictional sample written for FrameCue. Not derived from any real screenplay.",
    "duration_ms": 64740,
    "duration_timestamp": "01:04.74",
    "episode_number": 3,
@@ -4467,7 +4467,7 @@
  "notes": [
   "AI scores (ai_weighted_v1, 0-100) and heuristic priorities (heuristic_priority_v1, 0-1) are separate scoring systems; never rank them together.",
   "Only candidates listed in ai_evaluations have AI judgements; nothing is synthesized.",
-  "This analysis made no model API calls. The uploaded file is processed by the hosting platform for this request and is not stored by PromoLens.",
+  "This analysis made no model API calls. The uploaded file is processed by the hosting platform for this request and is not stored by FrameCue.",
   "Times are milliseconds from episode start; clips are half-open [start, end)."
  ],
  "schema_version": "promolens-analysis-v1",
@@ -4481,8 +4481,8 @@
    "files": 3,
    "kind": "files",
    "name": "upload",
-   "sha256": "7328e713cc1c78e5b7f302d3b3e89fcc0c1211fa587c631988df705f6ddddec6",
-   "size_bytes": 10973
+   "sha256": "d79b1de982c6ff08987fc7d34ff7e3ba25383bb5ceba1d960ad9f3e98b6e980e",
+   "size_bytes": 10970
   },
   "live_ai_calls": 0,
   "parse": {
@@ -4494,10 +4494,10 @@
   },
   "scenes": 9,
   "timings_ms": {
-   "ai_cache_lookup": 3,
-   "candidates": 66,
-   "parse": 4,
-   "total": 74
+   "ai_cache_lookup": 6,
+   "candidates": 52,
+   "parse": 5,
+   "total": 64
   },
   "versions": {
    "baseline": "heuristic_baseline_v1",

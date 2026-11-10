@@ -1,7 +1,8 @@
 import {
+  BadgeCheck,
   ChevronDown,
-  CircleCheck,
   CircleAlert,
+  CircleCheck,
   Download,
   FileJson,
   FileSpreadsheet,
@@ -12,13 +13,12 @@ import {
   Plus,
   Search,
   SlidersHorizontal,
-  Sparkles,
   Trash2,
   X,
 } from "lucide-react";
 import * as React from "react";
 import type { ViewName } from "@/api/types";
-import { Brand } from "@/components/Brand";
+import { Brand, BrandMark } from "@/components/Brand";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input, NativeSelect } from "@/components/ui/input";
@@ -57,14 +57,17 @@ export function TopBar({ entries }: { entries: Entry[] }) {
   const { state } = useApp();
   const doc = state.doc!;
   return (
-    <header className="flex h-14 shrink-0 items-center gap-3 border-b border-line bg-paper px-4 sm:px-5">
-      <Brand compact />
-      <span className="hidden h-5 w-px bg-line sm:block" aria-hidden />
+    <header className="flex h-14 shrink-0 items-center gap-3 border-b border-line bg-surface px-4 sm:gap-4 sm:px-5">
+      <span className="flex items-center">
+        <Brand size="sm" className="max-sm:hidden" />
+        <BrandMark className="size-[22px] sm:hidden" />
+      </span>
+      <span className="h-6 w-px bg-line" aria-hidden />
       <div className="min-w-0 flex-1">
-        <h1 className="truncate text-[13.5px] font-semibold text-ink" title={state.fileName}>
+        <h1 className="truncate text-[14px] leading-tight font-semibold text-ink" title={state.fileName}>
           {state.fileName}
         </h1>
-        <p className="hidden truncate text-[11.5px] text-muted sm:block">
+        <p className="mt-0.5 hidden truncate text-[12px] leading-tight text-muted sm:block">
           {doc.summary.episodes} episodes · {doc.summary.candidates} candidates · analyzed{" "}
           {new Date(doc.summary.analyzed_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}
         </p>
@@ -86,36 +89,40 @@ function CoverageChip() {
       <PopoverTrigger asChild>
         <button
           type="button"
-          className="hidden items-center gap-1.5 rounded-md border border-line bg-surface px-2.5 py-1 text-[12px] text-ink-soft shadow-card hover:bg-sunken md:inline-flex"
+          className="hidden h-8 items-center gap-2 rounded-md border border-line bg-surface px-2.5 text-[12px] font-medium text-muted transition-colors hover:border-line-strong hover:bg-canvas md:inline-flex"
         >
-          <Sparkles className="size-3.5 text-amber-ink" />
-          AI reviewed <span className="font-semibold text-ink tabular">{cov.ai_evaluated}</span>
-          <span className="text-faint tabular">/ {cov.total_candidates}</span>
+          <BadgeCheck className="size-4 text-accent" />
+          AI reviewed
+          <span className="font-semibold text-ink tabular">
+            {cov.ai_evaluated}
+            <span className="font-medium text-muted"> / {cov.total_candidates}</span>
+          </span>
+          <CoverageBar value={cov.candidate_coverage} />
           <ChevronDown className="size-3.5 text-faint" />
         </button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80">
-        <p className="text-[13px] font-semibold">AI evaluation coverage</p>
-        <p className="mt-1 text-[12.5px] text-muted">
+        <p className="text-[14px] font-semibold text-ink">AI evaluation coverage</p>
+        <p className="mt-1 text-[12.5px] leading-relaxed text-muted">
           {cov.complete
             ? "Every candidate has a validated AI review."
             : `${cov.ai_evaluated} of ${cov.total_candidates} candidates (${pct}%) in ${cov.episodes_with_ai} of ${cov.total_episodes} episodes have a validated AI review. AI rankings are provisional.`}
         </p>
-        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 text-[12.5px]">
+        <dl className="mt-3 grid grid-cols-[1fr_auto] gap-x-4 gap-y-2 border-t border-line pt-3 text-[12.5px]">
           <dt className="text-muted">Source</dt>
-          <dd className="text-right text-ink-soft">
+          <dd className="text-right font-medium text-ink">
             {cov.cache.source === "uploaded_bundle" ? "Uploaded bundle" : cov.cache.source === "local_cache" ? "Local cache" : "None"}
           </dd>
           <dt className="text-muted">Bundle entries used</dt>
-          <dd className="text-right tabular">{cov.cache.used} / {cov.cache.entries_scanned}</dd>
+          <dd className="text-right font-medium text-ink tabular">{cov.cache.used} / {cov.cache.entries_scanned}</dd>
           <dt className="text-muted">Older prompt (ignored)</dt>
-          <dd className="text-right tabular">{cov.cache.stale_prompt_version}</dd>
+          <dd className="text-right font-medium text-ink tabular">{cov.cache.stale_prompt_version}</dd>
           <dt className="text-muted">Other profile or input</dt>
-          <dd className="text-right tabular">{cov.cache.other_profile_or_input}</dd>
+          <dd className="text-right font-medium text-ink tabular">{cov.cache.other_profile_or_input}</dd>
           <dt className="text-muted">Failed validation</dt>
-          <dd className="text-right tabular">{cov.cache.invalid_on_revalidation.length}</dd>
+          <dd className="text-right font-medium text-ink tabular">{cov.cache.invalid_on_revalidation.length}</dd>
           <dt className="text-muted">Model</dt>
-          <dd className="truncate text-right text-ink-soft" title={cov.profile.model}>{cov.profile.model}</dd>
+          <dd className="max-w-44 truncate text-right font-medium text-ink" title={cov.profile.model}>{cov.profile.model}</dd>
         </dl>
       </PopoverContent>
     </Popover>
@@ -136,7 +143,7 @@ function StorageChip() {
     );
   return (
     <span
-      className="hidden items-center gap-1.5 text-[12px] text-muted lg:inline-flex"
+      className="hidden items-center gap-1.5 text-[12px] font-medium text-muted lg:inline-flex"
       title={s.state === "failed" ? s.message : "Stored locally in IndexedDB; may be cleared by the browser."}
       role="status"
     >
@@ -157,7 +164,7 @@ function ExportMenu({ entries }: { entries: Entry[] }) {
           <Download /> <span className="hidden sm:inline">Export</span>
         </Button>
       </MenuTrigger>
-      <MenuContent className="w-72">
+      <MenuContent className="w-80">
         <MenuLabel>Ranked list</MenuLabel>
         <MenuItem
           onSelect={() =>
@@ -178,7 +185,7 @@ function ExportMenu({ entries }: { entries: Entry[] }) {
           <FileJson /> Analysis document (JSON, re-importable)
         </MenuItem>
         <MenuSeparator />
-        <p className="px-2 py-1.5 text-[11.5px] leading-snug text-muted">
+        <p className="px-2.5 py-1.5 text-[12px] leading-snug text-muted">
           Exports can contain confidential screenplay text and AI notes. Share them accordingly.
         </p>
       </MenuContent>
@@ -195,7 +202,7 @@ function MoreMenu() {
     try {
       const check = validateDocument(JSON.parse(await file.text()));
       if (!check.ok) {
-        dispatch({ type: "notice", tone: "error", text: `Not a PromoLens analysis: ${check.reason}.` });
+        dispatch({ type: "notice", tone: "error", text: `Not a FrameCue analysis: ${check.reason}.` });
         return;
       }
       load(check.doc, check.doc.summary.input.name, "import");
@@ -208,7 +215,7 @@ function MoreMenu() {
     <>
       <Menu>
         <MenuTrigger asChild>
-          <Button size="icon-sm" variant="ghost" aria-label="Analysis menu">
+          <Button size="icon-sm" variant="ghost" aria-label="Analysis menu" className="-mr-1.5">
             <MoreHorizontal />
           </Button>
         </MenuTrigger>
@@ -228,7 +235,7 @@ function MoreMenu() {
             <FolderOpen /> Open saved analysis (.json)
           </MenuItem>
           <MenuSeparator />
-          <MenuItem className="text-no data-[highlighted]:bg-no-soft [&_svg]:text-no" onSelect={() => setConfirm(true)}>
+          <MenuItem className="text-no data-[highlighted]:bg-no-soft [&_svg]:!text-no" onSelect={() => setConfirm(true)}>
             <Trash2 /> Delete saved analysis
           </MenuItem>
         </MenuContent>
@@ -239,7 +246,7 @@ function MoreMenu() {
           title="Delete saved analysis?"
           description="This removes the analysis, your decisions and notes from this browser. Exported files are not affected. This cannot be undone."
         >
-          <div className="mt-4 flex justify-end gap-2">
+          <div className="mt-6 flex justify-end gap-2">
             <DialogClose asChild>
               <Button>Cancel</Button>
             </DialogClose>
@@ -267,8 +274,8 @@ export function Toolbar({ shown }: { shown: number }) {
   const { doc, view, filters, query } = state;
   const counts = { ai: doc!.views.ai.primaries, coverage: doc!.views.coverage.primaries };
   return (
-    <div className="space-y-2.5 border-b border-line px-4 pt-3 pb-3">
-      <div role="tablist" aria-label="Ranking" className="grid grid-cols-2 rounded-md bg-sunken p-0.5">
+    <div className="space-y-3 border-b border-line px-4 pt-4 pb-3">
+      <div role="tablist" aria-label="Ranking" className="grid h-9 grid-cols-2 rounded-lg bg-subtle p-1">
         {(["ai", "coverage"] as ViewName[]).map((v) => (
           <button
             key={v}
@@ -277,23 +284,23 @@ export function Toolbar({ shown }: { shown: number }) {
             aria-selected={view === v}
             onClick={() => dispatch({ type: "view", view: v })}
             className={cn(
-              "flex h-7 items-center justify-center gap-1.5 rounded-[5px] text-[12.5px] font-medium transition-colors",
-              view === v ? "bg-surface text-ink shadow-card" : "text-muted hover:text-ink",
+              "flex items-center justify-center gap-2 rounded-md text-[13px] font-semibold transition-[color]",
+              view === v ? "bg-surface text-ink shadow-[0_1px_2px_rgb(20_34_56/0.08)] ring-1 ring-line" : "text-muted hover:text-ink",
             )}
           >
-            {v === "ai" ? <><Sparkles className="size-3.5 text-amber-ink" /> AI-reviewed</> : "Full show"}
-            <span className="text-[11px] font-normal text-faint tabular">{counts[v]}</span>
+            {v === "ai" ? "AI-reviewed" : "Full show"}
+            <span className={cn("text-[11px] font-semibold tabular", view === v ? "text-accent" : "text-faint")}>{counts[v]}</span>
           </button>
         ))}
       </div>
       <div className="flex gap-2">
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-faint" aria-hidden />
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-faint" aria-hidden />
           <Input
             type="search"
             aria-label="Search candidates"
             placeholder="Search lines, speakers, IDs"
-            className="pl-8"
+            className="pl-9"
             value={query}
             onChange={(e) => dispatch({ type: "query", query: e.target.value })}
           />
@@ -316,10 +323,10 @@ function FilterPopover() {
         <Button aria-label={`Filters${count ? ` (${count} active)` : ""}`}>
           <SlidersHorizontal />
           <span className="hidden sm:inline">Filters</span>
-          {count > 0 && <Badge tone="ink" className="px-1 leading-4">{count}</Badge>}
+          {count > 0 && <Badge tone="solid" className="h-[18px] min-w-[18px] justify-center rounded-full px-1">{count}</Badge>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-80 space-y-3">
+      <PopoverContent align="end" className="w-80 space-y-3.5">
         <Field label="Episode">
           <NativeSelect
             value={filters.episode ?? ""}
@@ -362,11 +369,11 @@ function FilterPopover() {
             <option value="rejected">Rejected</option>
           </NativeSelect>
         </Field>
-        <label className="flex items-center gap-2 text-[13px] text-ink-soft">
-          <input type="checkbox" className="size-4 accent-[var(--color-amber)]" checked={filters.alternatives} onChange={(e) => set({ alternatives: e.target.checked })} />
+        <label className="flex items-center gap-2.5 text-[13px] font-medium text-ink">
+          <input type="checkbox" className="size-4 accent-[var(--color-accent)]" checked={filters.alternatives} onChange={(e) => set({ alternatives: e.target.checked })} />
           Include alternative cuts
         </label>
-        <div className="flex items-center justify-between border-t border-line pt-3">
+        <div className="-mx-4 flex items-center justify-between border-t border-line px-4 pt-3">
           <span className="text-[12px] text-muted">{view === "ai" ? "AI-reviewed view" : "Full-show view"}</span>
           <Button size="sm" variant="ghost" onClick={() => dispatch({ type: "filters", filters: DEFAULT_FILTERS })} disabled={!count}>
             Clear filters
@@ -380,10 +387,10 @@ function FilterPopover() {
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   const id = React.useId();
   return (
-    <div className="space-y-1">
-      <label htmlFor={id} className="text-[12px] font-medium text-ink-soft">{label}</label>
+    <div className="space-y-1.5">
+      <label htmlFor={id} className="text-[12px] font-semibold text-ink-soft">{label}</label>
       {React.isValidElement(children) ? React.cloneElement(children as React.ReactElement<{ id?: string }>, { id }) : children}
-      {hint && <p className="text-[11.5px] text-faint">{hint}</p>}
+      {hint && <p className="text-[12px] text-muted">{hint}</p>}
     </div>
   );
 }
@@ -399,18 +406,26 @@ function ActiveFilters({ filters, shown }: { filters: Filters; shown: number }) 
   if (filters.alternatives) chips.push(["With alternatives", { alternatives: false }]);
   return (
     <div className="flex min-h-5 flex-wrap items-center gap-1.5 text-[12px] text-muted">
-      <span className="tabular" aria-live="polite">{shown} shown</span>
+      <span className="mr-0.5 font-medium tabular" aria-live="polite">{shown} shown</span>
       {chips.map(([label, reset]) => (
         <button
           key={label}
           type="button"
           onClick={() => dispatch({ type: "filters", filters: { ...filters, ...reset } })}
-          className="inline-flex items-center gap-1 rounded-sm bg-sunken px-1.5 py-px text-[11.5px] text-ink-soft hover:bg-line"
+          className="inline-flex h-6 items-center gap-1 rounded-md border border-line bg-surface pr-1.5 pl-2 text-[12px] font-medium text-ink-soft hover:border-line-strong hover:text-ink"
           aria-label={`Remove filter ${label}`}
         >
           {label} <X className="size-3" />
         </button>
       ))}
     </div>
+  );
+}
+
+function CoverageBar({ value }: { value: number }) {
+  return (
+    <span className="h-1 w-10 overflow-hidden rounded-full bg-subtle" aria-hidden>
+      <span className="block h-full rounded-full bg-accent" style={{ width: `${Math.max(2, Math.min(100, value * 100))}%` }} />
+    </span>
   );
 }

@@ -31,10 +31,10 @@ export const Timeline = React.memo(function Timeline({ model, evidence, activeId
 
   return (
     <figure aria-label="Screenplay timeline around the clip" className="select-none">
-      <div className="grid grid-cols-[64px_1fr] gap-x-3">
+      <div className="grid grid-cols-[60px_1fr] gap-x-3 sm:grid-cols-[72px_1fr]">
         {/* ruler */}
         <div />
-        <div className="relative h-5 text-[10px] text-faint tabular" aria-hidden>
+        <div className="relative mb-1.5 h-4 text-[11px] font-medium text-muted tabular" aria-hidden>
           {model.ticks.map((t, i) => (
             <span key={t} className={cn("absolute top-0 -translate-x-1/2", i % 2 === 1 && "max-sm:hidden")} style={{ left: pct(t) }}>
               {axisLabel(t)}
@@ -42,34 +42,26 @@ export const Timeline = React.memo(function Timeline({ model, evidence, activeId
           ))}
         </div>
 
-        {/* lanes */}
+        {/* lane labels */}
         <div className="flex flex-col" aria-hidden>
           {model.lanes.map(({ lane, rows }) => (
-            <div
-              key={lane}
-              className="flex items-center text-[11px] font-medium text-muted"
-              style={{ height: rows * (ROW + ROW_GAP) + 6 }}
-            >
+            <div key={lane} className="flex items-center text-[12px] font-semibold text-ink-soft" style={{ height: rows * (ROW + ROW_GAP) + 7 }}>
               {LANE_LABELS[lane]}
             </div>
           ))}
         </div>
-        <div className="relative overflow-hidden rounded-md border border-line bg-[#efebe4]">
+
+        {/* track */}
+        <div className="relative overflow-hidden rounded-md bg-canvas ring-1 ring-line">
+          {model.ticks.map((t) => (
+            <div key={t} className="absolute inset-y-0 w-px bg-line" style={{ left: pct(t) }} aria-hidden />
+          ))}
           {/* clip, hook and ending windows */}
           <div className="absolute inset-y-0 bg-surface" style={{ left: pct(model.clip[0]), width: width(...model.clip) }} />
-          <div
-            className="absolute inset-y-0 bg-amber-soft/70"
-            style={{ left: pct(model.hook[0]), width: width(...model.hook) }}
-          />
-          <div
-            className="absolute inset-y-0 bg-amber-soft/70"
-            style={{ left: pct(model.ending[0]), width: width(...model.ending) }}
-          />
-          <div className="absolute inset-y-0 w-px bg-amber" style={{ left: pct(model.clip[0]) }} />
-          <div className="absolute inset-y-0 w-px bg-amber" style={{ left: pct(model.clip[1]) }} />
-          {model.ticks.map((t) => (
-            <div key={t} className="absolute inset-y-0 w-px bg-line/70" style={{ left: pct(t) }} aria-hidden />
-          ))}
+          <div className="absolute inset-y-0 bg-accent-soft/80" style={{ left: pct(model.hook[0]), width: width(...model.hook) }} />
+          <div className="absolute inset-y-0 bg-accent-soft/80" style={{ left: pct(model.ending[0]), width: width(...model.ending) }} />
+          <div className="absolute inset-y-0 w-[2px] -translate-x-1/2 bg-accent" style={{ left: pct(model.clip[0]) }} />
+          <div className="absolute inset-y-0 w-[2px] -translate-x-1/2 bg-accent" style={{ left: pct(model.clip[1]) }} />
 
           <div className="relative">
             {model.lanes.map(({ lane, rows, events }) => (
@@ -77,8 +69,8 @@ export const Timeline = React.memo(function Timeline({ model, evidence, activeId
                 key={lane}
                 role="group"
                 aria-label={`${LANE_LABELS[lane]} events`}
-                className="relative border-b border-line/60 last:border-b-0"
-                style={{ height: rows * (ROW + ROW_GAP) + 6 }}
+                className="relative border-b border-line/70 last:border-b-0"
+                style={{ height: rows * (ROW + ROW_GAP) + 7 }}
               >
                 {events.map((p) => (
                   <EventBar
@@ -97,32 +89,45 @@ export const Timeline = React.memo(function Timeline({ model, evidence, activeId
           </div>
         </div>
 
-        {/* window legend */}
+        {/* clip in and out points */}
         <div />
-        <div className="relative mt-1.5 h-4 text-[10.5px] font-medium tabular" aria-hidden>
-          <span className="absolute whitespace-nowrap text-amber-ink" style={{ left: pct(model.clip[0]) }}>
-            ▲ {timecode(model.clip[0])}
+        <div className="relative mt-2 h-5 text-[11px] font-bold tabular" aria-hidden>
+          <span className="absolute flex h-5 items-center rounded-[4px] bg-accent px-1.5 whitespace-nowrap text-white" style={{ left: pct(model.clip[0]) }}>
+            <span className="mr-1 max-sm:hidden">In</span>{timecode(model.clip[0])}
           </span>
-          <span className="absolute -translate-x-full whitespace-nowrap text-amber-ink" style={{ left: pct(model.clip[1]) }}>
-            {timecode(model.clip[1])} ▲
+          <span
+            className="absolute flex h-5 -translate-x-full items-center rounded-[4px] bg-accent px-1.5 whitespace-nowrap text-white"
+            style={{ left: pct(model.clip[1]) }}
+          >
+            <span className="mr-1 max-sm:hidden">Out</span>{timecode(model.clip[1])}
           </span>
         </div>
       </div>
-      <figcaption className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11.5px] text-muted sm:pl-[76px]">
-        <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-4 rounded-[2px] border border-amber bg-surface" /> Clip
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-4 rounded-[2px] bg-amber-soft" /> Hook (first 3 s) · Ending (last 5 s)
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-4 rounded-[2px] bg-ev-dialogue ring-2 ring-amber ring-offset-1" /> AI evidence
-        </span>
-        <span>Context ±10 s · screenplay timing, not video</span>
+      <figcaption className="sr-only">
+        Clip from {timecode(model.clip[0])} to {timecode(model.clip[1])}, with the first 3 seconds and last 5 seconds marked, and
+        10 seconds of context on each side. Screenplay timing, not video.
       </figcaption>
     </figure>
   );
 });
+
+/** Compact legend shown beside the timeline heading. */
+export function TimelineLegend() {
+  return (
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] font-medium text-muted" aria-hidden>
+      <span className="flex items-center gap-1.5">
+        <span className="h-3 w-4 rounded-[3px] bg-surface ring-1 ring-accent" /> Clip
+      </span>
+      <span className="flex items-center gap-1.5">
+        <span className="h-3 w-4 rounded-[3px] bg-accent-soft" /> First 3 s · last 5 s
+      </span>
+      <span className="flex items-center gap-1.5">
+        <span className="h-2 w-4 rounded-[2px] bg-ev-dialogue ring-2 ring-accent ring-offset-1" /> AI evidence
+      </span>
+      <span className="max-sm:hidden">±10 s context</span>
+    </div>
+  );
+}
 
 function describe(ev: DocEvent): string {
   const who = ev.speaker ? `${ev.speaker}: ` : "";
@@ -159,14 +164,14 @@ const EventBar = React.memo(function EventBar({
         "absolute rounded-[3px] transition-[opacity,box-shadow] focus-visible:outline-offset-1",
         LANE_BAR[lane],
         placed.inClip ? "opacity-100" : "opacity-35 hover:opacity-70",
-        isEvidence && "ring-2 ring-amber ring-offset-1 ring-offset-surface",
-        active && "outline-2 outline-ink outline-offset-1",
+        isEvidence && "ring-2 ring-accent ring-offset-1 ring-offset-surface",
+        active && "outline-2 outline-offset-1 outline-ink",
       )}
       style={{
         left,
         // a 1px gap keeps back-to-back shots visibly separate
         width: instant ? 3 : `max(3px, calc(${width} - 1px))`,
-        top: 3 + placed.row * (ROW + ROW_GAP),
+        top: 3.5 + placed.row * (ROW + ROW_GAP),
         height: ROW,
       }}
     />

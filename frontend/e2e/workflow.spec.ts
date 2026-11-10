@@ -13,7 +13,7 @@ test.describe("desktop workflow", () => {
     expect(missing.status()).toBe(404);
     expect((await missing.json()).error.code).toBe("not_found");
     await page.goto("/review/some/deep/link");
-    await expect(page.getByRole("heading", { name: "Analyze a screenplay" })).toBeVisible(); // nothing saved yet
+    await expect(page.getByRole("heading", { level: 1, name: /Find the moments worth promoting/ })).toBeVisible(); // nothing saved yet
   });
 
   test("sample analysis, review, refresh restore and deletion", async ({ page }) => {
@@ -58,9 +58,9 @@ test.describe("desktop workflow", () => {
     await page.getByRole("button", { name: "Analysis menu" }).click();
     await page.getByRole("menuitem", { name: /Delete saved analysis/ }).click();
     await page.getByRole("button", { name: /^Delete$/ }).click();
-    await expect(page.getByRole("heading", { name: "Analyze a screenplay" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /Find the moments worth promoting/ })).toBeVisible();
     await page.reload();
-    await expect(page.getByRole("heading", { name: "Analyze a screenplay" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /Find the moments worth promoting/ })).toBeVisible();
     expect(errors).toEqual([]);
   });
 

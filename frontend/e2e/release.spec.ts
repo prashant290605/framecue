@@ -51,7 +51,7 @@ test.describe("release checks", () => {
     await page.getByRole("button", { name: "Analysis menu" }).click();
     await page.getByRole("menuitem", { name: /Delete saved analysis/ }).click();
     await page.getByRole("button", { name: /^Delete$/ }).click();
-    await expect(page.getByRole("heading", { name: "Analyze a screenplay" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /Find the moments worth promoting/ })).toBeVisible();
 
     let analyzeCalls = 0;
     page.on("request", (r) => r.url().endsWith("/api/analyze") && analyzeCalls++);

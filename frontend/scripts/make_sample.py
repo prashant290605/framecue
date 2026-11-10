@@ -1,7 +1,7 @@
 """Generate the public "Try sample" screenplay: The Harbor Light.
 
 The story, characters and every line here are original and fictional. It was written for
-PromoLens and is not derived from any real or confidential screenplay, so it is safe to
+FrameCue and is not derived from any real or confidential screenplay, so it is safe to
 publish. It uses the same timestamped format as the parser expects.
 
 Usage (from the repository root):
@@ -228,7 +228,7 @@ def render(ep: dict) -> str:
     lines = [
         f"EPISODE NUMBER: Episode {ep['number']}",
         f"EPISODE LOGLINE: {ep['logline']}",
-        "CONTINUITY NOTES: Fictional sample written for PromoLens. Not derived from any real "
+        "CONTINUITY NOTES: Fictional sample written for FrameCue. Not derived from any real "
         "screenplay.",
         "",
         "--- SCRIPT START ---",

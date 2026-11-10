@@ -1,7 +1,12 @@
-# PromoLens
+# FrameCue
 
-PromoLens reads timestamped microdrama screenplays and proposes 20–60 second promo clips, with
-exact segment timestamps, hook and cliffhanger evidence, and reasons.
+FrameCue is an editorial workspace for discovering, evaluating and reviewing promotional moments
+in microdrama screenplays. It reads timestamped screenplays and proposes 20–60 second promo
+clips, with exact segment timestamps, hook and cliffhanger evidence, and reasons.
+
+The project was first built as PromoLens. The Python package, the `promolens` command and the
+`PROMOLENS_*` settings keep that name, so existing commands, saved analyses and exports still
+work.
 - **Deterministic code:** hard constraints (timing, boundaries, validation), candidate
   discovery and the baseline.
 - **Optional AI review:** a free, swappable LLM (GroqCloud `openai/gpt-oss-120b`) adds
@@ -123,6 +128,14 @@ No endpoint runs model inference.
 shadcn/ui-style components on Radix, with Lucide icons and minimal Motion. It talks only to
 `GET /api/health` and `POST /api/analyze`.
 
+**Design system.** All tokens live in `frontend/src/index.css`:
+- **Colours:** a cool neutral scale (canvas `#F5F7FA`, surface `#FFFFFF`, ink `#142238`, muted
+  `#64748B`, borders `#E2E8F0`) and one blue accent (`#345CE0`, hover `#2649BC`).
+- **Type:** Manrope, self-hosted.
+- **Hierarchy:** hairlines and spacing rather than shadows or nested cards.
+- **Logo:** the mark (a split frame with a playhead cue) is drawn as SVG in
+  `src/components/Brand.tsx` and `public/favicon.svg`.
+
 **Upload screen:**
 - **Inputs:** drag-and-drop or choose files, plus an optional AI bundle.
 - **Validation:** type and size are checked against the limit reported by `/api/health`
@@ -198,7 +211,7 @@ cd frontend && npm run dev
   `.python-version`. It also blocks ZIPs, PDFs, `episode-*.txt`, `runs`, `outputs`, `data`,
   `.env*`, keys and AI bundles anywhere.
 - **Uploaded files:** they are processed in memory by Vercel's infrastructure for the
-  duration of the request. PromoLens does not store them, but they do pass through the
+  duration of the request. FrameCue does not store them, but they do pass through the
   platform.
 
 Preview deployment (protected by Vercel Authentication):

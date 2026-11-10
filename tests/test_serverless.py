@@ -349,7 +349,7 @@ def test_public_sample_is_fictional_valid_and_analyzable() -> None:
     files = sorted(p.name for p in sample.glob("*.txt"))
     assert files == ["harbor-light-01.txt", "harbor-light-02.txt", "harbor-light-03.txt"]
     for p in sample.glob("*.txt"):
-        assert "Fictional sample written for PromoLens" in p.read_text("utf-8")
+        assert "Fictional sample written for FrameCue" in p.read_text("utf-8")
     result = parse_path(sample)
     assert len(result.episodes) == 3 and not result.issues
     assert len(analyze_path(sample, cache_dir=None).by_id) > 30

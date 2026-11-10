@@ -1,4 +1,4 @@
-# PromoLens — Architecture Contract
+# FrameCue (formerly PromoLens): architecture contract
 
 Status: Phases 0–4 implemented. Phase 3.5 validated the evaluator with **real inference** on
 GroqCloud's Free Plan (`openai/gpt-oss-120b`, $0), as documented in §10b. Phase 4 added the
@@ -789,7 +789,7 @@ is not logged in.
 - **Runtime:** React 19.1.10, TypeScript 6.0.3, Vite 8.3.5, Tailwind 4.3.3; Radix
   (`radix-ui` 1.8.1) under small shadcn-style components, `lucide-react`, `motion`
   (LazyMotion), `idb`, `@tanstack/react-virtual`.
-- **Fonts:** Inter and Fraunces, self-hosted via fontsource.
+- **Fonts:** Inter and Fraunces, self-hosted via fontsource. Replaced by Manrope in the FrameCue redesign (§19).
 - **Version policy:** every version is pinned and was published at least two weeks before
   use.
 - **No external services:** no analytics or third-party requests.
@@ -921,3 +921,77 @@ free-tier ledger was already at 182k tokens, over the 180k budget, so no further
 made. The coverage-first plan (38 episodes, about 107k tokens) remains a documented,
 one-command next step.
 
+
+## 19. FrameCue rebrand and visual redesign
+
+**Scope.** This changed the frontend's presentation and product naming only. Not changed:
+- parsing, candidate generation, AI evaluation, ranking, evidence validation and exports;
+- the endpoints and the Groq integration;
+- IndexedDB behaviour.
+
+Backend edits are limited to user-visible copy: the CLI banner, the OpenAPI titles, and the
+analysis note "not stored by FrameCue".
+
+**Name and identifiers.** The product is now FrameCue, used in the UI, the page metadata and
+the docs. These keep the PromoLens-era name, because renaming them would break saved work or
+existing commands and links:
+- the Python package and the `promolens` command;
+- the `PROMOLENS_*` settings;
+- the IndexedDB database name (`promolens`);
+- the schema ids (`promolens-analysis-v1`, `promolens-shortlist-v1`);
+- the GitHub repository and the Vercel domain.
+
+Exported filenames now start with `framecue-`.
+
+**Design system** (`frontend/src/index.css`):
+- **Colours:** canvas `#F5F7FA`, surface `#FFFFFF`, subtle `#EDF1F6`, line `#E2E8F0` /
+  `#CBD5E1`, ink `#142238`, ink-soft `#33435C`, muted `#64748B`, and the accent `#345CE0` (hover
+  `#2649BC`). Status colours: ok, no and later. "Later" is slate, with no amber.
+- **Timeline lanes:** four slate steps.
+- **Type:** Manrope (variable, self-hosted), weight 500 for body text.
+- **Sizing:** radius 6/8/12 px; buttons 32/36/44 px; inputs 36 px; icons 16 px.
+- **Elevation:** one shadow, for popovers and menus only. Cards are replaced by hairlines and
+  spacing.
+
+**Logo.** A split frame (the shot) with a playhead cue through it, on a 32-unit grid with
+2.6-unit strokes:
+- `BrandMark` comes in two tones: duo, with an accent playhead, and mono.
+- `BrandIcon` is the accent tile, also used as `public/favicon.svg`.
+- `Brand` is the lockup.
+- There is also `apple-touch-icon.png`.
+
+I checked the mark at 16, 20, 32 and 64 px, in single colour and reversed, before choosing
+it. Three alternatives were rejected: corner brackets read as a generic scan icon, an offset
+playhead looked unbalanced, and a box with a playhead read as a terminal.
+
+**Layout changes:**
+- **Landing:** a single centred column. Headline, one sentence, then an upload panel:
+  - a dropzone;
+  - a selected-files list with Clear;
+  - the AI-bundle row;
+  - Analyze as the primary action and the sample as the secondary.
+  
+  Below the panel sit two privacy notes and a compact three-step strip. "Open saved analysis"
+  moved to the top navigation.
+- **Workspace:**
+  - a white top bar, with a coverage chip that carries a progress bar;
+  - the list on the canvas, with an episode tag, timecodes, duration, a two-line preview, a
+    restrained score, status icons and an accent bar on the selected row;
+  - the inspector on white, in sections separated by hairlines rather than cards;
+  - the review controls as a segmented group;
+  - the timeline with In and Out markers and a compact legend beside its heading;
+  - the excerpt with accent window markers and an active-line wash.
+
+**Visual QA.** Playwright captured every state with Edge at 1440, 1366, 768 and 390 px. Real
+defects were found and fixed:
+- the AI-bundle row was cramped on mobile;
+- body text looked too thin;
+- the disabled primary button was a washed-out blue;
+- privacy notes wrapped with orphans;
+- the dialog focused its close button first;
+- the export menu label wrapped;
+- CLI commands broke mid-word;
+- the coverage popover labels wrapped;
+- the view switcher animated its background, showing the wrong segment for 150 ms.
+
+There is no horizontal overflow at 768 or 390 px.

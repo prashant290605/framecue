@@ -1,4 +1,4 @@
-# PromoLens API contract (for the Phase 5 React frontend)
+# FrameCue API contract (for the React frontend)
 
 The source of truth is the generated OpenAPI schema at `GET /api/openapi.json` (interactive
 docs: `/api/docs`). Generate TypeScript types from it, for example with `openapi-typescript`.

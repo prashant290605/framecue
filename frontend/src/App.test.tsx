@@ -133,7 +133,7 @@ describe("inspection, filters and review", () => {
     await u.selectOptions(screen.getByLabelText("Episode"), "2");
     const shown = within(list()).getAllByRole("option");
     expect(shown.length).toBeGreaterThan(0);
-    for (const o of shown) expect(o).toHaveTextContent(/^\d*Ep 2/);
+    for (const o of shown) expect(o).toHaveTextContent(/^\d*EP 2/);
     expect(screen.getByRole("button", { name: "Remove filter Episode 2" })).toBeInTheDocument();
   });
 
@@ -188,7 +188,7 @@ describe("inspection, filters and review", () => {
     expect(bar).toHaveAttribute("aria-pressed", "true");
     const id = bar.getAttribute("data-event-id")!;
     expect(within(detail()).getAllByText(id).length).toBeGreaterThan(0); // inspector shows it
-    const excerptLine = within(detail()).getAllByRole("button").find((b) => b.className.includes("grid-cols-[74px_1fr]") && b.className.includes("shadow-card"));
+    const excerptLine = within(detail()).getAllByRole("button").find((b) => b.hasAttribute("data-excerpt-line") && b.dataset.active === "true");
     expect(excerptLine).toBeDefined(); // the excerpt highlights the same event
   });
 });
@@ -249,6 +249,6 @@ describe("persistence", () => {
     const u = user();
     render(<App />);
     await u.upload(await screen.findByTestId("import-input"), file("bad.json", JSON.stringify({ schema_version: "x" }), "application/json"));
-    expect(await screen.findByRole("alert")).toHaveTextContent(/not a PromoLens analysis/);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/not a FrameCue analysis/);
   });
 });

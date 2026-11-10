@@ -1,12 +1,12 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { Check, Clock3, CornerDownRight, Sparkles, X } from "lucide-react";
+import { BadgeCheck, CircleCheck, CircleX, Clock3, CornerDownRight, StickyNote } from "lucide-react";
 import * as React from "react";
 import type { ViewName } from "@/api/types";
 import type { DocIndex, Entry, Reviews } from "@/lib/doc-index";
-import { seconds, timecode } from "@/lib/time";
+import { timecode } from "@/lib/time";
 import { cn } from "@/lib/utils";
 
-export const ROW_HEIGHT = 76;
+export const ROW_HEIGHT = 84;
 
 interface Props {
   index: DocIndex;
@@ -48,7 +48,7 @@ export function PromoList({ index, view, entries, reviews, selectedId, onSelect 
       aria-label={view === "ai" ? "AI-reviewed recommendations" : "Full-show candidates"}
       aria-activedescendant={selectedId ? `row-${selectedId}` : undefined}
       onKeyDown={onKeyDown}
-      className="h-full overflow-y-auto overscroll-contain focus-visible:outline-none"
+      className="h-full overflow-y-auto overscroll-contain pb-3 focus-visible:outline-none"
     >
       <div style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
         {virtualizer.getVirtualItems().map((item) => {
@@ -103,52 +103,63 @@ const Row = React.memo(function Row({
       aria-selected={selected}
       onClick={() => onSelect(entry.id)}
       className={cn(
-        "group mx-2 flex h-[70px] cursor-pointer gap-3 rounded-md border px-3 py-2.5 transition-colors",
-        selected ? "border-amber/60 bg-surface shadow-card" : "border-transparent hover:bg-surface/70",
+        "group relative mx-2 flex h-[78px] cursor-pointer gap-3 rounded-lg px-3 py-2.5 transition-colors",
+        selected ? "bg-surface shadow-[0_1px_2px_rgb(20_34_56/0.06)] ring-1 ring-line" : "hover:bg-subtle",
       )}
     >
-      <div className="w-8 shrink-0 pt-px text-right">
+      {selected && <span className="absolute top-3 bottom-3 left-0 w-[3px] rounded-full bg-accent" aria-hidden />}
+      <div className="w-6 shrink-0 pt-[3px] text-right">
         {entry.rank !== null ? (
-          <span className="text-[12.5px] font-semibold text-ink-soft tabular">{entry.rank}</span>
+          <span className={cn("text-[12px] font-semibold tabular", selected ? "text-accent" : "text-muted")}>{entry.rank}</span>
         ) : (
           <CornerDownRight className="ml-auto size-3.5 text-faint" aria-label="Alternative cut" />
         )}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 text-[12.5px]">
-          <span className="font-medium text-ink">Ep {c.episode_number}</span>
-          <span className="font-mono text-[12px] text-ink-soft tabular">
-            {timecode(c.start_ms)}–{timecode(c.end_ms)}
+        <div className="flex items-center gap-2 whitespace-nowrap">
+          <span
+            className={cn(
+              "inline-flex h-5 items-center rounded-[5px] px-1.5 text-[11px] font-bold tabular",
+              selected ? "bg-accent-soft text-accent-hover" : "bg-subtle text-ink-soft group-hover:bg-surface",
+            )}
+          >
+            EP {c.episode_number}
           </span>
-          <span className="text-[12px] text-faint tabular">{seconds(c.duration_ms)}</span>
+          <span className="text-[13px] font-semibold text-ink tabular">
+            {timecode(c.start_ms)} – {timecode(c.end_ms)}
+          </span>
+          <span className="text-[12px] text-muted tabular">{shortSeconds(c.duration_ms)}</span>
         </div>
-        <p className="mt-1 line-clamp-2 text-[12.5px] leading-snug text-muted">{preview}</p>
+        <p className="mt-1.5 line-clamp-2 text-[12px] leading-[1.4] text-muted">{preview}</p>
       </div>
-      <div className="flex w-14 shrink-0 flex-col items-end justify-between">
+      <div className="flex w-12 shrink-0 flex-col items-end justify-between">
         {view === "ai" && ai ? (
           <span className="text-right">
-            <span className="block text-[15px] leading-none font-semibold text-ink tabular">{ai.weighted_score}</span>
-            <span className="text-[10.5px] text-faint tabular">H{ai.hook_score} C{ai.cliffhanger_score}</span>
+            <span className="block text-[16px] leading-none font-bold text-ink tabular">{ai.weighted_score}</span>
+            <span className="mt-1 block text-[10.5px] font-medium text-muted tabular">H{ai.hook_score} · C{ai.cliffhanger_score}</span>
           </span>
         ) : (
           <span className="text-right">
-            <span className="block text-[13px] leading-none font-medium text-ink-soft tabular">{c.baseline.priority.toFixed(3)}</span>
-            <span className="text-[10.5px] text-faint">priority</span>
+            <span className="block text-[13px] leading-none font-semibold text-ink-soft tabular">{c.baseline.priority.toFixed(3)}</span>
+            <span className="mt-1 block text-[10.5px] font-medium text-muted">priority</span>
           </span>
         )}
-        <span className="flex items-center gap-1">
-          {view === "coverage" && ai && (
-            <Sparkles className="size-3.5 text-amber-ink" aria-label="AI review available" />
-          )}
-          {hasNote && <span className="size-1.5 rounded-full bg-faint" aria-label="Has a note" />}
-          {decision === "accepted" && <Check className="size-3.5 text-ok" aria-label="Accepted" />}
-          {decision === "rejected" && <X className="size-3.5 text-no" aria-label="Rejected" />}
-          {decision === "later" && <Clock3 className="size-3.5 text-amber-ink" aria-label="Marked for later" />}
+        <span className="flex items-center gap-1.5 [&_svg]:size-3.5">
+          {view === "coverage" && ai && <BadgeCheck className="text-accent" aria-label="AI review available" />}
+          {hasNote && <StickyNote className="text-muted" aria-label="Has a note" />}
+          {decision === "accepted" && <CircleCheck className="text-ok" aria-label="Accepted" />}
+          {decision === "rejected" && <CircleX className="text-no" aria-label="Rejected" />}
+          {decision === "later" && <Clock3 className="text-later" aria-label="Marked for later" />}
         </span>
       </div>
     </div>
   );
 });
+
+/** "37.4 s" for list rows; the inspector shows centisecond precision. */
+function shortSeconds(ms: number): string {
+  return `${(ms / 1000).toFixed(1)} s`;
+}
 
 const openingCache = new WeakMap<DocIndex, Map<string, string>>();
 

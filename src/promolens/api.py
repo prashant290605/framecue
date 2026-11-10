@@ -1,4 +1,4 @@
-"""Local FastAPI backend for the PromoLens React frontend. Offline: no endpoint calls a model.
+"""Local FastAPI backend for the FrameCue React frontend. Offline: no endpoint calls a model.
 
 Routes (all JSON unless noted):
 
@@ -196,7 +196,7 @@ def create_app(config: ApiConfig | None = None) -> FastAPI:
     config = config or ApiConfig()
     store = RunStore(config)
     app = FastAPI(
-        title="PromoLens API",
+        title="FrameCue API",
         version=__version__,
         docs_url="/api/docs",
         redoc_url=None,

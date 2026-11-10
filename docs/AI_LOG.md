@@ -553,3 +553,42 @@ architecture draft.
   - the served bundles contain no confidential names and no key or provider strings.
 - AI coverage is unchanged at 41 of 788 (5.2%). No live model calls were made in Phase 6
   (the daily ledger was over budget).
+
+## FrameCue rebrand and redesign (2026-11-11)
+
+**What the AI assistant did:**
+- rebuilt the design tokens and drew the FrameCue logo, choosing it from rendered comparisons
+  at 16–64 px;
+- restyled every frontend surface without changing any calculation;
+- updated the copy and docs;
+- ran screenshot QA at four widths, then deployed after a preview check (§19).
+
+### Mistakes caught and corrected
+- **A truncated component.** A scripted splice cut the upload screen at the first match of
+  its marker, which was inside a helper, and dropped most of the component. The blank page
+  and console error caught it. I restored the file from git and spliced at the right place.
+- **An unrelated process on port 8000.** The dev proxy now reads `API_TARGET`, and the local
+  run uses port 8010. I did not stop the other process.
+
+### Tests updated because the visible copy changed (none removed)
+- The landing-page heading is now the h1, "Find the moments worth promoting".
+- List rows show "EP 2" instead of "Ep 2".
+- The import error now names FrameCue.
+- The excerpt test used to find the highlighted line through CSS class names. It now uses a
+  `data-active` attribute, so it no longer breaks on styling changes.
+- The sample-header assertion now reads FrameCue.
+
+### Verified (redesign)
+- **Frontend:** the TypeScript check, 58 Vitest tests and the production build pass.
+- **Playwright locally:** 5 passed, plus the 2 private real-pack specs, run locally only.
+- **Python:** 308 tests pass with the private pack (284 plus 24 skipped without it). Ruff is
+  clean.
+- **Vercel preview** (protected, checked in the browser pane):
+  - the sample analyzes;
+  - the `A` shortcut works;
+  - reloading `/review` restores the selection and the decision.
+- **Production** (https://promolens-two.vercel.app, checked without signing in):
+  - the title is FrameCue, and the favicon and apple-touch icon are served;
+  - deep links return 200, and unknown `/api` paths return a JSON 404;
+  - the Playwright suite (5 tests) passes against production;
+  - the served bundles and the workspace chunk contain no confidential names or key strings.

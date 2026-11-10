@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { CircleAlert, X } from "lucide-react";
 import * as React from "react";
 import { BrandMark } from "@/components/Brand";
 import { UploadScreen } from "@/features/upload/UploadScreen";
@@ -49,14 +49,10 @@ function Shell() {
 
   let screen: React.ReactNode;
   if (state.phase === "boot") {
-    screen = (
-      <div className="flex h-dvh items-center justify-center" aria-busy="true" aria-label="Loading">
-        <BrandMark className="size-8 animate-pulse" />
-      </div>
-    );
+    screen = <Splash />;
   } else if (state.phase === "workspace" && !atRoot) {
     screen = (
-      <React.Suspense fallback={<div className="flex h-dvh items-center justify-center"><BrandMark className="size-8 animate-pulse" /></div>}>
+      <React.Suspense fallback={<Splash />}>
         <Workspace />
       </React.Suspense>
     );
@@ -67,22 +63,31 @@ function Shell() {
   return (
     <>
       {screen}
-      <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-4 z-[60] flex justify-center px-4">
+      <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-5 z-[60] flex justify-center px-4">
         {state.notice && (
           <div
             role={state.notice.tone === "error" ? "alert" : "status"}
             className={cn(
-              "pointer-events-auto flex max-w-md items-start gap-3 rounded-lg border px-3.5 py-2.5 text-[13px] shadow-pop",
-              state.notice.tone === "error" ? "border-no/25 bg-no-soft text-no" : "border-line bg-ink text-paper",
+              "pointer-events-auto flex max-w-md items-center gap-3 rounded-lg py-2.5 pr-2.5 pl-4 text-[13px] font-medium shadow-pop",
+              state.notice.tone === "error" ? "border border-no/30 bg-surface text-no" : "bg-ink text-white",
             )}
           >
+            {state.notice.tone === "error" && <CircleAlert className="size-4 shrink-0" aria-hidden />}
             <span className="flex-1">{state.notice.text}</span>
-            <button type="button" aria-label="Dismiss" onClick={() => dispatch({ type: "dismiss" })} className="opacity-70 hover:opacity-100">
+            <button type="button" aria-label="Dismiss" onClick={() => dispatch({ type: "dismiss" })} className="rounded-md p-1 opacity-70 hover:bg-white/10 hover:opacity-100">
               <X className="size-4" />
             </button>
           </div>
         )}
       </div>
     </>
+  );
+}
+
+function Splash() {
+  return (
+    <div className="flex h-dvh items-center justify-center" aria-busy="true" aria-label="Loading">
+      <BrandMark className="size-9 animate-pulse" />
+    </div>
   );
 }

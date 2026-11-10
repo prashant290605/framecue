@@ -1,4 +1,4 @@
-import { FileArchive, FileJson, FileText, FolderOpen, Info, Loader2, ShieldCheck, Sparkles, Upload, X } from "lucide-react";
+import { ArrowRight, BookOpen, CircleAlert, FileArchive, FileJson, FileText, FolderOpen, HardDrive, Loader2, ShieldCheck, Upload, X } from "lucide-react";
 import * as React from "react";
 import { analyze, ApiError, CLI_HINT, DEFAULT_MAX_UPLOAD, getHealth } from "@/api/client";
 import { Brand } from "@/components/Brand";
@@ -117,7 +117,7 @@ export function UploadScreen() {
     try {
       const check = validateDocument(JSON.parse(await file.text()));
       if (!check.ok) {
-        setProblem({ title: "That file is not a PromoLens analysis.", detail: check.reason });
+        setProblem({ title: "That file is not a FrameCue analysis.", detail: check.reason });
         return;
       }
       history.pushState(null, "", "/review");
@@ -138,105 +138,134 @@ export function UploadScreen() {
   const total = files.reduce((n, f) => n + f.size, 0) + (bundle?.size ?? 0);
 
   return (
-    <div className="min-h-dvh">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
-        <Brand />
-        <span className="flex items-center gap-1.5 text-[12px] text-muted" aria-live="polite">
-          <span
-            className={cn(
-              "size-1.5 rounded-full",
-              service === "ok" ? "bg-ok" : service === "down" ? "bg-no" : "bg-faint",
-            )}
-          />
-          {service === "ok" ? "Analysis service online" : service === "down" ? "Service unreachable" : "Checking service"}
-        </span>
-      </header>
-
-      <main className="mx-auto grid max-w-6xl gap-10 px-5 pt-6 pb-16 sm:px-8 lg:grid-cols-[1fr_440px] lg:gap-16 lg:pt-14">
-        <section className="max-w-xl">
-          <p className="text-[12px] font-medium tracking-[0.08em] text-amber-ink uppercase">Promo discovery for microdramas</p>
-          <h1 className="mt-3 font-display text-[34px] leading-[1.12] font-semibold tracking-[-0.01em] text-ink sm:text-[42px]">
-            Find the clip that makes viewers press play.
-          </h1>
-          <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
-            PromoLens reads timestamped screenplays and proposes 20–60 second promo cuts with exact
-            timecodes, the opening hook and the cliffhanger at the cut, so editors start from
-            evidence instead of a blank timeline.
-          </p>
-          <dl className="mt-8 grid gap-5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-            {[
-              ["Every episode", "Deterministic candidates and a transparent baseline for the whole show."],
-              ["AI review, when supplied", "Validated model judgements appear only from a real evaluation bundle."],
-              ["Yours to decide", "Accept, reject and annotate cuts; export a shortlist."],
-            ].map(([t, d]) => (
-              <div key={t}>
-                <dt className="text-[13px] font-semibold text-ink">{t}</dt>
-                <dd className="mt-1 text-[13px] leading-relaxed text-muted">{d}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section aria-label="Analyze a screenplay" className="rounded-lg border border-line bg-surface p-5 shadow-card sm:p-6">
-          <h2 className="font-display text-[19px] font-semibold">Analyze a screenplay</h2>
-          <p className="mt-1 text-[13px] text-muted">One .zip pack or .txt episodes · up to {bytes(maxBytes)}</p>
-
-          <div
-            onDragOver={(e) => {
-              e.preventDefault();
-              setDragging(true);
-            }}
-            onDragLeave={() => setDragging(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setDragging(false);
-              accept(e.dataTransfer.files);
-            }}
-            className={cn(
-              "mt-4 rounded-lg border border-dashed px-4 py-7 text-center transition-colors",
-              dragging ? "border-amber bg-amber-wash" : "border-line-strong bg-paper",
-            )}
-          >
-            <Upload className="mx-auto size-5 text-muted" aria-hidden />
-            <p className="mt-2 text-[13px] text-ink-soft">
-              Drop screenplay files here, or{" "}
-              <button type="button" className="font-medium text-amber-ink underline-offset-4 hover:underline" onClick={() => fileInput.current?.click()}>
-                choose files
-              </button>
-            </p>
+    <div className="flex min-h-dvh flex-col">
+      <header className="border-b border-line bg-surface">
+        <div className="mx-auto flex h-16 max-w-[1120px] items-center justify-between gap-4 px-5 sm:px-8">
+          <Brand />
+          <div className="flex items-center gap-1 sm:gap-3">
+            <span className="hidden items-center gap-2 text-[12px] font-medium text-muted sm:flex" aria-live="polite">
+              <span
+                className={cn("size-1.5 rounded-full", service === "ok" ? "bg-ok" : service === "down" ? "bg-no" : "bg-faint")}
+                aria-hidden
+              />
+              {service === "ok" ? "Analysis service online" : service === "down" ? "Service unreachable" : "Checking service"}
+            </span>
+            <span className="hidden h-5 w-px bg-line sm:block" aria-hidden />
+            <Button variant="ghost" size="sm" onClick={() => importInput.current?.click()}>
+              <FolderOpen /> <span className="max-sm:hidden">Open saved analysis</span>
+              <span className="sm:hidden">Open</span>
+            </Button>
             <input
-              ref={fileInput}
+              ref={importInput}
               type="file"
-              accept=".zip,.txt"
-              multiple
+              accept=".json,application/json"
               className="sr-only"
-              aria-label="Screenplay files"
-              data-testid="screenplay-input"
+              aria-label="Saved analysis file"
+              data-testid="import-input"
               onChange={(e) => {
-                accept(e.target.files);
+                void onImport(e.target.files?.[0]);
                 e.target.value = "";
               }}
             />
           </div>
+        </div>
+      </header>
 
-          {files.length > 0 && (
-            <ul className="mt-3 space-y-1" aria-label="Selected files">
-              {files.slice(0, 4).map((f) => (
-                <li key={f.name} className="flex items-center gap-2 text-[13px] text-ink-soft">
-                  {/\.zip$/i.test(f.name) ? <FileArchive className="size-4 text-muted" /> : <FileText className="size-4 text-muted" />}
-                  <span className="min-w-0 flex-1 truncate">{f.name}</span>
-                  <span className="tabular text-[12px] text-faint">{bytes(f.size)}</span>
-                </li>
-              ))}
-              {files.length > 4 && <li className="text-[12px] text-faint">and {files.length - 4} more</li>}
-            </ul>
-          )}
+      <main className="flex-1 px-5 sm:px-8">
+        <div className="mx-auto w-full max-w-[640px] pt-12 pb-16 sm:pt-20 lg:pt-24">
+          <p className="text-[13px] font-semibold text-accent">Promo discovery for microdrama</p>
+          <h1 className="mt-3 text-[34px] leading-[1.1] font-bold tracking-[-0.035em] text-balance text-ink sm:text-[44px]">
+            Find the moments worth promoting.
+          </h1>
+          <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-muted sm:text-[16px]">
+            Upload timestamped screenplays and get ranked 20–60 second cuts with exact timecodes and the
+            hook and cliffhanger behind each pick, ready for editorial review.
+          </p>
 
-          <div className="mt-4 rounded-md border border-line px-3 py-2.5">
-            <div className="flex items-center justify-between gap-3">
+          <section aria-labelledby="analyze-heading" className="mt-10 rounded-xl border border-line bg-surface">
+            <h2 id="analyze-heading" className="sr-only">Analyze a screenplay</h2>
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDragging(true);
+              }}
+              onDragLeave={() => setDragging(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragging(false);
+                accept(e.dataTransfer.files);
+              }}
+              className={cn(
+                "m-2 flex flex-col items-center rounded-lg border border-dashed px-6 py-9 text-center transition-colors sm:py-10",
+                dragging ? "border-accent bg-accent-wash" : "border-line-strong bg-canvas/60",
+              )}
+            >
+              <span
+                className={cn(
+                  "flex size-11 items-center justify-center rounded-full transition-colors",
+                  dragging ? "bg-accent text-white" : "bg-surface text-accent ring-1 ring-line",
+                )}
+              >
+                <Upload className="size-5" aria-hidden />
+              </span>
+              <p className="mt-4 text-[15px] font-semibold text-ink">Drop screenplay files here</p>
+              <p className="mt-1 text-[13px] text-muted">One .zip pack or .txt episodes · up to {bytes(maxBytes)}</p>
+              <Button size="sm" className="mt-5" onClick={() => fileInput.current?.click()}>
+                Choose files
+              </Button>
+              <input
+                ref={fileInput}
+                type="file"
+                accept=".zip,.txt"
+                multiple
+                className="sr-only"
+                aria-label="Screenplay files"
+                data-testid="screenplay-input"
+                onChange={(e) => {
+                  accept(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+            </div>
+
+            {files.length > 0 && (
+              <div className="px-5 pt-2 pb-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-[12px] font-semibold text-muted">
+                    {files.length === 1 ? "1 file selected" : `${files.length} files selected`}
+                  </p>
+                  <button
+                    type="button"
+                    className="rounded text-[12px] font-semibold text-muted hover:text-ink"
+                    onClick={() => {
+                      setFiles([]);
+                      setProblem(null);
+                    }}
+                  >
+                    Clear
+                  </button>
+                </div>
+                <ul className="mt-1.5 divide-y divide-line" aria-label="Selected files">
+                  {files.slice(0, 4).map((f) => (
+                    <li key={f.name} className="flex items-center gap-2.5 py-2 text-[13px] text-ink">
+                      {/\.zip$/i.test(f.name) ? <FileArchive className="size-4 text-muted" /> : <FileText className="size-4 text-muted" />}
+                      <span className="min-w-0 flex-1 truncate font-medium">{f.name}</span>
+                      <span className="tabular text-[12px] text-muted">{bytes(f.size)}</span>
+                    </li>
+                  ))}
+                  {files.length > 4 && <li className="py-2 text-[12px] text-muted">and {files.length - 4} more</li>}
+                </ul>
+              </div>
+            )}
+
+            <div className="flex flex-col items-start gap-3 border-t border-line px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <div className="min-w-0">
-                <p className="text-[13px] font-medium">AI evaluation bundle <span className="font-normal text-faint">(optional)</span></p>
-                <p className="text-[12px] text-muted">From <code className="text-[11px]">promolens export-ai</code>. Enables AI-reviewed picks.</p>
+                <p className="text-[13px] font-semibold text-ink">
+                  AI evaluation bundle <span className="ml-1 font-medium text-muted">Optional</span>
+                </p>
+                <p className="mt-0.5 text-[12px] break-all text-muted sm:truncate">
+                  {bundle ? `${bundle.name} · ${bytes(bundle.size)}` : "Adds validated AI-reviewed picks from a local evaluation."}
+                </p>
               </div>
               {bundle ? (
                 <Button size="sm" variant="ghost" onClick={() => setBundle(null)} aria-label="Remove AI bundle">
@@ -244,89 +273,90 @@ export function UploadScreen() {
                 </Button>
               ) : (
                 <Button size="sm" onClick={() => bundleInput.current?.click()}>
-                  <FileJson /> Add
+                  <FileJson /> Add bundle
                 </Button>
               )}
+              <input
+                ref={bundleInput}
+                type="file"
+                accept=".json,application/json"
+                className="sr-only"
+                aria-label="AI evaluation bundle"
+                data-testid="bundle-input"
+                onChange={(e) => {
+                  const f = e.target.files?.[0] ?? null;
+                  setBundle(f);
+                  setProblem(f ? checkSelection(files, f, maxBytes) : null);
+                  e.target.value = "";
+                }}
+              />
             </div>
-            {bundle && <p className="mt-1.5 truncate text-[12px] text-ink-soft">{bundle.name} · {bytes(bundle.size)}</p>}
-            <input
-              ref={bundleInput}
-              type="file"
-              accept=".json,application/json"
-              className="sr-only"
-              aria-label="AI evaluation bundle"
-              data-testid="bundle-input"
-              onChange={(e) => {
-                const f = e.target.files?.[0] ?? null;
-                setBundle(f);
-                setProblem(f ? checkSelection(files, f, maxBytes) : null);
-                e.target.value = "";
-              }}
-            />
-          </div>
 
-          {problem && (
-            <div role="alert" className="mt-4 rounded-md border border-no/25 bg-no-soft px-3 py-2.5 text-[13px] text-no">
-              <p className="font-medium">{problem.title}</p>
-              {problem.detail && <p className="mt-0.5 text-no/85">{problem.detail}</p>}
-            </div>
-          )}
+            {problem && (
+              <div role="alert" className="mx-5 mb-4 flex gap-2.5 rounded-md bg-no-soft px-3.5 py-3 text-[13px] text-no">
+                <CircleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
+                <div className="min-w-0">
+                  <p className="font-semibold">{problem.title}</p>
+                  {problem.detail && <p className="mt-0.5 text-no/85">{problem.detail}</p>}
+                </div>
+              </div>
+            )}
 
-          {busy ? (
-            <div className="mt-4 flex items-center justify-between rounded-md bg-sunken px-3 py-2.5" aria-live="polite">
-              <span className="flex items-center gap-2 text-[13px] text-ink-soft">
-                <Loader2 className="size-4 animate-spin text-amber-ink" aria-hidden />
-                {busy === "sample" ? "Analyzing the sample" : "Analyzing"} · <span className="tabular">{elapsed.toFixed(1)} s</span>
-                {elapsed > 8 && <span className="text-faint">Large packs take a few seconds</span>}
-              </span>
-              <Button size="sm" variant="ghost" onClick={() => controller.current?.abort()}>
-                Cancel
-              </Button>
+            <div className="border-t border-line p-4 sm:px-5">
+              {busy ? (
+                <div className="flex h-11 items-center justify-between gap-3" aria-live="polite">
+                  <span className="flex min-w-0 items-center gap-2.5 text-[13px] font-semibold text-ink">
+                    <Loader2 className="size-4 shrink-0 animate-spin text-accent" aria-hidden />
+                    {busy === "sample" ? "Analyzing the sample" : "Analyzing"}
+                    <span className="font-medium tabular text-muted">{elapsed.toFixed(1)} s</span>
+                    {elapsed > 8 && <span className="truncate font-medium text-muted max-sm:hidden">Large packs take a few seconds</span>}
+                  </span>
+                  <Button size="sm" variant="ghost" onClick={() => controller.current?.abort()}>
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <Button variant="ghost" size="lg" className="px-3 sm:-ml-1" onClick={onSample}>
+                    <BookOpen className="text-muted" /> Try the fictional sample
+                  </Button>
+                  <Button variant="primary" size="lg" className="sm:min-w-40" onClick={onAnalyze} disabled={files.length === 0}>
+                    Analyze{total ? ` · ${bytes(total)}` : ""} <ArrowRight />
+                  </Button>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <Button variant="primary" size="lg" className="flex-1" onClick={onAnalyze} disabled={files.length === 0}>
-                Analyze{total ? ` · ${bytes(total)}` : ""}
-              </Button>
-              <Button size="lg" onClick={onSample} className="flex-1 sm:flex-none">
-                <Sparkles className="text-amber-ink" /> Try the fictional sample
-              </Button>
-            </div>
-          )}
+          </section>
 
-          <div className="mt-5 space-y-2 border-t border-line pt-4 text-[12px] leading-relaxed text-muted">
-            <p className="flex gap-2">
-              <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-faint" aria-hidden />
-              Files are sent to the PromoLens analysis endpoint on its hosting platform for this
-              request. The server does not intentionally keep them, and no AI model is called.
-            </p>
-            <p className="flex gap-2">
-              <Info className="mt-0.5 size-3.5 shrink-0 text-faint" aria-hidden />
-              Results are saved in this browser (IndexedDB) so a refresh keeps your work. You can
-              delete them at any time.
-            </p>
-          </div>
-          <button
-            type="button"
-            className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-medium text-ink-soft hover:text-ink"
-            onClick={() => importInput.current?.click()}
-          >
-            <FolderOpen className="size-3.5" /> Open a saved analysis (.json) — stays on this device
-          </button>
-          <input
-            ref={importInput}
-            type="file"
-            accept=".json,application/json"
-            className="sr-only"
-            aria-label="Saved analysis file"
-            data-testid="import-input"
-            onChange={(e) => {
-              void onImport(e.target.files?.[0]);
-              e.target.value = "";
-            }}
-          />
-        </section>
+          <ul className="mt-5 flex flex-col gap-2 text-[12px] text-muted sm:flex-row sm:gap-6">
+            <li className="flex items-center gap-2">
+              <ShieldCheck className="size-3.5 shrink-0 text-faint" aria-hidden />
+              Processed in memory, no AI model called
+            </li>
+            <li className="flex items-center gap-2">
+              <HardDrive className="size-3.5 shrink-0 text-faint" aria-hidden />
+              Results stay in this browser
+            </li>
+          </ul>
+
+          <ol className="mt-14 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3" aria-label="How it works">
+            {STEPS.map(([title, text], i) => (
+              <li key={title} className="bg-canvas px-4 py-3.5">
+                <p className="flex items-center gap-2 text-[13px] font-semibold text-ink">
+                  <span className="tabular text-[12px] text-accent">{String(i + 1).padStart(2, "0")}</span> {title}
+                </p>
+                <p className="mt-1 text-[12px] leading-relaxed text-muted">{text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </main>
     </div>
   );
 }
+
+const STEPS = [
+  ["Upload", "A screenplay pack or single episodes, with timestamps."],
+  ["Review", "Ranked cuts with timecodes, evidence and a timeline."],
+  ["Export", "Accept, reject and annotate, then export a shortlist."],
+] as const;

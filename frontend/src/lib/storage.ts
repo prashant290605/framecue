@@ -14,6 +14,7 @@ import { validateDocument } from "./validate";
  * analysis in memory and show the limitation instead of crashing.
  * ------------------------------------------------------------------------------------- */
 
+// The database name predates the FrameCue rebrand; changing it would orphan saved work.
 export const DB_NAME = "promolens";
 export const DB_VERSION = 1;
 const OPEN_TIMEOUT_MS = 4000;
@@ -44,7 +45,7 @@ interface StoredReview {
   updatedAt: string;
 }
 
-interface PromoLensDB extends DBSchema {
+interface AppDB extends DBSchema {
   analysis: { key: string; value: StoredAnalysis };
   review: { key: string; value: StoredReview };
 }
@@ -64,7 +65,7 @@ export function analysisKey(doc: AnalysisDocument): string {
   return `${doc.summary.input.sha256}:${doc.summary.analyzed_at}`;
 }
 
-let dbPromise: Promise<IDBPDatabase<PromoLensDB>> | null = null;
+let dbPromise: Promise<IDBPDatabase<AppDB>> | null = null;
 
 function toStorageError(error: unknown): StorageError {
   if (error instanceof StorageError) return error;
@@ -81,12 +82,12 @@ function toStorageError(error: unknown): StorageError {
   return new StorageError("error", "Local storage failed; your work stays in this tab.");
 }
 
-function db(): Promise<IDBPDatabase<PromoLensDB>> {
+function db(): Promise<IDBPDatabase<AppDB>> {
   if (dbPromise) return dbPromise;
   if (typeof indexedDB === "undefined") {
     return Promise.reject(new StorageError("unavailable", "This browser has no IndexedDB."));
   }
-  const opening = openDB<PromoLensDB>(DB_NAME, DB_VERSION, {
+  const opening = openDB<AppDB>(DB_NAME, DB_VERSION, {
     upgrade(database, oldVersion) {
       // v1: initial schema. Future versions migrate here, keyed on oldVersion.
       if (oldVersion < 1) {
@@ -141,7 +142,7 @@ export interface Restored {
 
 /** Load the last analysis. Corrupt or outdated records are deleted and reported. */
 export async function loadAnalysis(): Promise<Restored | null> {
-  let d: IDBPDatabase<PromoLensDB>;
+  let d: IDBPDatabase<AppDB>;
   try {
     d = await db();
   } catch (error) {

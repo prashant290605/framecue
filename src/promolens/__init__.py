@@ -1,4 +1,4 @@
-"""PromoLens: find and rank promo clips in timestamped microdrama screenplays."""
+"""FrameCue (package `promolens`): find and rank promo clips in microdrama screenplays."""
 
 from importlib.metadata import PackageNotFoundError, version
 

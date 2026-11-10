@@ -63,7 +63,7 @@ log = logging.getLogger("promolens.serverless")
 
 def create_serverless_app(frontend_dir: Path | None = DEFAULT_FRONTEND_DIR) -> FastAPI:
     app = FastAPI(
-        title="PromoLens (stateless)",
+        title="FrameCue (stateless)",
         version=__version__,
         docs_url="/api/docs",
         redoc_url=None,

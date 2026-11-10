@@ -1,4 +1,4 @@
-import { FileJson, Layers, SearchX, Sparkles } from "lucide-react";
+import { FileJson, Info, Layers, SearchX } from "lucide-react";
 import { domAnimation, LazyMotion, MotionConfig } from "motion/react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
@@ -76,19 +76,19 @@ function WorkspaceView() {
   const filteredOut = !aiEmpty && entries.length === 0;
 
   const list = (
-    <section aria-label="Recommendations" className="flex min-h-0 flex-col">
+    <section aria-label="Recommendations" className="flex min-h-0 flex-1 flex-col">
       <Toolbar shown={entries.length} />
       {view === "ai" && !aiEmpty && state.doc!.views.ai.provisional && (
-        <p className="border-b border-line bg-amber-wash px-4 py-2 text-[12px] leading-snug text-amber-ink">
-          Provisional: {state.doc!.views.ai.provisional_reason}
-        </p>
+        <ViewNote>
+          <span>Provisional: {state.doc!.views.ai.provisional_reason}</span>
+        </ViewNote>
       )}
       {view === "coverage" && (
-        <p className="border-b border-line px-4 py-2 text-[12px] leading-snug text-muted">
-          Unverified suggestions ranked by the heuristic baseline (0–1). Not AI quality scores.
-        </p>
+        <ViewNote>
+          <span>Unverified suggestions ranked by the heuristic baseline (0–1). Not AI quality scores.</span>
+        </ViewNote>
       )}
-      <div className="min-h-0 flex-1 pt-2">
+      <div className="min-h-0 flex-1 pt-1.5">
         {aiEmpty ? (
           <EmptyAi onFullShow={() => dispatch({ type: "view", view: "coverage" })} />
         ) : filteredOut ? (
@@ -107,17 +107,17 @@ function WorkspaceView() {
   );
 
   return (
-    <div className="flex h-dvh flex-col">
+    <div className="flex h-dvh flex-col bg-canvas">
       <TopBar entries={entries} />
       {desktop ? (
-        <div className="grid min-h-0 flex-1 grid-cols-[minmax(360px,420px)_1fr]">
-          <div className="flex min-h-0 flex-col border-r border-line bg-paper">{list}</div>
-          <main className="min-h-0 overflow-y-auto bg-[#fcfbf9]" aria-label="Candidate detail">
+        <div className="grid min-h-0 flex-1 grid-cols-[392px_1fr] xl:grid-cols-[420px_1fr]">
+          <div className="flex min-h-0 flex-col border-r border-line">{list}</div>
+          <main className="min-h-0 overflow-y-auto bg-surface" aria-label="Candidate detail">
             {aiEmpty ? <AiExplainer /> : <Detail />}
           </main>
         </div>
       ) : mobileDetail && selectedId && !aiEmpty ? (
-        <main className="min-h-0 flex-1 overflow-y-auto" aria-label="Candidate detail">
+        <main className="min-h-0 flex-1 overflow-y-auto bg-surface" aria-label="Candidate detail">
           <Detail onBack={() => setMobileDetail(false)} />
         </main>
       ) : (
@@ -127,54 +127,72 @@ function WorkspaceView() {
   );
 }
 
+function ViewNote({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="flex gap-2 border-b border-line px-4 py-2.5 text-[12px] leading-snug text-muted">
+      <Info className="mt-px size-3.5 shrink-0 text-faint" aria-hidden />
+      {children}
+    </p>
+  );
+}
+
+function EmptyState({ icon, title, children }: { icon: React.ReactNode; title: string; children?: React.ReactNode }) {
+  return (
+    <div className="flex flex-col items-center px-8 pt-14 pb-8 text-center">
+      <span className="flex size-10 items-center justify-center rounded-full bg-surface text-muted ring-1 ring-line [&_svg]:size-[18px]">{icon}</span>
+      <p className="mt-4 text-[14px] font-semibold text-ink">{title}</p>
+      {children}
+    </div>
+  );
+}
+
 function EmptyAi({ onFullShow }: { onFullShow: () => void }) {
   return (
-    <div className="mx-4 mt-6 rounded-lg border border-line bg-surface p-5 text-center">
-      <Sparkles className="mx-auto size-5 text-amber-ink" />
-      <p className="mt-2 text-[14px] font-semibold">No AI-reviewed picks in this analysis</p>
-      <p className="mx-auto mt-1 max-w-sm text-[13px] text-muted">
+    <EmptyState icon={<Layers />} title="No AI-reviewed picks in this analysis">
+      <p className="mt-1.5 max-w-[300px] text-[13px] leading-relaxed text-muted">
         AI judgements appear only when a validated evaluation bundle is uploaded with the
         screenplay. Nothing is estimated or generated in its place.
       </p>
-      <Button variant="primary" className="mt-4" onClick={onFullShow}>
-        <Layers /> Browse the full show
+      <Button variant="primary" className="mt-5" onClick={onFullShow}>
+        Browse the full show
       </Button>
-    </div>
+    </EmptyState>
   );
 }
 
 function AiExplainer() {
   return (
-    <div className="mx-auto max-w-lg px-6 py-16 text-[13px] leading-relaxed text-muted">
-      <h2 className="font-display text-[20px] font-semibold text-ink">How AI review works here</h2>
-      <p className="mt-3">
-        The deployed service never calls a model. AI-reviewed recommendations come from a
-        private evaluation bundle produced locally with <code className="text-[12px]">promolens evaluate</code> and
-        exported with <code className="text-[12px]">promolens export-ai</code>.
-      </p>
-      <p className="mt-3">
-        When you upload that bundle with the same screenplay, each judgement is used only if it
-        matches the screenplay exactly and its cited evidence re-validates. Everything else is
-        ignored and counted in the coverage panel.
-      </p>
-      <p className="mt-3 flex items-center gap-2 text-ink-soft">
-        <FileJson className="size-4 text-faint" /> Start a new analysis and add the bundle to see AI picks.
-      </p>
+    <div className="mx-auto max-w-[480px] px-8 py-20">
+      <span className="flex size-10 items-center justify-center rounded-full bg-accent-soft text-accent">
+        <FileJson className="size-[18px]" />
+      </span>
+      <h2 className="mt-5 text-[20px] font-bold tracking-[-0.02em] text-ink">How AI review works here</h2>
+      <div className="mt-3 space-y-3 text-[14px] leading-relaxed text-muted">
+        <p>
+          The deployed service never calls a model. AI-reviewed recommendations come from a private
+          evaluation bundle produced locally with the command-line tool, using{" "}
+          <code className="font-mono text-[12px] whitespace-nowrap text-ink-soft">promolens evaluate</code> and then{" "}
+          <code className="font-mono text-[12px] whitespace-nowrap text-ink-soft">promolens export-ai</code>.
+        </p>
+        <p>
+          Upload that bundle with the same screenplay and each judgement is used only if it matches
+          the screenplay exactly and its cited evidence re-validates. Everything else is ignored and
+          counted in the coverage panel.
+        </p>
+      </div>
     </div>
   );
 }
 
 function EmptyFiltered({ canClear, onClear }: { canClear: boolean; onClear: () => void }) {
   return (
-    <div className="mx-4 mt-6 rounded-lg border border-dashed border-line-strong p-5 text-center">
-      <SearchX className="mx-auto size-5 text-faint" />
-      <p className="mt-2 text-[13.5px] font-medium">Nothing matches</p>
-      <p className="mt-1 text-[12.5px] text-muted">Try fewer filters or a different search.</p>
+    <EmptyState icon={<SearchX />} title="Nothing matches">
+      <p className="mt-1.5 text-[13px] text-muted">Try fewer filters or a different search.</p>
       {canClear && (
-        <Button size="sm" className="mt-3" onClick={onClear}>
+        <Button size="sm" className="mt-4" onClick={onClear}>
           Clear search and filters
         </Button>
       )}
-    </div>
+    </EmptyState>
   );
 }

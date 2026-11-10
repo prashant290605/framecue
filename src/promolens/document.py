@@ -278,7 +278,7 @@ def build_document(run: RunResult) -> AnalysisDocument:
         "are separate scoring systems; never rank them together.",
         "Only candidates listed in ai_evaluations have AI judgements; nothing is synthesized.",
         "This analysis made no model API calls. The uploaded file is processed by the hosting "
-        "platform for this request and is not stored by PromoLens.",
+        "platform for this request and is not stored by FrameCue.",
         "Times are milliseconds from episode start; clips are half-open [start, end).",
     )
     return AnalysisDocument(

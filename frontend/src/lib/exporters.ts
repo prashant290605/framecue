@@ -145,7 +145,7 @@ export function analysisJson(doc: AnalysisDocument): string {
 
 export function exportName(doc: AnalysisDocument, kind: string, ext: string): string {
   const stem = doc.summary.input.name.replace(/\.[^.]+$/, "").replace(/[^A-Za-z0-9_-]+/g, "-");
-  return `promolens-${stem.slice(0, 40) || "analysis"}-${kind}.${ext}`;
+  return `framecue-${stem.slice(0, 40) || "analysis"}-${kind}.${ext}`;
 }
 
 export function download(name: string, text: string, type: string): void {

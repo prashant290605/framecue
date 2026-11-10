@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("mobile: stacked list and detail navigation", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /Find the clip/ })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /Find the moments worth promoting/ })).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0); // no horizontal scrolling
   await page.getByRole("button", { name: /Try the fictional sample/ }).click();

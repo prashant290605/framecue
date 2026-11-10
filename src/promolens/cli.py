@@ -1,4 +1,4 @@
-"""PromoLens command line.
+"""FrameCue command line (`promolens`).
 
     promolens analyze <pack.zip | episode.txt | folder> [--out DIR]
     promolens serve [--host 127.0.0.1] [--port 8000]
@@ -74,7 +74,7 @@ def _analyze(args) -> int:
     manifest = write_exports(run, out, raw_dir=Path(args.raw_dir))
     elapsed = time.perf_counter() - started
     summary, cov = run_summary(run), coverage(run)
-    print("PromoLens offline analysis (no model API calls)")
+    print("FrameCue offline analysis (no model API calls)")
     print(
         f"input: {summary.input.name} ({summary.input.kind}, {summary.input.size_bytes:,} bytes,"
         f" sha256 {summary.input.sha256[:12]})"
@@ -159,7 +159,7 @@ def _slug(source: Path, sha256: str) -> str:
 
 
 def _parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="promolens", description="PromoLens promo clip finder.")
+    p = argparse.ArgumentParser(prog="promolens", description="FrameCue promo clip finder.")
     sub = p.add_subparsers(dest="command")
 
     a = sub.add_parser("analyze", help="offline analysis of a ZIP, .txt file or folder")

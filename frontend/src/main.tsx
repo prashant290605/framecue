@@ -1,5 +1,4 @@
-import "@fontsource-variable/inter";
-import "@fontsource-variable/fraunces";
+import "@fontsource-variable/manrope";
 import "./index.css";
 import * as React from "react";
 import { createRoot } from "react-dom/client";

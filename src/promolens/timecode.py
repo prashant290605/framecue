@@ -1,7 +1,7 @@
 """Exact conversion between screenplay timestamps and integer milliseconds.
 
 Screenplay timestamps are ``MM:SS.cc`` (minutes, seconds, centiseconds). All timing logic in
-PromoLens uses integer milliseconds so that durations and overlaps are exact; floats are never
+FrameCue uses integer milliseconds so that durations and overlaps are exact; floats are never
 involved.
 """
 

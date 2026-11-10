@@ -3,16 +3,16 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center gap-1 whitespace-nowrap rounded-sm px-1.5 py-px text-[11px] font-medium leading-[18px] [&_svg]:size-3",
+  "inline-flex h-5 items-center gap-1 whitespace-nowrap rounded-[5px] px-1.5 text-[11px] font-semibold [&_svg]:size-3",
   {
     variants: {
       tone: {
-        neutral: "bg-sunken text-ink-soft",
+        neutral: "bg-subtle text-ink-soft",
         outline: "border border-line text-muted",
-        amber: "bg-amber-soft text-amber-ink",
+        accent: "bg-accent-soft text-accent-hover",
         ok: "bg-ok-soft text-ok",
         no: "bg-no-soft text-no",
-        ink: "bg-ink text-paper",
+        solid: "bg-accent text-white",
       },
     },
     defaultVariants: { tone: "neutral" },
