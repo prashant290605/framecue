@@ -16,7 +16,7 @@ Every component is in [0, 1]. The priority is the weighted mean of the component
 
 import re
 
-from promolens.schemas import (
+from framecue.schemas import (
     CandidateConfig,
     CandidateSignals,
     EventType,

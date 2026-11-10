@@ -1,4 +1,4 @@
-"""The real pack through the stateless endpoint (skipped unless PROMOLENS_TEST_ZIP is set)."""
+"""The real pack through the stateless endpoint (skipped unless FRAMECUE_TEST_ZIP is set)."""
 
 import os
 import time
@@ -8,15 +8,15 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from promolens.document import AnalysisDocument
-from promolens.evaluator import EvaluationCache
-from promolens.pipeline import DEFAULT_CACHE_DIR, analyze_path
-from promolens.serverless import MAX_REQUEST_BYTES, MAX_RESPONSE_BYTES, create_serverless_app
+from framecue.document import AnalysisDocument
+from framecue.evaluator import EvaluationCache
+from framecue.pipeline import DEFAULT_CACHE_DIR, analyze_path
+from framecue.serverless import MAX_REQUEST_BYTES, MAX_RESPONSE_BYTES, create_serverless_app
 
-ZIP = os.environ.get("PROMOLENS_TEST_ZIP")
+ZIP = os.environ.get("FRAMECUE_TEST_ZIP")
 pytestmark = [
     pytest.mark.private,
-    pytest.mark.skipif(not ZIP, reason="set PROMOLENS_TEST_ZIP to the private screenplay ZIP"),
+    pytest.mark.skipif(not ZIP, reason="set FRAMECUE_TEST_ZIP to the private screenplay ZIP"),
 ]
 CACHE = Path(__file__).resolve().parents[1] / DEFAULT_CACHE_DIR
 

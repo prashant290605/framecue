@@ -2,7 +2,7 @@ import type { AnalysisDocument, ViewName } from "@/api/types";
 import type { DocIndex, Entry, Reviews } from "./doc-index";
 
 /** Same columns as the backend's ai_recommendations.csv / coverage_candidates.csv
- *  (src/promolens/exports.py), plus the editor's decision and note. */
+ *  (src/framecue/exports.py), plus the editor's decision and note. */
 export const RANKED_COLUMNS = [
   "view", "rank", "alternative_of", "candidate_id", "episode", "start_timestamp",
   "end_timestamp", "start_ms", "end_ms", "duration_seconds", "segments", "score_system",
@@ -124,7 +124,7 @@ export function shortlistJson(index: DocIndex, reviews: Reviews, now = new Date(
   const s = index.doc.summary;
   return JSON.stringify(
     {
-      format: "promolens-shortlist-v1",
+      format: "framecue-shortlist-v1",
       exported_at: now.toISOString(),
       source: {
         input_name: s.input.name,

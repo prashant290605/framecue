@@ -1,4 +1,4 @@
-"""End-to-end checks on the confidential pack (skipped unless PROMOLENS_TEST_ZIP is set).
+"""End-to-end checks on the confidential pack (skipped unless FRAMECUE_TEST_ZIP is set).
 
 Assertions are about consistency and structure, never about screenplay content. The AI cache
 is the local private one, so AI counts are compared across outputs instead of hard-coded.
@@ -15,16 +15,16 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from promolens.api import ApiConfig, create_app
-from promolens.exports import write_exports
-from promolens.pipeline import DEFAULT_CACHE_DIR, analyze_path, coverage
-from promolens.ranking import PromoFilter, page
-from promolens.timecode import parse_timestamp
+from framecue.api import ApiConfig, create_app
+from framecue.exports import write_exports
+from framecue.pipeline import DEFAULT_CACHE_DIR, analyze_path, coverage
+from framecue.ranking import PromoFilter, page
+from framecue.timecode import parse_timestamp
 
-ZIP = os.environ.get("PROMOLENS_TEST_ZIP")
+ZIP = os.environ.get("FRAMECUE_TEST_ZIP")
 pytestmark = [
     pytest.mark.private,
-    pytest.mark.skipif(not ZIP, reason="set PROMOLENS_TEST_ZIP to the private screenplay ZIP"),
+    pytest.mark.skipif(not ZIP, reason="set FRAMECUE_TEST_ZIP to the private screenplay ZIP"),
 ]
 REPO = Path(__file__).resolve().parents[1]
 CACHE = REPO / DEFAULT_CACHE_DIR

@@ -1,4 +1,4 @@
-import { openDB, type DBSchema, type IDBPDatabase } from "idb";
+import { deleteDB, openDB, type DBSchema, type IDBPDatabase } from "idb";
 import type { AnalysisDocument, ViewName } from "@/api/types";
 import type { Decision, Filters, Reviews } from "./doc-index";
 import { validateDocument } from "./validate";
@@ -13,14 +13,14 @@ import { validateDocument } from "./validate";
  *   app       "last"        -> the analysis key to reopen after a refresh
  *
  * v1 kept a single analysis under the key "current"; upgrading moves it into the library
- * with its decisions intact.
+ * with its decisions intact. Work saved under an earlier database name on the same site is
+ * moved into this database the first time it opens empty (see adoptEarlier).
  *
  * Every failure is converted into a StorageError with a user-facing reason; callers keep the
  * analysis in memory and show the limitation instead of crashing.
  * ------------------------------------------------------------------------------------- */
 
-// The database name predates the FrameCue rebrand; changing it would orphan saved work.
-export const DB_NAME = "promolens";
+export const DB_NAME = "framecue";
 export const DB_VERSION = 2;
 const OPEN_TIMEOUT_MS = 4000;
 
@@ -141,6 +141,9 @@ function db(): Promise<IDBPDatabase<AppDB>> {
     blocking() {
       dbPromise = null; // another tab upgraded the schema; reopen next time
     },
+  }).then(async (database) => {
+    await adoptEarlier(database).catch(() => undefined); // never blocks opening
+    return database;
   });
   const timeout = new Promise<never>((_, reject) =>
     setTimeout(
@@ -153,6 +156,51 @@ function db(): Promise<IDBPDatabase<AppDB>> {
     throw toStorageError(error);
   });
   return dbPromise;
+}
+
+/** Move saved work from an earlier database name on this site into this one, once: when
+ *  this database is still empty and another database here has the same stores. */
+async function adoptEarlier(target: IDBPDatabase<AppDB>): Promise<void> {
+  if (typeof indexedDB.databases !== "function" || (await target.count("library")) > 0) return;
+  const names = (await indexedDB.databases())
+    .map((d) => d.name)
+    .filter((n): n is string => Boolean(n) && n !== DB_NAME);
+  for (const name of names) {
+    const source = await openDB(name).catch(() => null);
+    if (!source) continue;
+    const stores = [...source.objectStoreNames];
+    if (!stores.includes("analysis") || !stores.includes("review")) {
+      source.close();
+      continue;
+    }
+    const read = async (store: string) => {
+      const os = source.transaction(store, "readonly").objectStore(store);
+      const [keys, values] = await Promise.all([os.getAllKeys(), os.getAll()]);
+      return keys.map((k, i) => [String(k), values[i]] as const);
+    };
+    const analyses = await read("analysis");
+    const reviews = await read("review");
+    const library = stores.includes("library") ? await read("library") : [];
+    const app = stores.includes("app") ? await read("app") : [];
+    source.close();
+    const tx = target.transaction([...STORES], "readwrite");
+    for (const [key, value] of analyses) {
+      const stored = value as StoredAnalysis;
+      if (!stored?.meta?.key || !stored.doc) continue;
+      const meta = withSummary(stored.meta, stored.doc);
+      void tx.objectStore("analysis").put({ meta, doc: stored.doc }, meta.key);
+      if (key === "current") {
+        // a v1 database: list its single analysis and reopen it after a refresh
+        void tx.objectStore("library").put(meta, meta.key);
+        void tx.objectStore("app").put(meta.key, "last");
+      }
+    }
+    for (const [key, value] of library) void tx.objectStore("library").put(value as AnalysisMeta, key);
+    for (const [, value] of reviews) void tx.objectStore("review").put(value as StoredReview);
+    for (const [key, value] of app) if (typeof value === "string") void tx.objectStore("app").put(value, key);
+    await tx.done;
+    void deleteDB(name).catch(() => undefined);
+  }
 }
 
 async function run<T>(work: (d: IDBPDatabase<AppDB>) => Promise<T>): Promise<T> {

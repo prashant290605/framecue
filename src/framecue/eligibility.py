@@ -25,7 +25,7 @@ from urllib.parse import urlsplit, urlunsplit
 
 import httpx
 
-from promolens.llm_client import LLMSettings
+from framecue.llm_client import LLMSettings
 
 REQUIRED_PARAMETERS = frozenset({"response_format", "structured_outputs"})
 
@@ -137,7 +137,7 @@ def assess(rows: list[dict], settings: LLMSettings) -> Eligibility:
             "only_safety_retention_endpoints",
             "every ZDR-listed endpoint for this model is a Safety Retention endpoint (prompts "
             "flagged by provider classifiers may be retained); choose another model or set "
-            "PROMOLENS_LLM_ALLOW_SAFETY_RETENTION=true deliberately",
+            "FRAMECUE_LLM_ALLOW_SAFETY_RETENTION=true deliberately",
             excluded=tuple(retaining),
         )
     strict_slugs = {e.provider_slug for e in strict}
@@ -188,7 +188,7 @@ def check_eligibility(
         )
     if not settings.zdr:
         return Eligibility(
-            settings.model, False, "zdr_disabled", "PROMOLENS_LLM_ZDR is false; refusing"
+            settings.model, False, "zdr_disabled", "FRAMECUE_LLM_ZDR is false; refusing"
         )
     try:
         rows = fetch_zdr_endpoints(settings, transport)

@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: { alias: { "@": "/src" } },
   build: { outDir: "dist", emptyOutDir: true, sourcemap: false },
-  // In development, /api is proxied to `promolens serve` on port 8000 (override with API_TARGET).
+  // In development, /api is proxied to `framecue serve` on port 8000 (override with API_TARGET).
   server: { proxy: { "/api": apiTarget } },
   test: {
     environment: "jsdom",

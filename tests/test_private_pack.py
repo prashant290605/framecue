@@ -1,6 +1,6 @@
 """Integration tests against the confidential screenplay ZIP.
 
-Run locally with:  PROMOLENS_TEST_ZIP=/path/to/pack.zip pytest -m private
+Run locally with:  FRAMECUE_TEST_ZIP=/path/to/pack.zip pytest -m private
 They skip when the variable is unset (e.g. in CI). Assertions report counts and IDs only;
 no screenplay text is printed or stored.
 """
@@ -13,16 +13,16 @@ from pathlib import Path
 
 import pytest
 
-from promolens.parser import parse_zip
-from promolens.schemas import EventType, ParseResult, Severity
+from framecue.parser import parse_zip
+from framecue.schemas import EventType, ParseResult, Severity
 
-ZIP_PATH = os.environ.get("PROMOLENS_TEST_ZIP", "")
+ZIP_PATH = os.environ.get("FRAMECUE_TEST_ZIP", "")
 
 pytestmark = [
     pytest.mark.private,
     pytest.mark.skipif(
         not ZIP_PATH or not Path(ZIP_PATH).is_file(),
-        reason="set PROMOLENS_TEST_ZIP to the private screenplay ZIP",
+        reason="set FRAMECUE_TEST_ZIP to the private screenplay ZIP",
     ),
 ]
 

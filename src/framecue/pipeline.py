@@ -6,8 +6,8 @@ candidate window, the prompt version, the scoring rules, the inference profile a
 evidence windows. Every reused entry is also re-validated against the parsed episode. All
 other cache entries are counted in a ``CacheAudit`` and excluded.
 
-Live evaluation is a separate, explicit opt-in path (``promolens evaluate`` /
-``promolens.eval_driver --live``). Its results reach this pipeline only through the cache.
+Live evaluation is a separate, explicit opt-in path (``framecue evaluate`` /
+``framecue.eval_driver --live``). Its results reach this pipeline only through the cache.
 """
 
 import hashlib
@@ -18,20 +18,20 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 
-from promolens import __version__
-from promolens.baseline import METHOD as BASELINE_METHOD
-from promolens.candidates import generate_candidates
-from promolens.evaluator import (
+from framecue import __version__
+from framecue.baseline import METHOD as BASELINE_METHOD
+from framecue.candidates import generate_candidates
+from framecue.evaluator import (
     SCORING_RULES_VERSION,
     EvaluationCache,
     MemoryCache,
     cache_key,
     load_cached_evaluation,
 )
-from promolens.llm_client import LLMSettings
-from promolens.parser import parse_path
-from promolens.prompts import PROMPT_VERSION
-from promolens.results import (
+from framecue.llm_client import LLMSettings
+from framecue.parser import parse_path
+from framecue.prompts import PROMPT_VERSION
+from framecue.results import (
     AIProfile,
     AIStatus,
     CacheAudit,
@@ -40,7 +40,7 @@ from promolens.results import (
     ParseSummary,
     RunSummary,
 )
-from promolens.schemas import (
+from framecue.schemas import (
     CandidateConfig,
     Episode,
     ParseResult,
@@ -97,7 +97,7 @@ class RunResult:
     @property
     def views(self):  # -> ranking.Views (imported lazily to avoid a cycle)
         if self._views is None:
-            from promolens.ranking import build_views
+            from framecue.ranking import build_views
 
             self._views = build_views(self)
         return self._views
@@ -297,7 +297,7 @@ def run_summary(run: RunResult) -> RunSummary:
         coverage=coverage(run),
         timings_ms=run.timings_ms,
         versions={
-            "promolens": __version__,
+            "framecue": __version__,
             "prompt": PROMPT_VERSION,
             "scoring_rules": SCORING_RULES_VERSION,
             "baseline": BASELINE_METHOD,

@@ -4,9 +4,9 @@ import zipfile
 
 import pytest
 
-from promolens import parser
-from promolens.parser import parse_path, parse_zip
-from promolens.schemas import Severity
+from framecue import parser
+from framecue.parser import parse_path, parse_zip
+from framecue.schemas import Severity
 from synthetic import simple_episode
 
 

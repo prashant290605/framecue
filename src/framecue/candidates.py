@@ -37,8 +37,8 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from statistics import median
 
-from promolens.baseline import OPEN_LINE_CUES, STRONG_CUES, assess, duration_preference, event_cues
-from promolens.schemas import (
+from framecue.baseline import OPEN_LINE_CUES, STRONG_CUES, assess, duration_preference, event_cues
+from framecue.schemas import (
     CandidateConfig,
     CandidateSignals,
     ClipSegment,

@@ -1,6 +1,6 @@
 """A small OpenAI-compatible chat-completions client for OpenRouter or GroqCloud.
 
-``PROMOLENS_LLM_PROVIDER`` selects the request dialect (default ``openrouter``).
+``FRAMECUE_LLM_PROVIDER`` selects the request dialect (default ``openrouter``).
 
 **GroqCloud** (``groq``): ``max_completion_tokens``, strict ``json_schema`` (constrained
 decoding on supported models), optional ``reasoning_effort`` and ``include_reasoning=false``.
@@ -23,7 +23,7 @@ safety:
 - ``zdr=true``: zero-data-retention endpoints only.
 
 ``zdr=true`` alone still admits "Safety Retention" endpoints on accounts that allow them, so
-callers run ``promolens.eligibility.check_eligibility`` first. Its result supplies
+callers run ``framecue.eligibility.check_eligibility`` first. Its result supplies
 ``ignore_providers`` (sent as ``provider.ignore``) and ``forbidden_providers`` (a response from
 one of them aborts the run with ``privacy_routing_violation``).
 
@@ -65,21 +65,21 @@ MAX_RETRY_WAIT_S = 60.0
 CHARS_PER_TOKEN_ESTIMATE = 3.0
 
 _ENV = {
-    "provider": ("PROMOLENS_LLM_PROVIDER",),
-    "api_key": ("PROMOLENS_LLM_API_KEY",),
-    "model": ("PROMOLENS_LLM_MODEL",),
-    "endpoint": ("PROMOLENS_LLM_ENDPOINT",),
-    "timeout_s": ("PROMOLENS_LLM_TIMEOUT_S",),
-    "max_output_tokens": ("PROMOLENS_LLM_MAX_OUTPUT_TOKENS",),
-    "max_retries": ("PROMOLENS_LLM_MAX_RETRIES",),
-    "reasoning_effort": ("PROMOLENS_LLM_REASONING_EFFORT",),
-    "zdr": ("PROMOLENS_LLM_ZDR",),
-    "allow_safety_retention": ("PROMOLENS_LLM_ALLOW_SAFETY_RETENTION",),
-    "batch_size": ("PROMOLENS_EVAL_BATCH_SIZE",),
-    "max_run_cost": ("PROMOLENS_MAX_RUN_COST",),
-    "price_prompt_per_mtok": ("PROMOLENS_PRICE_PROMPT_PER_MTOK",),
-    "price_completion_per_mtok": ("PROMOLENS_PRICE_COMPLETION_PER_MTOK",),
-    "daily_token_budget": ("PROMOLENS_DAILY_TOKEN_BUDGET",),
+    "provider": ("FRAMECUE_LLM_PROVIDER",),
+    "api_key": ("FRAMECUE_LLM_API_KEY",),
+    "model": ("FRAMECUE_LLM_MODEL",),
+    "endpoint": ("FRAMECUE_LLM_ENDPOINT",),
+    "timeout_s": ("FRAMECUE_LLM_TIMEOUT_S",),
+    "max_output_tokens": ("FRAMECUE_LLM_MAX_OUTPUT_TOKENS",),
+    "max_retries": ("FRAMECUE_LLM_MAX_RETRIES",),
+    "reasoning_effort": ("FRAMECUE_LLM_REASONING_EFFORT",),
+    "zdr": ("FRAMECUE_LLM_ZDR",),
+    "allow_safety_retention": ("FRAMECUE_LLM_ALLOW_SAFETY_RETENTION",),
+    "batch_size": ("FRAMECUE_EVAL_BATCH_SIZE",),
+    "max_run_cost": ("FRAMECUE_MAX_RUN_COST",),
+    "price_prompt_per_mtok": ("FRAMECUE_PRICE_PROMPT_PER_MTOK",),
+    "price_completion_per_mtok": ("FRAMECUE_PRICE_COMPLETION_PER_MTOK",),
+    "daily_token_budget": ("FRAMECUE_DAILY_TOKEN_BUDGET",),
 }
 
 # Groq free plan allows 8,000 tokens/minute for gpt-oss-120b, so a single request (prompt plus
@@ -115,7 +115,7 @@ class LLMSettings(BaseModel):
     max_run_cost: float | None = Field(default=None, gt=0, description="Stop when exceeded.")
     price_prompt_per_mtok: float | None = Field(default=None, ge=0)
     price_completion_per_mtok: float | None = Field(default=None, ge=0)
-    # Free-tier guard: tokens this project may spend per UTC day (see promolens.quota).
+    # Free-tier guard: tokens this project may spend per UTC day (see framecue.quota).
     daily_token_budget: int | None = Field(default=None, gt=0)
 
     @model_validator(mode="before")
@@ -276,7 +276,7 @@ class ChatCompletionsClient:
         if settings.api_key is None or not settings.api_key.get_secret_value().strip():
             raise LLMError(
                 "missing_api_key",
-                "Set PROMOLENS_LLM_API_KEY in the environment or .env",
+                "Set FRAMECUE_LLM_API_KEY in the environment or .env",
                 scope="run",
             )
         self.settings = settings

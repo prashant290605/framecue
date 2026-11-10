@@ -68,7 +68,7 @@ describe("upload", () => {
   });
 
   it("sends the fictional sample's published AI bundle and labels its reviews as genuine", async () => {
-    const bundle = { format: "promolens-ai-bundle-v1", entries: {}, failures: {} };
+    const bundle = { format: "framecue-ai-bundle-v1", entries: {}, failures: {} };
     const { calls } = mockFetch({ analyze: () => json(sampleDocWithAi()), sampleBundle: () => json(bundle) });
     const u = user();
     render(<App />);

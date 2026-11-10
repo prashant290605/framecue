@@ -13,14 +13,14 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
+from framecue import cli, serverless
+from framecue.api import ApiConfig, create_app
+from framecue.document import AnalysisDocument
+from framecue.evaluator import EvaluationCache
+from framecue.parser import parse_zip_bytes
+from framecue.serverless import MAX_REQUEST_BYTES, MAX_UPLOAD_BYTES, create_serverless_app
+from framecue.timecode import parse_timestamp
 from pipeline_fakes import episode_text, fill_cache, pack_bytes
-from promolens import cli, serverless
-from promolens.api import ApiConfig, create_app
-from promolens.document import AnalysisDocument
-from promolens.evaluator import EvaluationCache
-from promolens.parser import parse_zip_bytes
-from promolens.serverless import MAX_REQUEST_BYTES, MAX_UPLOAD_BYTES, create_serverless_app
-from promolens.timecode import parse_timestamp
 
 REPO = Path(__file__).resolve().parents[1]
 LINE = "We should check the list."  # the synthetic dialogue; must never reach logs
@@ -59,7 +59,7 @@ def test_stateless_analysis_is_complete_and_normalized(client) -> None:
     r = analyze(client)
     assert r.status_code == 200 and r.headers["cache-control"] == "no-store"
     doc = AnalysisDocument.model_validate(r.json())  # exact contract
-    assert doc.schema_version == "promolens-analysis-v1"
+    assert doc.schema_version == "framecue-analysis-v1"
     assert [e.episode_number for e in doc.episodes] == [1, 2, 3]
     assert doc.summary.candidates == len(doc.candidates) and doc.summary.live_ai_calls == 0
     for ep in doc.episodes:
@@ -129,8 +129,8 @@ def test_tampered_bundle_entry_is_rejected(client, tmp_path) -> None:
     ("bundle_bytes", "message"),
     [
         (b"not json", "not valid JSON"),
-        (json.dumps({"format": "other"}).encode(), "not a promolens-ai-bundle-v1"),
-        (json.dumps({"format": "promolens-ai-bundle-v1", "entries": {"../x": {}}}).encode(),
+        (json.dumps({"format": "other"}).encode(), "not a framecue-ai-bundle-v1"),
+        (json.dumps({"format": "framecue-ai-bundle-v1", "entries": {"../x": {}}}).encode(),
          "64-character hex"),
     ],
 )  # fmt: skip
@@ -172,10 +172,10 @@ def test_oversized_requests_are_rejected_with_cli_guidance(client) -> None:
     big = b"x" * (MAX_UPLOAD_BYTES + 10)  # body below the 4.4 MB guard, content above 4 MB
     r = client.post("/api/analyze", files=[("files", ("big.txt", big, "text/plain"))])
     assert r.status_code == 413 and r.json()["error"]["code"] == "upload_too_large"
-    assert "promolens analyze" in r.json()["error"]["message"]
+    assert "framecue analyze" in r.json()["error"]["message"]
     huge = b"x" * (MAX_REQUEST_BYTES + 10)  # rejected from Content-Length before parsing
     r = client.post("/api/analyze", files=[("files", ("huge.txt", huge, "text/plain"))])
-    assert r.status_code == 413 and "promolens analyze" in r.json()["error"]["message"]
+    assert r.status_code == 413 and "framecue analyze" in r.json()["error"]["message"]
     assert MAX_REQUEST_BYTES < 4_500_000 and MAX_UPLOAD_BYTES < MAX_REQUEST_BYTES
 
 
@@ -261,11 +261,11 @@ def test_vercelignore_excludes_private_files_and_keeps_the_app() -> None:
         pytest.skip("git is needed to evaluate ignore rules")
     tree = [
         "app.py", "pyproject.toml", "README.md", "vercel.json", ".python-version",
-        "src/promolens/api.py", "frontend/package.json", "frontend/src/main.ts",
+        "src/framecue/api.py", "frontend/package.json", "frontend/src/main.ts",
         "frontend/index.html",
         # must be excluded:
         "pack.zip", "brief.pdf", ".env", ".env.local", "data/private/x.txt", "runs/cache/a.json",
-        "runs/ai_bundle.json", "outputs/x.csv", "episode-01.txt", "src/promolens/__pycache__/x.pyc",
+        "runs/ai_bundle.json", "outputs/x.csv", "episode-01.txt", "src/framecue/__pycache__/x.pyc",
         "frontend/node_modules/vite/index.js", "frontend/dist/index.html", "tests/test_x.py",
         "docs/PLAN.md", "frontend/src/secrets.json", "src/pack.zip", "frontend/review/notes.txt",
     ]  # fmt: skip
@@ -327,7 +327,7 @@ def test_cli_export_ai_writes_a_private_bundle(tmp_path, capsys) -> None:
     out = tmp_path / "bundle.json"
     assert cli.main(["export-ai", "--cache-dir", str(tmp_path / "cache"), "--out", str(out)]) == 0
     bundle = json.loads(out.read_text("utf-8"))
-    assert bundle["format"] == "promolens-ai-bundle-v1" and len(bundle["entries"]) == 1
+    assert bundle["format"] == "framecue-ai-bundle-v1" and len(bundle["entries"]) == 1
     assert "PRIVATE" in capsys.readouterr().out
     assert cli.main(["export-ai", "--cache-dir", str(tmp_path / "none")]) == 2
 
@@ -342,8 +342,8 @@ def test_committed_openapi_matches_the_stateless_app() -> None:
 
 
 def test_public_sample_is_fictional_valid_and_analyzable() -> None:
-    from promolens.parser import parse_path
-    from promolens.pipeline import analyze_path
+    from framecue.parser import parse_path
+    from framecue.pipeline import analyze_path
 
     sample = REPO / "frontend" / "public" / "sample"
     files = sorted(p.name for p in sample.glob("*.txt"))
@@ -380,7 +380,7 @@ def test_public_sample_bundle_is_genuine_sample_only_and_revalidates() -> None:
     sample = SAMPLE_DIR
     bundle_path = sample / "harbor-light.ai-bundle.json"
     bundle = json.loads(bundle_path.read_text("utf-8"))
-    assert bundle["format"] == "promolens-ai-bundle-v1" and bundle["failures"] == {}
+    assert bundle["format"] == "framecue-ai-bundle-v1" and bundle["failures"] == {}
     entries = bundle["entries"]
     assert 0 < len(entries) <= 44
     for entry in entries.values():

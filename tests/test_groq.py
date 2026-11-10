@@ -6,19 +6,19 @@ from datetime import UTC, datetime
 import httpx
 import pytest
 
-from llm_fakes import TEST_KEY, FakeOpenRouter, body, request_ids
-from promolens.candidates import generate_candidates
-from promolens.eligibility import check_eligibility
-from promolens.evaluator import EvaluationCache, EvaluationConfig, Evaluator
-from promolens.llm_client import (
+from framecue.candidates import generate_candidates
+from framecue.eligibility import check_eligibility
+from framecue.evaluator import EvaluationCache, EvaluationConfig, Evaluator
+from framecue.llm_client import (
     GROQ_ENDPOINT,
     ChatCompletionsClient,
     LLMError,
     LLMSettings,
     parse_duration,
 )
-from promolens.quota import DailyLedger
-from promolens.schemas import CandidateConfig, EvaluationStatus
+from framecue.quota import DailyLedger
+from framecue.schemas import CandidateConfig, EvaluationStatus
+from llm_fakes import TEST_KEY, FakeOpenRouter, body, request_ids
 from test_evaluator import make_episode
 
 MESSAGES = [{"role": "system", "content": "s"}, {"role": "user", "content": "{}"}]
@@ -85,15 +85,15 @@ def call(client):
 
 def test_settings_defaults_and_provider_specific_key_fallback() -> None:
     s = LLMSettings.from_env(
-        env={"PROMOLENS_LLM_PROVIDER": "groq", "GROQ_API_KEY": "g"}, dotenv=None
+        env={"FRAMECUE_LLM_PROVIDER": "groq", "GROQ_API_KEY": "g"}, dotenv=None
     )
     assert s.provider == "groq" and s.endpoint == GROQ_ENDPOINT
     assert s.model == "openai/gpt-oss-120b" and s.batch_size == 4 and s.max_output_tokens == 2500
     assert s.api_key.get_secret_value() == "g" and s.reasoning_effort == "low"
-    other = {"PROMOLENS_LLM_PROVIDER": "groq", "OPENROUTER_API_KEY": "not-for-groq"}
+    other = {"FRAMECUE_LLM_PROVIDER": "groq", "OPENROUTER_API_KEY": "not-for-groq"}
     assert LLMSettings.from_env(env=other, dotenv=None).api_key is None
     explicit = LLMSettings.from_env(
-        env={"PROMOLENS_LLM_PROVIDER": "groq", "PROMOLENS_EVAL_BATCH_SIZE": "2"}, dotenv=None
+        env={"FRAMECUE_LLM_PROVIDER": "groq", "FRAMECUE_EVAL_BATCH_SIZE": "2"}, dotenv=None
     )
     assert explicit.batch_size == 2
     assert LLMSettings().provider == "openrouter" and LLMSettings().batch_size == 8

@@ -2,7 +2,7 @@
 
 FrameCue finds and ranks 20–60 second promo clips in timestamped microdrama screenplays.
 
-**Live site:** https://framecue-app.vercel.app (the earlier address, https://promolens-two.vercel.app, still works).
+**Live site:** https://framecue-app.vercel.app
 
 ## Overview
 
@@ -72,9 +72,6 @@ The deployed API has two routes, `GET /api/health` and `POST /api/analyze`. It i
 and never calls a model. AI reviews reach the website only as a bundle uploaded with the
 screenplay, which the server re-validates against that screenplay.
 
-The Python package and command are still called `promolens`, the project's first name, so
-existing scripts, settings (`PROMOLENS_*`) and saved data keep working.
-
 ## Getting started
 
 **Prerequisites:** Python 3.11 or later and Node.js 24. The commands below use Windows
@@ -99,13 +96,13 @@ cd frontend && npm ci
 **Environment variables** are needed only for live AI evaluation. Copy `.env.example` to
 `.env` (gitignored) and set:
 
-- `PROMOLENS_LLM_API_KEY` (or `GROQ_API_KEY`): a GroqCloud key on the free plan;
-- `PROMOLENS_DAILY_TOKEN_BUDGET` (optional): tokens per UTC day, default 180,000.
+- `FRAMECUE_LLM_API_KEY` (or `GROQ_API_KEY`): a GroqCloud key on the free plan;
+- `FRAMECUE_DAILY_TOKEN_BUDGET` (optional): tokens per UTC day, default 180,000.
 
 Start the backend (http://127.0.0.1:8000):
 
 ```bash
-.venv\Scripts\promolens serve --port 8000
+.venv\Scripts\framecue serve --port 8000
 ```
 
 Start the frontend (http://localhost:5173, with `/api` proxied to port 8000):
@@ -129,7 +126,7 @@ story through the real API, together with any AI reviews published for it in
 1. Plan the run without calling the model:
 
    ```bash
-   .venv\Scripts\promolens evaluate --zip "data\private\pack.zip" --schedule coverage-first --levels 1
+   .venv\Scripts\framecue evaluate --zip "data\private\pack.zip" --schedule coverage-first --levels 1
    ```
 
 2. Add `--allow-large --live` to evaluate. Requests are paced to the free plan's limits and
@@ -137,7 +134,7 @@ story through the real API, together with any AI reviews published for it in
 3. Export the cached reviews:
 
    ```bash
-   .venv\Scripts\promolens export-ai --out runs\ai_bundle.json
+   .venv\Scripts\framecue export-ai --out runs\ai_bundle.json
    ```
 
 4. Upload `runs\ai_bundle.json` as the **AI evaluation bundle** together with the same
@@ -153,10 +150,10 @@ list, your shortlist and the analysis document.
 
 | Command | Purpose |
 |---|---|
-| `promolens analyze <zip, txt or folder> --out <dir>` | Offline analysis; writes rankings, CSVs and a manifest |
-| `promolens serve --port 8000` | Local API for the frontend |
-| `promolens evaluate --zip <path> [--live]` | Opt-in AI evaluation (dry run without `--live`) |
-| `promolens export-ai --out <file>` | Bundle cached AI reviews for upload |
+| `framecue analyze <zip, txt or folder> --out <dir>` | Offline analysis; writes rankings, CSVs and a manifest |
+| `framecue serve --port 8000` | Local API for the frontend |
+| `framecue evaluate --zip <path> [--live]` | Opt-in AI evaluation (dry run without `--live`) |
+| `framecue export-ai --out <file>` | Bundle cached AI reviews for upload |
 
 `analyze` never calls a model and prints counts, IDs and scores, never screenplay text.
 
@@ -185,7 +182,7 @@ cd frontend && npm run build && npx playwright test
 ```
 
 Set `E2E_BASE_URL` to run the same specs against a deployment. Tests that need the private
-screenplay pack are skipped unless `PROMOLENS_TEST_ZIP` points to it. CI runs Ruff, pytest,
+screenplay pack are skipped unless `FRAMECUE_TEST_ZIP` points to it. CI runs Ruff, pytest,
 the TypeScript check, the build and Vitest on every push.
 
 ## Deployment

@@ -1,9 +1,9 @@
-"""FrameCue command line (`promolens`).
+"""FrameCue command line (`framecue`).
 
-    promolens analyze <pack.zip | episode.txt | folder> [--out DIR]
-    promolens serve [--host 127.0.0.1] [--port 8000]
-    promolens export-ai [--out runs/ai_bundle.json]   (private AI results for /api/analyze)
-    promolens evaluate ...   (explicit opt-in live AI evaluation; see eval_driver)
+    framecue analyze <pack.zip | episode.txt | folder> [--out DIR]
+    framecue serve [--host 127.0.0.1] [--port 8000]
+    framecue export-ai [--out runs/ai_bundle.json]   (private AI results for /api/analyze)
+    framecue evaluate ...   (explicit opt-in live AI evaluation; see eval_driver)
 
 ``analyze`` is always offline. It never creates a model client, and it reuses cached AI
 evaluations only when their keys match this input and the AI profile exactly. The console
@@ -18,16 +18,16 @@ import sys
 import time
 from pathlib import Path
 
-from promolens.exports import DEFAULT_RAW_DIR, write_exports
-from promolens.llm_client import LLMSettings
-from promolens.pipeline import (
+from framecue.exports import DEFAULT_RAW_DIR, write_exports
+from framecue.llm_client import LLMSettings
+from framecue.pipeline import (
     DEFAULT_CACHE_DIR,
     NoEpisodesError,
     analyze_path,
     coverage,
     run_summary,
 )
-from promolens.ranking import page
+from framecue.ranking import page
 
 DEFAULT_OUT_ROOT = Path("runs/outputs")
 
@@ -35,7 +35,7 @@ DEFAULT_OUT_ROOT = Path("runs/outputs")
 def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     if argv[:1] == ["evaluate"]:  # pass everything after it to the live-evaluation driver
-        from promolens import eval_driver
+        from framecue import eval_driver
 
         return eval_driver.main(argv[1:])
     parser = _parser()
@@ -120,7 +120,7 @@ def _serve(args) -> int:
     try:
         import uvicorn
 
-        from promolens.api import ApiConfig, create_app
+        from framecue.api import ApiConfig, create_app
     except ImportError as exc:  # pragma: no cover - dependency missing
         print(f"error: web dependencies missing ({exc.name})", file=sys.stderr)
         return 4
@@ -135,7 +135,7 @@ def _export_ai(args) -> int:
     """Write the private AI cache as one bundle for upload to the stateless endpoint."""
     import json
 
-    from promolens.evaluator import EvaluationCache
+    from framecue.evaluator import EvaluationCache
 
     cache = EvaluationCache(Path(args.cache_dir))
     if not cache.exists():
@@ -159,7 +159,7 @@ def _slug(source: Path, sha256: str) -> str:
 
 
 def _parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="promolens", description="FrameCue promo clip finder.")
+    p = argparse.ArgumentParser(prog="framecue", description="FrameCue promo clip finder.")
     sub = p.add_subparsers(dest="command")
 
     a = sub.add_parser("analyze", help="offline analysis of a ZIP, .txt file or folder")

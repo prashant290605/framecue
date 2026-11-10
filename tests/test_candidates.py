@@ -4,7 +4,7 @@ not copied from the implementation's output."""
 import pydantic
 import pytest
 
-from promolens.candidates import (
+from framecue.candidates import (
     Anchor,
     EpisodeIndex,
     build_candidate,
@@ -23,7 +23,7 @@ from promolens.candidates import (
     summarize,
     validate_candidates,
 )
-from promolens.schemas import (
+from framecue.schemas import (
     CandidateConfig,
     ClipSegment,
     EventType,
@@ -439,7 +439,7 @@ def test_shortlist_is_sorted_by_priority() -> None:
 
 def _with_window(candidate: PromoCandidate, start_ms: int, end_ms: int) -> PromoCandidate:
     """Rebuild a candidate around a new window, bypassing generation (for validation tests)."""
-    from promolens.schemas import candidate_id_for
+    from framecue.schemas import candidate_id_for
 
     segment = ClipSegment(episode_number=candidate.episode_number, start_ms=start_ms, end_ms=end_ms)
     return candidate.model_copy(

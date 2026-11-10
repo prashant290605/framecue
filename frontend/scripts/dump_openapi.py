@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
-from promolens.serverless import create_serverless_app  # noqa: E402
+from framecue.serverless import create_serverless_app  # noqa: E402
 
 schema = create_serverless_app(frontend_dir=None).openapi()
 out = Path(__file__).resolve().parents[1] / "src" / "api" / "openapi.json"

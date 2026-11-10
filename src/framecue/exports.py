@@ -23,10 +23,10 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
-from promolens.pipeline import RunResult, run_summary
-from promolens.ranking import PromoFilter, detail, episode_summaries, page
-from promolens.results import ExportFile, ExportManifest
-from promolens.timecode import format_timestamp
+from framecue.pipeline import RunResult, run_summary
+from framecue.ranking import PromoFilter, detail, episode_summaries, page
+from framecue.results import ExportFile, ExportManifest
+from framecue.timecode import format_timestamp
 
 DEFAULT_RAW_DIR = Path("runs/raw")
 

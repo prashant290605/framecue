@@ -1,8 +1,8 @@
 import pydantic
 import pytest
 
-from promolens.parser import parse_episode_text, parse_path
-from promolens.schemas import (
+from framecue.parser import parse_episode_text, parse_path
+from framecue.schemas import (
     Episode,
     EventType,
     ParseResult,

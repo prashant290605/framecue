@@ -11,11 +11,11 @@ from pathlib import Path
 
 import httpx
 
+from framecue.candidates import generate_candidates
+from framecue.evaluator import EvaluationCache, EvaluationConfig, Evaluator
+from framecue.llm_client import ChatCompletionsClient, LLMSettings
+from framecue.schemas import CandidateConfig, Episode
 from llm_fakes import TEST_KEY, good_item, ok, request_ids
-from promolens.candidates import generate_candidates
-from promolens.evaluator import EvaluationCache, EvaluationConfig, Evaluator
-from promolens.llm_client import ChatCompletionsClient, LLMSettings
-from promolens.schemas import CandidateConfig, Episode
 from synthetic import episode, ev, scene, shots, ts
 
 

@@ -7,14 +7,14 @@ cost from configured prices. It makes no network calls unless ``--check-eligibil
 given. For OpenRouter that reads the public ZDR endpoint list; no key or screenplay content is
 sent.
 
-``--live`` always runs the eligibility check first (see ``promolens.eligibility``).
+``--live`` always runs the eligibility check first (see ``framecue.eligibility``).
 
 Provider-specific guards:
 
 - **OpenRouter:** refuses models with no strict-ZDR, structured-output endpoint. Large runs
-  need ``PROMOLENS_MAX_RUN_COST``.
+  need ``FRAMECUE_MAX_RUN_COST``.
 - **GroqCloud (free plan):** cost is never estimated as spend. A daily token budget
-  (``PROMOLENS_DAILY_TOKEN_BUDGET``, default 180,000) is enforced with a local ledger under
+  (``FRAMECUE_DAILY_TOKEN_BUDGET``, default 180,000) is enforced with a local ledger under
   ``runs/quota/``. Requests are paced to the tokens-per-minute headers, and a daily-quota 429
   stops the run. Accepted assessments are cached, so re-running the same command resumes where
   it stopped.
@@ -22,10 +22,10 @@ Provider-specific guards:
 With ``--live`` it writes full results, including the explanations, to ``runs/eval-smoke/``
 (gitignored). The console shows ids, scores, warnings and usage only, never screenplay text.
 
-    python -m promolens.eval_driver --zip <pack.zip> --episodes 1 --per-episode 4
-    python -m promolens.eval_driver --zip <pack.zip> --episodes 1 --per-episode 4 --live
-    python -m promolens.eval_driver --zip <pack.zip> --candidates C001-... C007-... --live
-    python -m promolens.eval_driver --zip <pack.zip> --per-episode 0 --live --allow-large
+    python -m framecue.eval_driver --zip <pack.zip> --episodes 1 --per-episode 4
+    python -m framecue.eval_driver --zip <pack.zip> --episodes 1 --per-episode 4 --live
+    python -m framecue.eval_driver --zip <pack.zip> --candidates C001-... C007-... --live
+    python -m framecue.eval_driver --zip <pack.zip> --per-episode 0 --live --allow-large
 """
 
 import argparse
@@ -34,19 +34,19 @@ import sys
 from dataclasses import asdict
 from pathlib import Path
 
-from promolens.candidates import generate_candidates
-from promolens.eligibility import check_eligibility
-from promolens.evaluator import (
+from framecue.candidates import generate_candidates
+from framecue.eligibility import check_eligibility
+from framecue.evaluator import (
     EvaluationCache,
     EvaluationConfig,
     Evaluator,
     cache_key,
     estimate_prompt_tokens,
 )
-from promolens.llm_client import ChatCompletionsClient, LLMError, LLMSettings
-from promolens.parser import parse_path
-from promolens.quota import DailyLedger
-from promolens.schemas import CandidateConfig
+from framecue.llm_client import ChatCompletionsClient, LLMError, LLMSettings
+from framecue.parser import parse_path
+from framecue.quota import DailyLedger
+from framecue.schemas import CandidateConfig
 
 LIVE_CANDIDATE_LIMIT = 40  # larger live runs need --allow-large plus a cost or token cap
 GROQ_DEFAULT_DAILY_TOKEN_BUDGET = 180_000  # below the documented 200K TPD, with headroom
@@ -125,7 +125,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"daily token budget={daily_budget} used_today(ledger)={ledger.tokens_today()}")
     else:
         estimate = settings.estimate_cost(tokens, out_tokens)
-        note = "(set PROMOLENS_PRICE_* to estimate)" if estimate is None else f"~{estimate:.4f}"
+        note = "(set FRAMECUE_PRICE_* to estimate)" if estimate is None else f"~{estimate:.4f}"
         print(f"ESTIMATED cost: {note}  cap={settings.max_run_cost}")
     if not args.live:
         if args.check_eligibility:
@@ -146,14 +146,14 @@ def main(argv: list[str] | None = None) -> int:
     else:
         max_run_cost = settings.max_run_cost
         if args.allow_large and max_run_cost is None:
-            print("refusing: --allow-large requires PROMOLENS_MAX_RUN_COST")
+            print("refusing: --allow-large requires FRAMECUE_MAX_RUN_COST")
             return 2
         estimate = settings.estimate_cost(tokens, out_tokens)
         if estimate is not None and max_run_cost and estimate > max_run_cost:
-            print("refusing: estimated cost exceeds PROMOLENS_MAX_RUN_COST")
+            print("refusing: estimated cost exceeds FRAMECUE_MAX_RUN_COST")
             return 2
     if settings.api_key is None:
-        print("cannot start: missing_api_key: set PROMOLENS_LLM_API_KEY in the environment or .env")
+        print("cannot start: missing_api_key: set FRAMECUE_LLM_API_KEY in the environment or .env")
         return 2
     eligibility = check_eligibility(settings)
     print(eligibility.summary())

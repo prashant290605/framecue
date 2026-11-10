@@ -29,8 +29,8 @@ Ranks are positions in the full view. Filters select from it and keep the origin
 
 from dataclasses import dataclass, field
 
-from promolens.candidates import EpisodeIndex, iou
-from promolens.results import (
+from framecue.candidates import EpisodeIndex, iou
+from framecue.results import (
     AI_SCORE_SYSTEM,
     BASELINE_SCORE_SYSTEM,
     AIJudgement,
@@ -49,8 +49,8 @@ from promolens.results import (
     TimelineScene,
     View,
 )
-from promolens.schemas import PromoCandidate, PromoEvaluation, Severity
-from promolens.timecode import format_timestamp
+from framecue.schemas import PromoCandidate, PromoEvaluation, Severity
+from framecue.timecode import format_timestamp
 
 IOU_DUPLICATE = 0.5
 CONTAINMENT_DUPLICATE = 0.8

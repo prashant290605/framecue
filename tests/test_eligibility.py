@@ -6,10 +6,10 @@ from pathlib import Path
 import httpx
 import pytest
 
+from framecue import eval_driver
+from framecue.eligibility import Eligibility, assess, check_eligibility, zdr_list_url
+from framecue.llm_client import LLMError, LLMSettings, OpenRouterClient
 from llm_fakes import TEST_KEY, body, settings
-from promolens import eval_driver
-from promolens.eligibility import Eligibility, assess, check_eligibility, zdr_list_url
-from promolens.llm_client import LLMError, LLMSettings, OpenRouterClient
 from synthetic import FIXTURES
 
 MODEL = "acme/test-model"
@@ -105,7 +105,7 @@ def test_zdr_list_url_derivation() -> None:
 
 def test_allow_safety_retention_needs_an_explicit_yes(tmp_path) -> None:
     def parse(value: str) -> bool:
-        env = {"PROMOLENS_LLM_ALLOW_SAFETY_RETENTION": value}
+        env = {"FRAMECUE_LLM_ALLOW_SAFETY_RETENTION": value}
         return LLMSettings.from_env(env=env, dotenv=None).allow_safety_retention
 
     assert parse("true") and parse("1") and parse("YES")
@@ -154,7 +154,7 @@ def test_response_from_forbidden_provider_aborts_without_retry() -> None:
 
 def test_driver_refuses_live_run_before_sending_anything(monkeypatch, tmp_path, capsys) -> None:
     monkeypatch.chdir(tmp_path)  # no .env here
-    monkeypatch.setenv("PROMOLENS_LLM_API_KEY", TEST_KEY)
+    monkeypatch.setenv("FRAMECUE_LLM_API_KEY", TEST_KEY)
     blocked = Eligibility(MODEL, False, "only_safety_retention_endpoints", "synthetic")
     monkeypatch.setattr(eval_driver, "check_eligibility", lambda s: blocked)
 

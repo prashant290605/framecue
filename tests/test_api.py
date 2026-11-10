@@ -7,10 +7,10 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
+from framecue import api as api_module
+from framecue.api import ApiConfig, create_app
+from framecue.parser import parse_zip_bytes
 from pipeline_fakes import episode_text, fill_cache, pack_bytes
-from promolens import api as api_module
-from promolens.api import ApiConfig, create_app
-from promolens.parser import parse_zip_bytes
 
 ORIGIN = "http://localhost:5173"
 SECRET = "sk-or-gsk_SHOULD-NEVER-APPEAR-0000"
@@ -22,12 +22,12 @@ def guarded(monkeypatch):
         raise AssertionError("unexpected network call")
 
     monkeypatch.setattr(httpx.HTTPTransport, "handle_request", refuse)
-    monkeypatch.setenv("PROMOLENS_LLM_API_KEY", SECRET)
+    monkeypatch.setenv("FRAMECUE_LLM_API_KEY", SECRET)
 
     def no_client(*a, **k):
         raise AssertionError("the API must never create a model client")
 
-    monkeypatch.setattr("promolens.llm_client.ChatCompletionsClient.__init__", no_client)
+    monkeypatch.setattr("framecue.llm_client.ChatCompletionsClient.__init__", no_client)
 
 
 def make_client(tmp_path, **overrides) -> TestClient:
@@ -259,7 +259,7 @@ def _all(client, run_id, view, alternatives=False):
 
 def _fill_without_guard(cache, episodes):
     """fill_cache uses the real client with a mock transport; lift the guard just for it."""
-    import promolens.llm_client as lc
+    import framecue.llm_client as lc
 
     patched = lc.ChatCompletionsClient.__init__
     lc.ChatCompletionsClient.__init__ = _ORIGINAL_INIT
@@ -269,6 +269,6 @@ def _fill_without_guard(cache, episodes):
         lc.ChatCompletionsClient.__init__ = patched
 
 
-import promolens.llm_client as _lc  # noqa: E402
+import framecue.llm_client as _lc  # noqa: E402
 
 _ORIGINAL_INIT = _lc.ChatCompletionsClient.__init__

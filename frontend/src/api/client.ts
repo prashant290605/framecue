@@ -40,7 +40,7 @@ const FRIENDLY: Record<string, string> = {
 };
 
 export const CLI_HINT =
-  "For larger inputs, run the local command line tool: promolens analyze <file> --out <folder>.";
+  "For larger inputs, run the local command line tool: framecue analyze <file> --out <folder>.";
 
 export async function getHealth(signal?: AbortSignal): Promise<Health> {
   const response = await fetch("/api/health", { signal, headers: { Accept: "application/json" } });

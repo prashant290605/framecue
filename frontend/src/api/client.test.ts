@@ -19,7 +19,7 @@ describe("analyze()", () => {
   });
 
   it.each([
-    [413, "platform text, not JSON", "upload_too_large", /online limit.*promolens analyze/s],
+    [413, "platform text, not JSON", "upload_too_large", /online limit.*framecue analyze/s],
     [400, { error: { code: "invalid_ai_bundle", message: "x" } }, "invalid_ai_bundle", /AI evaluation bundle/],
     [422, { error: { code: "no_valid_episodes", message: "x" } }, "no_valid_episodes", /No valid screenplay/],
     [500, { error: { code: "internal_error", message: "x" } }, "internal_error", /had a problem/],
@@ -82,6 +82,6 @@ describe("checkSelection() before any upload", () => {
     const big = new File([new Uint8Array(4_100_000)], "big.zip");
     const problem = checkSelection([big], null, max);
     expect(problem?.title).toMatch(/online limit is 4.0 MB/);
-    expect(problem?.detail).toMatch(/promolens analyze/);
+    expect(problem?.detail).toMatch(/framecue analyze/);
   });
 });

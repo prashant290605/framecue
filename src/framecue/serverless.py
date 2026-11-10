@@ -15,7 +15,7 @@ Limits are kept under Vercel's 4.5 MB request and response bodies. Larger inputs
 
 No model is ever called. No AI cache ships with the deployment (``.vercelignore``). AI-reviewed
 results appear only when the user uploads a private ``ai_bundle`` exported by
-``promolens export-ai``. Its entries are used only if they match the uploaded screenplay
+``framecue export-ai``. Its entries are used only if they match the uploaded screenplay
 exactly and their evidence re-validates.
 
 The built frontend (``frontend/dist``) is served through FastAPI's ``app.frontend()``. On
@@ -32,22 +32,22 @@ from typing import Annotated
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import Response
 
-from promolens import __version__
-from promolens.api import (
+from framecue import __version__
+from framecue.api import (
     AnalyzeLimits,
     ApiError,
     _origins_from_env,
     analyze_request,
     install_common,
 )
-from promolens.document import AnalysisDocument
+from framecue.document import AnalysisDocument
 
 # Vercel: 4.5 MB per request body. Keep the whole multipart body under 4.4 MB, and the file
 # content under 4.0 MB, so the platform limit is never what rejects a request.
 MAX_REQUEST_BYTES = 4_400_000
 MAX_UPLOAD_BYTES = 4_000_000
 MAX_RESPONSE_BYTES = 4_300_000
-CLI_HINT = '; analyze larger inputs locally with the CLI: promolens analyze "<file>" --out <folder>'
+CLI_HINT = '; analyze larger inputs locally with the CLI: framecue analyze "<file>" --out <folder>'
 SERVERLESS_LIMITS = AnalyzeLimits(
     max_upload_bytes=MAX_UPLOAD_BYTES,
     max_files=120,
@@ -58,7 +58,7 @@ SERVERLESS_LIMITS = AnalyzeLimits(
     too_large_hint=CLI_HINT,
 )
 DEFAULT_FRONTEND_DIR = Path(__file__).resolve().parents[2] / "frontend" / "dist"
-log = logging.getLogger("promolens.serverless")
+log = logging.getLogger("framecue.serverless")
 
 
 def create_serverless_app(frontend_dir: Path | None = DEFAULT_FRONTEND_DIR) -> FastAPI:

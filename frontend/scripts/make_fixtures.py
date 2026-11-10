@@ -16,10 +16,10 @@ sys.path[:0] = [str(ROOT / "src"), str(ROOT / "tests")]
 
 from fastapi.testclient import TestClient  # noqa: E402
 
+from framecue.evaluator import EvaluationCache  # noqa: E402
+from framecue.parser import parse_path  # noqa: E402
+from framecue.serverless import create_serverless_app  # noqa: E402
 from pipeline_fakes import fill_cache  # noqa: E402
-from promolens.evaluator import EvaluationCache  # noqa: E402
-from promolens.parser import parse_path  # noqa: E402
-from promolens.serverless import create_serverless_app  # noqa: E402
 
 SAMPLE = ROOT / "frontend" / "public" / "sample"
 OUT = ROOT / "frontend" / "src" / "test" / "fixtures"
@@ -38,7 +38,7 @@ def save(name: str, response) -> None:
 save("sample-document.json", client.post("/api/analyze", files=files))
 with tempfile.TemporaryDirectory() as tmp:
     episodes = list(parse_path(SAMPLE).episodes)
-    from promolens.candidates import generate_candidates
+    from framecue.candidates import generate_candidates
 
     pattern = [(4, 5, 4, 4), (3, 2, 3, 3), (5, 4, 3, 4), (2, 1, 2, 3), (4, 3, 4, 3)]
     scores = {

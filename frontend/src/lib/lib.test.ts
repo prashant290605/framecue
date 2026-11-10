@@ -45,6 +45,13 @@ describe("validateDocument", () => {
     expect(validateDocument(doc).ok).toBe(false);
   });
 
+  it("opens documents saved under an earlier v1 schema id and relabels them", () => {
+    const doc = { ...sampleDoc(), schema_version: "earlier-analysis-v1" };
+    const check = validateDocument(doc);
+    expect(check.ok && check.doc.schema_version).toBe("framecue-analysis-v1");
+    expect(validateDocument({ ...sampleDoc(), schema_version: "earlier-analysis-v2" }).ok).toBe(false);
+  });
+
   it("rejects non-objects", () => {
     expect(validateDocument(null).ok).toBe(false);
     expect(validateDocument([1, 2]).ok).toBe(false);
@@ -185,7 +192,7 @@ describe("exports", () => {
       [b.candidate_id]: { decision: null, note: "maybe", updatedAt: "t" },
     };
     const json = JSON.parse(shortlistJson(index, reviews, new Date("2026-11-10T00:00:00Z")));
-    expect(json.format).toBe("promolens-shortlist-v1");
+    expect(json.format).toBe("framecue-shortlist-v1");
     expect(json.source.input_sha256).toBe(index.doc.summary.input.sha256);
     expect(json.items).toHaveLength(2);
     const item = json.items.find((i: any) => i.candidate_id === a.candidate_id);

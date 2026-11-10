@@ -12,9 +12,14 @@ const isInt = (v: unknown): v is number => typeof v === "number" && Number.isInt
  * (views and AI judgements must point at real candidates; evidence at real events), so a
  * corrupt or tampered file is rejected instead of rendering nonsense.
  */
-export function validateDocument(value: unknown): Validation {
+export function validateDocument(input: unknown): Validation {
   const fail = (reason: string): Validation => ({ ok: false, reason });
-  if (!isObj(value)) return fail("not a JSON object");
+  if (!isObj(input)) return fail("not a JSON object");
+  // Documents saved or exported earlier use the same v1 format under an earlier id.
+  const value =
+    typeof input.schema_version === "string" && /^[a-z]+-analysis-v1$/.test(input.schema_version)
+      ? { ...input, schema_version: SCHEMA_VERSION }
+      : input;
   if (value.schema_version !== SCHEMA_VERSION) {
     return fail(`unsupported schema version (expected ${SCHEMA_VERSION})`);
   }

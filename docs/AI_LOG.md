@@ -199,7 +199,7 @@ architecture draft.
 ## Phase 3.5: live validation gate (2026-11-10)
 
 ### Configuration check
-- No `.env` file exists. Neither `PROMOLENS_LLM_API_KEY` nor `OPENROUTER_API_KEY` is set in the
+- No `.env` file exists. Neither `FRAMECUE_LLM_API_KEY` nor `OPENROUTER_API_KEY` is set in the
   process, user or machine environment. `LLMSettings.from_env()` loads no key. **Live inference
   is blocked**, and no request was sent to the model API.
 
@@ -220,7 +220,7 @@ architecture draft.
     missing flag as retaining;
   - it adds Safety-Retention-only providers to `provider.ignore`;
   - it aborts the run if a response names an excluded provider;
-  - it blocks the default model unless `PROMOLENS_LLM_ALLOW_SAFETY_RETENTION=true` is set
+  - it blocks the default model unless `FRAMECUE_LLM_ALLOW_SAFETY_RETENTION=true` is set
     deliberately.
 
   `--live` always runs it. Verified against the live list, it blocks the default model and
@@ -255,7 +255,7 @@ architecture draft.
   - `include_reasoning=false`.
 
   It does not send the OpenRouter `provider` object, `service_tier`, tools or plugins.
-- **Config check:** `.env` holds `PROMOLENS_LLM_PROVIDER=groq`, a key with the expected shape
+- **Config check:** `.env` holds `FRAMECUE_LLM_PROVIDER=groq`, a key with the expected shape
   (length and prefix checked only, never printed), the model and the endpoint.
   `LLMSettings.from_env()` loads the key, and it does not appear in the settings repr.
 - **Docs consulted:** Groq rate limits, structured outputs, the model page, errors, reasoning,
@@ -394,7 +394,7 @@ architecture draft.
   - every episode has a coverage primary.
 
   0 problems found.
-- **Live server:** `promolens serve` on localhost served health, CORS (allowed origin only),
+- **Live server:** `framecue serve` on localhost served health, CORS (allowed origin only),
   a full-pack upload, promos and detail in about 20 ms, CSV download and the OpenAPI docs.
   The server log held no screenplay text and no tracebacks.
 - **Model calls:** 0 live model calls in Phase 4. The evaluate path was only dry-run.
@@ -403,7 +403,7 @@ architecture draft.
 - `Query(ge=1)` on a list parameter made FastAPI compare a list with an int (500). The error
   guard returned a sanitized 500 as designed. The fix validates manually, and a test covers
   `episode=0`.
-- `promolens evaluate --zip ...` failed because argparse claimed `--zip` for the top-level
+- `framecue evaluate --zip ...` failed because argparse claimed `--zip` for the top-level
   parser. Arguments are now passed straight through, with a regression test.
 - Two drafted tests were wrong:
   - a tie-breaker check was guarded by an `if`, so it could pass vacuously; it is now a hard
@@ -544,7 +544,7 @@ architecture draft.
   episode 9), and I corrected the review.
 
 ### Verified
-- Live production: https://promolens-two.vercel.app, all checked anonymously:
+- Live production: https://framecue-app.vercel.app, all checked anonymously:
   - health, assets and the sample are served from the CDN;
   - deep links return 200 HTML, and unknown `/api` paths return a JSON 404;
   - the Playwright suite (5 tests) passes against production;
@@ -587,7 +587,7 @@ architecture draft.
   - the sample analyzes;
   - the `A` shortcut works;
   - reloading `/review` restores the selection and the decision.
-- **Production** (https://promolens-two.vercel.app, checked without signing in):
+- **Production** (https://framecue-app.vercel.app, checked without signing in):
   - the title is FrameCue, and the favicon and apple-touch icon are served;
   - deep links return 200, and unknown `/api` paths return a JSON 404;
   - the Playwright suite (5 tests) passes against production;

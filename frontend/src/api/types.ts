@@ -16,4 +16,4 @@ export type Segment = S["Segment"];
 export type ViewName = "ai" | "coverage";
 export type EvaluationStatus = DocCandidate["evaluation_status"];
 
-export const SCHEMA_VERSION = "promolens-analysis-v1" as const;
+export const SCHEMA_VERSION = "framecue-analysis-v1" as const;

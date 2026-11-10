@@ -2,10 +2,10 @@
 
 import json
 
+from framecue.candidates import generate_candidates
+from framecue.prompts import alias_maps, build_messages, to_real_ids
+from framecue.schemas import CandidateConfig, EvaluationStatus
 from llm_fakes import FakeOpenRouter, good_item, ok, user_payload
-from promolens.candidates import generate_candidates
-from promolens.prompts import alias_maps, build_messages, to_real_ids
-from promolens.schemas import CandidateConfig, EvaluationStatus
 from test_evaluator import make_episode, run
 
 
@@ -80,8 +80,8 @@ def test_user_payload_helper_reads_v2() -> None:
 
 
 def test_validation_log_records_problems_without_script_text() -> None:
+    from framecue.evaluator import EvaluationConfig, Evaluator
     from llm_fakes import settings
-    from promolens.evaluator import EvaluationConfig, Evaluator
 
     episode, cands, to_alias = setup()
     c = cands[0]

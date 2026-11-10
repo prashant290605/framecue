@@ -21,8 +21,8 @@ layout:
 import json
 import re
 
-from promolens.candidates import EpisodeIndex, intersects
-from promolens.schemas import (
+from framecue.candidates import EpisodeIndex, intersects
+from framecue.schemas import (
     CandidateConfig,
     Episode,
     PromoCandidate,

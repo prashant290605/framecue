@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "promolens"
+name = "framecue"
 version = "0.0.1"
 description = "Find and rank 20-60 second promo clips in timestamped microdrama screenplays."
 readme = "README.md"
@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.scripts]
-promolens = "promolens.cli:main"
+framecue = "framecue.cli:main"
 
 [project.optional-dependencies]
 dev = [
@@ -32,7 +32,7 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
-markers = ["private: needs the confidential screenplay ZIP via PROMOLENS_TEST_ZIP"]
+markers = ["private: needs the confidential screenplay ZIP via FRAMECUE_TEST_ZIP"]
 # Starlette deprecates its httpx-based TestClient in favour of httpx2; harmless here.
 filterwarnings = ["ignore:Using `httpx` with `starlette.testclient`"]
 

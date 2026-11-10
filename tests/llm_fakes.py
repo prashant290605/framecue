@@ -6,8 +6,8 @@ from collections.abc import Callable
 
 import httpx
 
-from promolens.llm_client import LLMSettings, OpenRouterClient
-from promolens.schemas import PromoCandidate
+from framecue.llm_client import LLMSettings, OpenRouterClient
+from framecue.schemas import PromoCandidate
 
 TEST_KEY = "sk-test-NOT-A-REAL-KEY-0000"
 REPORTED_MODEL = "google/gemini-3.1-flash-lite-20260507"

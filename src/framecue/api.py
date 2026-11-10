@@ -41,13 +41,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from promolens import __version__
-from promolens.document import AnalysisDocument, build_document
-from promolens.evaluator import BundleError, MemoryCache
-from promolens.exports import DEFAULT_RAW_DIR, write_exports
-from promolens.llm_client import LLMSettings, _read_dotenv
-from promolens.parser import parse_files, parse_zip_bytes
-from promolens.pipeline import (
+from framecue import __version__
+from framecue.document import AnalysisDocument, build_document
+from framecue.evaluator import BundleError, MemoryCache
+from framecue.exports import DEFAULT_RAW_DIR, write_exports
+from framecue.llm_client import LLMSettings, _read_dotenv
+from framecue.parser import parse_files, parse_zip_bytes
+from framecue.pipeline import (
     DEFAULT_CACHE_DIR,
     NoEpisodesError,
     RunResult,
@@ -56,8 +56,8 @@ from promolens.pipeline import (
     describe_bytes,
     run_summary,
 )
-from promolens.ranking import PromoFilter, detail, episode_summaries, page
-from promolens.results import (
+from framecue.ranking import PromoFilter, detail, episode_summaries, page
+from framecue.results import (
     AIStatus,
     EpisodeSummary,
     EvaluationCoverage,
@@ -67,9 +67,9 @@ from promolens.results import (
     PromoPage,
     RunSummary,
 )
-from promolens.schemas import ParseResult, QualityWarning
+from framecue.schemas import ParseResult, QualityWarning
 
-log = logging.getLogger("promolens.api")
+log = logging.getLogger("framecue.api")
 
 RUN_ID = re.compile(r"^[A-Za-z0-9_-]{22}$")
 CANDIDATE_ID = re.compile(r"^C\d{3,}-\d{7}-\d{7}$")
@@ -103,8 +103,8 @@ class ApiConfig:
 
 def _origins_from_env() -> tuple[str, ...]:
     """Explicit origins from the environment, then ``.env``; otherwise the local Vite ones."""
-    raw = os.environ.get("PROMOLENS_CORS_ORIGINS") or _read_dotenv(Path(".env")).get(
-        "PROMOLENS_CORS_ORIGINS", ""
+    raw = os.environ.get("FRAMECUE_CORS_ORIGINS") or _read_dotenv(Path(".env")).get(
+        "FRAMECUE_CORS_ORIGINS", ""
     )
     origins = tuple(o.strip() for o in raw.split(",") if o.strip())
     return origins or DEFAULT_ORIGINS

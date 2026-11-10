@@ -4181,7 +4181,7 @@
   "This analysis made no model API calls. The uploaded file is processed by the hosting platform for this request and is not stored by FrameCue.",
   "Times are milliseconds from episode start; clips are half-open [start, end)."
  ],
- "schema_version": "promolens-analysis-v1",
+ "schema_version": "framecue-analysis-v1",
  "summary": {
   "ai_source": "none",
   "analyzed_at": "2026-11-10T00:00:00+00:00",
@@ -4212,7 +4212,7 @@
   },
   "versions": {
    "baseline": "heuristic_baseline_v1",
-   "promolens": "0.0.1",
+   "framecue": "0.0.1",
    "prompt": "promo-eval-v3",
    "ranking": "ranking-v1",
    "scoring_rules": "evidence-rules-v1"

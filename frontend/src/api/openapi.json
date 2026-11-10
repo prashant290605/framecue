@@ -250,8 +250,8 @@
       "type": "array"
      },
      "schema_version": {
-      "const": "promolens-analysis-v1",
-      "default": "promolens-analysis-v1",
+      "const": "framecue-analysis-v1",
+      "default": "framecue-analysis-v1",
       "title": "Schema Version",
       "type": "string"
      },

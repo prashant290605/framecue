@@ -1,6 +1,6 @@
 import pytest
 
-from promolens.timecode import format_timestamp, parse_timestamp
+from framecue.timecode import format_timestamp, parse_timestamp
 
 
 @pytest.mark.parametrize(

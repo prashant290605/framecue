@@ -2,12 +2,12 @@
 
 The source of truth is the generated OpenAPI schema at `GET /api/openapi.json` (interactive
 docs: `/api/docs`). Generate TypeScript types from it, for example with `openapi-typescript`.
-The models live in `src/promolens/document.py` and `src/promolens/results.py`.
+The models live in `src/framecue/document.py` and `src/framecue/results.py`.
 
 ## Deployed contract (Vercel, stateless): what the frontend must use
 
 The deployment (`app.py`) exposes only these routes, and they also exist in the local
-`promolens serve` app:
+`framecue serve` app:
 
 | Method | Path | Body | Returns |
 |---|---|---|---|
@@ -28,7 +28,7 @@ a refresh needs a re-upload, or a reload of a document the user saved.
 - **Measured on the real 50-episode pack:** a 540 KB upload (618 KB with the AI bundle)
   produced a 1.77–1.81 MB response in about 2.3 s.
 
-**AnalysisDocument** (`schema_version: "promolens-analysis-v1"`):
+**AnalysisDocument** (`schema_version: "framecue-analysis-v1"`):
 - `summary`: `{analyzed_at, input, episodes, scenes, events, candidates, parse, timings_ms,
   versions, live_ai_calls: 0, ai_source: none|uploaded_bundle|local_cache}`.
 - `coverage`: an EvaluationCoverage, including the cache audit.
@@ -66,9 +66,9 @@ a refresh needs a re-upload, or a reload of a document the user saved.
   `source_events` and the AI `hook_event_ids` / `cliffhanger_event_ids`.
 - **Exports:** the document itself is the JSON export. Build the CSVs client-side with the
   columns of the local `ai_recommendations.csv` / `coverage_candidates.csv` (listed in
-  `src/promolens/exports.py`). Prefix cells starting with `= + - @` with `'`.
+  `src/framecue/exports.py`). Prefix cells starting with `= + - @` with `'`.
 
-**Private AI results online, without deploying them.** Run `promolens export-ai` locally
+**Private AI results online, without deploying them.** Run `framecue export-ai` locally
 (it writes `runs/ai_bundle.json`) and upload that file as `ai_bundle` together with the
 screenplay.
 - **Validation:** the server uses an entry only if its cache key matches the uploaded
@@ -77,7 +77,7 @@ screenplay.
 - **Privacy:** the bundle contains model explanations about the scripts, so keep it private.
   It is processed for that request only.
 
-## Local-only stateful API (`promolens serve`)
+## Local-only stateful API (`framecue serve`)
 
 The routes below use a run store on local disk. They are **not deployed**: a Vercel
 function's filesystem is read-only apart from `/tmp`, and requests can land on different
@@ -86,11 +86,11 @@ instances. They stay for local development and tests.
 Start locally (binds to 127.0.0.1 only):
 
 ```bash
-.venv\Scripts\promolens serve --port 8000
+.venv\Scripts\framecue serve --port 8000
 ```
 
 CORS allows only `http://localhost:5173` and `http://127.0.0.1:5173` (Vite's defaults). To
-override, set `PROMOLENS_CORS_ORIGINS` (comma-separated). No endpoint calls a model: the API
+override, set `FRAMECUE_CORS_ORIGINS` (comma-separated). No endpoint calls a model: the API
 is offline and reuses cached AI evaluations only.
 
 ## Conventions
@@ -251,7 +251,7 @@ Downloads one file from a fixed allowlist: `manifest.json`, `episodes.json`,
 ## Phase 5 integration notes (implemented in `frontend/`)
 
 The frontend uses **only** `/api/health` and `POST /api/analyze`. That way it works
-identically on Vercel and against `promolens serve`.
+identically on Vercel and against `framecue serve`.
 
 - **Upload:**
   1. Read `max_upload_bytes` from `/api/health`, and block larger files client-side with the

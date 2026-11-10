@@ -1,4 +1,4 @@
-# FrameCue (formerly PromoLens): architecture contract
+# FrameCue: architecture contract
 
 Status: Phases 0–4 implemented. Phase 3.5 validated the evaluator with **real inference** on
 GroqCloud's Free Plan (`openai/gpt-oss-120b`, $0), as documented in §10b. Phase 4 added the
@@ -15,7 +15,7 @@ React + TypeScript + Vite, Tailwind CSS + shadcn/ui     (Phase 5: editor review 
                  │  JSON over HTTP (docs/API.md)
 FastAPI backend: api.py                                  (Phase 4: thin routes, offline)
                  │  Python calls
-PromoLens core (this package)
+FrameCue core (this package)
    parser ─► candidates + baseline ─► cached-AI lookup ─► ranking ─► exports   (pipeline.py)
                                             ▲
    opt-in live path: eval_driver ─► evaluator ─► llm_client (GroqCloud free / OpenRouter)
@@ -28,7 +28,7 @@ PromoLens core (this package)
 
 ## 1. Problem
 
-Kuku supplies timestamped microdrama screenplays (50 episodes for one show). PromoLens finds and
+Kuku supplies timestamped microdrama screenplays (50 episodes for one show). FrameCue finds and
 ranks 20–60 s promotional clips. Each recommendation states: episode, exact start/end of every
 segment (in order), the opening hook, the cliffhanger, and one line on why it works. Clips must make
 sense to a viewer who has never seen the show. The prototype must run again on a new input pack
@@ -38,7 +38,7 @@ during the interview, with a swappable model.
 
 1. Drop a screenplay pack (ZIP or folder of episode `.txt` files) into `data/private/`, or upload
    it in the web UI.
-2. Run `promolens run --input <path> [--evaluator baseline|llm]`. Output goes to
+2. Run `framecue run --input <path> [--evaluator baseline|llm]`. Output goes to
    `runs/<run_id>/` (gitignored).
 3. Read the parse report first: episodes, scenes, events, warnings. A pack that fails to parse
    stops the run with a clear error; it never yields silently partial results.
@@ -117,7 +117,7 @@ Irregularities the parser must handle:
 Models are frozen, reject unknown fields, use tuples for collections and validate their own
 invariants. They round-trip through JSON.
 
-Implemented in Phase 1 (`src/promolens/schemas.py`):
+Implemented in Phase 1 (`src/framecue/schemas.py`):
 - **ScriptEvent** has these fields:
   - `event_id`: `E{episode:03d}-S{scene:02d}-{source_index:04d}`, for example
     `E001-S01-0007`. The index is zero-based and counts across the whole episode, so IDs stay
@@ -339,8 +339,8 @@ checks that:
 OpenRouter dialect, which is kept and tested.*
 
 **Adapter** (`llm_client.py`). This is a small httpx client for OpenAI-compatible
-`/chat/completions`. The defaults are `PROMOLENS_LLM_ENDPOINT=https://openrouter.ai/api/v1/chat/completions`
-and `PROMOLENS_LLM_MODEL=google/gemini-3.1-flash-lite`. To swap models, change one environment
+`/chat/completions`. The defaults are `FRAMECUE_LLM_ENDPOINT=https://openrouter.ai/api/v1/chat/completions`
+and `FRAMECUE_LLM_MODEL=google/gemini-3.1-flash-lite`. To swap models, change one environment
 variable. Another OpenAI-compatible endpoint (such as a Kuku-provided API) only needs a
 different endpoint and key. Evaluator code depends only on the `JsonModelClient` protocol.
 
@@ -357,7 +357,7 @@ relaxed**. A preflight check (§10a) runs before any content is sent and may add
 `provider.ignore`.
 
 **Batching.** Candidates are evaluated per episode, in chronological order, in batches of
-`PROMOLENS_EVAL_BATCH_SIZE` (default 8). For the real pack that is 100 requests for 788
+`FRAMECUE_EVAL_BATCH_SIZE` (default 8). For the real pack that is 100 requests for 788
 candidates. Each batch sends:
 - the episode logline and continuity notes;
 - one de-duplicated event table covering every clip and its ±10 s context;
@@ -387,7 +387,7 @@ episode end is not a cliffhanger by itself.
 - 401, 402, unsupported model or parameters, and no eligible provider are **run-level**: all
   further requests stop, and every remaining candidate is labelled with the reason.
 - Other errors fail only their batch, so one bad episode never stops the run.
-- An optional `PROMOLENS_MAX_RUN_COST` stops requests once the provider-reported cost (or, if
+- An optional `FRAMECUE_MAX_RUN_COST` stops requests once the provider-reported cost (or, if
   that is missing, the configured-price estimate) reaches the cap.
 
 **Cache** (`runs/cache/evaluations/`, gitignored). One JSON file per candidate holds only the
@@ -406,7 +406,7 @@ recomputed on every read. Cached entries are re-validated against the episode on
 **Usage accounting.** The run records requests, HTTP retries, prompt and completion tokens,
 **provider-reported** cost (summed only when reported), latency, cache hits and misses, and the
 models and providers that served. An **estimated** cost appears only when
-`PROMOLENS_PRICE_*_PER_MTOK` is configured, and it is labelled as an estimate.
+`FRAMECUE_PRICE_*_PER_MTOK` is configured, and it is labelled as an estimate.
 
 **Secrets.** The key is a `SecretStr`. It goes only into the Authorization header and is never
 logged, repr'd, or included in errors or cache keys.
@@ -437,7 +437,7 @@ does **not** guarantee strict ZDR.
      for this model go into `provider.ignore`. A response naming one of them aborts the run
      with `privacy_routing_violation`;
    - only Safety Retention endpoints → **blocked** (`only_safety_retention_endpoints`), unless
-     `PROMOLENS_LLM_ALLOW_SAFETY_RETENTION=true` is set deliberately;
+     `FRAMECUE_LLM_ALLOW_SAFETY_RETENTION=true` is set deliberately;
    - one provider serves both kinds → blocked (`cannot_exclude_safety_retention`);
    - list unreadable, no ZDR endpoint, no structured-output endpoint, or `zdr=false` → blocked.
 
@@ -464,7 +464,7 @@ preflight does not rely on it.
 
 **Why.** The assignment must cost exactly $0. GroqCloud's Free Plan serves `openai/gpt-oss-120b`
 with strict structured outputs, and needs no payment method. Select it with
-`PROMOLENS_LLM_PROVIDER=groq`.
+`FRAMECUE_LLM_PROVIDER=groq`.
 
 **Request dialect** (`llm_client.py`, `provider="groq"`):
 - `max_completion_tokens` (not `max_tokens`);
@@ -502,7 +502,7 @@ no inference data by default except reliability/abuse logs, which ZDR turns off.
 - **Daily quota.** A tokens/requests-per-day 429 is run-level (`daily_quota_exhausted`). So is
   zero remaining requests/day.
 - **Daily ledger.** Tokens per day are not exposed in headers. A local ledger
-  (`runs/quota/`, counts only) enforces `PROMOLENS_DAILY_TOKEN_BUDGET` (default 180,000 under
+  (`runs/quota/`, counts only) enforces `FRAMECUE_DAILY_TOKEN_BUDGET` (default 180,000 under
   the documented 200K TPD), and the evaluator stops with `token_budget_exhausted`.
 - **Oversized requests.** A 413, or a request whose estimate exceeds the TPM limit, is
   batch-level, so the evaluator splits it.
@@ -565,7 +565,7 @@ and 7.0k tokens. v3 adds three general rules found by the private review:
 - **Pass 2:** `--per-episode 8`, then `--per-episode 0` (all). The cache makes each pass
   incremental.
 - **Daily run:**
-  `python -m promolens.eval_driver --zip <pack> --per-episode <N> --allow-large --live`.
+  `python -m framecue.eval_driver --zip <pack> --per-episode <N> --allow-large --live`.
   It stops on the daily budget or a daily 429, and reports `coverage after run: X/Y`.
 - **Not done:** mixing models or providers to go faster. That would make scores
   non-comparable.
@@ -629,7 +629,7 @@ The sample is small and single-annotator, and the write-up will say so.
 | 2 ✅ | Candidates, boundary validator, heuristic baseline | All 50 episodes give validated shortlists offline. 100% of candidates pass validation. Tests cover the constraints. *Scope change:* the CLI, ranking and exports move to Phase 3 (Phase 2 was scoped to candidate discovery). |
 | 3 ◐ | Evidence-grounded LLM evaluator, OpenRouter client, cache | Done: schema-validated and cached evaluation with repair, splitting and labelled fallback, and mocked tests for every failure mode. **Not done: a live smoke test (no API key).** The CLI, ranking and exports move to Phase 4. |
 | 3.5 ✅ | Live validation gate | Done: real inference on the GroqCloud Free Plan ($0) with a smoke test, a 16-candidate sample across 4 episodes, a low/medium comparison, private quality review, prompt v2/v3 and quota-aware resumable runs (§10b). The OpenRouter strict-ZDR preflight is kept (§10a). Full-pack AI coverage is partial and accumulates daily (see AI_LOG). |
-| 4 ✅ | Pipeline, ranking views, exports, CLI, FastAPI backend | `promolens analyze` and the API process the full pack offline, merge valid cached AI evaluations, keep AI and baseline rankings separate, and export JSON/CSV with a manifest (§15). |
+| 4 ✅ | Pipeline, ranking views, exports, CLI, FastAPI backend | `framecue analyze` and the API process the full pack offline, merge valid cached AI evaluations, keep AI and baseline rankings separate, and export JSON/CSV with a manifest (§15). |
 | 5 | React/TS/Vite/Tailwind/shadcn UI, quality analysis and submission | The UI loads a run and shows both views, coverage, evidence and timelines, with accept/reject. Plus a human-labelled sample and a ≤ 2-page write-up. |
 
 ## 14. Assumptions
@@ -689,7 +689,7 @@ were not kept, and this is stated in the manifest. The evaluator now appends eve
 unmodified response to `runs/raw/*.jsonl`. Exports include those whose episode checksum
 matches the input.
 
-**CLI** (`promolens`): `analyze` (offline), `serve` (uvicorn, localhost by default) and
+**CLI** (`framecue`): `analyze` (offline), `serve` (uvicorn, localhost by default) and
 `evaluate` (passes through to the live driver; dry run unless `--live`).
 
 **Free-quota scheduling.** `eval_driver --schedule coverage-first --levels N`:
@@ -742,7 +742,7 @@ service. Vercel "Services" (beta) is not used.
 **Why no run store online.** Instances do not share disk, and only `/tmp` is writable, so a
 stored run can disappear between requests. `POST /api/analyze` therefore returns the complete
 `AnalysisDocument` (`document.py`) in one response, and the browser holds it. The stateful
-`/api/runs*` routes remain for local `promolens serve` only.
+`/api/runs*` routes remain for local `framecue serve` only.
 
 **Document design.**
 - **Normalized:** each event appears once, and each episode has an `event_range`. Candidates
@@ -760,7 +760,7 @@ stored run can disappear between requests. `POST /api/analyze` therefore returns
 
 Each limit returns a 413 with guidance to use the local CLI.
 
-**AI results online without deploying them.** `promolens export-ai` writes the private cache
+**AI results online without deploying them.** `framecue export-ai` writes the private cache
 as a bundle. Uploaded as `ai_bundle`, its entries go through the same key match and
 evidence re-validation as the local cache (`MemoryCache`). `coverage.cache.source` records
 `uploaded_bundle`.
@@ -804,7 +804,7 @@ is not logged in.
 
 **State and persistence.**
 - **State:** one reducer and context; no state framework.
-- **IndexedDB `promolens` v1:**
+- **IndexedDB `framecue` v1:**
   - `analysis/current` holds `{meta, doc}`;
   - `review/<input sha256:analyzed_at>` holds `{reviews, ui}`.
 - **Write timing:** the document is saved once, in the background, after analysis or
@@ -853,15 +853,15 @@ is not logged in.
 
 **Incident: unintended production deployment.** The first `vercel deploy` on a new
 project is always assigned to production, which I did not anticipate. It created a public
-`promolens-two.vercel.app`. It contains only the allowlisted code and the fictional sample,
+production address. It contained only the allowlisted code and the fictional sample,
 holds no keys, never calls a model and stores nothing. Later deploys are previews, protected
 by Vercel Authentication. **Resolved:** with the owner's approval, the production deployment
-was removed (`vercel remove`). `promolens-two.vercel.app` now returns 404, and only the
-protected previews remain.
+was removed (`vercel remove`), and only the protected previews remained until the
+deliberate release in §18.
 
 ## 18. Phase 6: final QA and release
 
-**Production deployment (public, deliberate).** https://promolens-two.vercel.app. It is built
+**Production deployment (public, deliberate).** https://framecue-app.vercel.app. It is built
 with `vercel deploy --prod` from the same `.vercelignore` allowlist and ships only code and
 the fictional sample, with no keys and no AI cache. It never calls a model.
 
@@ -932,14 +932,10 @@ one-command next step.
 Backend edits are limited to user-visible copy: the CLI banner, the OpenAPI titles, and the
 analysis note "not stored by FrameCue".
 
-**Name and identifiers.** The product is now FrameCue, used in the UI, the page metadata and
-the docs. These keep the PromoLens-era name, because renaming them would break saved work or
-existing commands and links:
-- the Python package and the `promolens` command;
-- the `PROMOLENS_*` settings;
-- the IndexedDB database name (`promolens`);
-- the schema ids (`promolens-analysis-v1`, `promolens-shortlist-v1`);
-- the GitHub repository and the Vercel domain.
+**Name and identifiers.** The product is FrameCue everywhere: the UI, the page metadata, the
+docs, the Python package and the `framecue` command, the `FRAMECUE_*` settings, the IndexedDB
+database (`framecue`), the schema ids (`framecue-analysis-v1`, `framecue-shortlist-v1`), the
+GitHub repository and the Vercel project.
 
 Exported filenames now start with `framecue-`.
 
@@ -1054,10 +1050,9 @@ When no bundle was supplied, the popover now says so.
 variant for dark tab bars. PNG icons (180, 192, 512) and a 16/32/48 px ICO are rendered from
 the same paths in Edge; `site.webmanifest` lists them.
 
-**Address.** `framecue.vercel.app` belongs to another Vercel project. `framecue-app.vercel.app`
-was free and is now a domain of the existing project. `promolens-two.vercel.app` keeps
-serving the same deployment rather than redirecting, because saved analyses live in each
-origin's own IndexedDB; Back up all and Import move them.
+**Address.** `framecue.vercel.app` belongs to another Vercel project, so the production
+address is `framecue-app.vercel.app`. Saved analyses live in each address's own IndexedDB;
+Back up all and Import move them between addresses or browsers.
 
 **Commit attribution.** Earlier commits carried an automatic `Co-Authored-By` trailer, which is
 why GitHub listed a second contributor. Authors and committers were always the repository

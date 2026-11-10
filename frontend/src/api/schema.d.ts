@@ -122,10 +122,10 @@ export interface components {
             notes: string[];
             /**
              * Schema Version
-             * @default promolens-analysis-v1
+             * @default framecue-analysis-v1
              * @constant
              */
-            schema_version: "promolens-analysis-v1";
+            schema_version: "framecue-analysis-v1";
             summary: components["schemas"]["DocSummary"];
             views: components["schemas"]["DocViews"];
         };

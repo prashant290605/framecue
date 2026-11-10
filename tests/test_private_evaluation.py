@@ -1,5 +1,5 @@
 """Prompt construction and validation on the confidential pack. No API calls are made.
-Skips unless PROMOLENS_TEST_ZIP is set."""
+Skips unless FRAMECUE_TEST_ZIP is set."""
 
 import json
 import os
@@ -7,13 +7,13 @@ from pathlib import Path
 
 import pytest
 
-from promolens.candidates import generate_pack_candidates
-from promolens.evaluator import validate_batch
-from promolens.parser import parse_zip
-from promolens.prompts import SYSTEM_PROMPT, build_messages, response_schema
-from promolens.schemas import CandidateConfig
+from framecue.candidates import generate_pack_candidates
+from framecue.evaluator import validate_batch
+from framecue.parser import parse_zip
+from framecue.prompts import SYSTEM_PROMPT, build_messages, response_schema
+from framecue.schemas import CandidateConfig
 
-ZIP_PATH = os.environ.get("PROMOLENS_TEST_ZIP", "")
+ZIP_PATH = os.environ.get("FRAMECUE_TEST_ZIP", "")
 CFG = CandidateConfig()
 BATCH = 8
 
@@ -21,7 +21,7 @@ pytestmark = [
     pytest.mark.private,
     pytest.mark.skipif(
         not ZIP_PATH or not Path(ZIP_PATH).is_file(),
-        reason="set PROMOLENS_TEST_ZIP to the private screenplay ZIP",
+        reason="set FRAMECUE_TEST_ZIP to the private screenplay ZIP",
     ),
 ]
 

@@ -1,7 +1,7 @@
 import pytest
 
-from promolens.baseline import METHOD, assess, duration_preference, event_cues
-from promolens.schemas import BaselineWeights, CandidateConfig, CandidateSignals
+from framecue.baseline import METHOD, assess, duration_preference, event_cues
+from framecue.schemas import BaselineWeights, CandidateConfig, CandidateSignals
 from synthetic import build, ev
 
 CFG = CandidateConfig()

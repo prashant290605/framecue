@@ -92,6 +92,44 @@ describe("IndexedDB persistence", () => {
     expect((await listAnalyses()).map((m) => m.key)).toEqual([key]);
   });
 
+  it("adopts saved work from an earlier database name on the same site, once", async () => {
+    const doc = sampleDoc();
+    const key = analysisKey(doc);
+    const earlier = await openDB("earlier-name", 2, {
+      upgrade(d) {
+        d.createObjectStore("analysis");
+        d.createObjectStore("review", { keyPath: "key" });
+        d.createObjectStore("library");
+        d.createObjectStore("app");
+      },
+    });
+    const meta = { key, fileName: "kept.zip", origin: "upload", savedAt: "2026-11-10T10:00:00Z", bytes: 1 };
+    await earlier.put("analysis", { meta, doc }, key);
+    await earlier.put("library", meta, key);
+    await earlier.put("app", key, "last");
+    await earlier.put("review", { key, reviews: { z: { decision: "later", note: "kept", updatedAt: "t" } }, ui: null, updatedAt: "t" });
+    earlier.close();
+    const restored = await loadAnalysis();
+    expect(restored?.meta.fileName).toBe("kept.zip");
+    expect(restored?.reviews.z).toMatchObject({ decision: "later", note: "kept" });
+    expect((await indexedDB.databases()).map((d) => d.name)).not.toContain("earlier-name");
+  });
+
+  it("adopts a single-analysis (v1) database saved under an earlier name", async () => {
+    const doc = sampleDoc();
+    const key = analysisKey(doc);
+    const earlier = await openDB("earlier-v1", 1, {
+      upgrade(d) {
+        d.createObjectStore("analysis");
+        d.createObjectStore("review", { keyPath: "key" });
+      },
+    });
+    await earlier.put("analysis", { meta: { key, fileName: "one.zip", origin: "upload", savedAt: "t", bytes: 1 }, doc }, "current");
+    earlier.close();
+    expect((await loadAnalysis())?.meta.fileName).toBe("one.zip");
+    expect((await listAnalyses()).map((m) => m.key)).toEqual([key]);
+  });
+
   it("removes and reports corrupt or outdated data", async () => {
     const database = await openDB(DB_NAME, 1, {
       upgrade(d) {

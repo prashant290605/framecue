@@ -4,9 +4,9 @@ import { fileURLToPath } from "node:url";
 import { expect, test, type Page } from "@playwright/test";
 
 /* PRIVATE visual QA and performance on the confidential pack. Skipped unless
- * PROMOLENS_TEST_ZIP is set. Screenshots and metrics go to ../runs/screens (gitignored),
+ * FRAMECUE_TEST_ZIP is set. Screenshots and metrics go to ../runs/screens (gitignored),
  * because they show screenplay text. Nothing here is committed or deployed. */
-const ZIP = process.env.PROMOLENS_TEST_ZIP;
+const ZIP = process.env.FRAMECUE_TEST_ZIP;
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const BUNDLE = resolve(ROOT, "runs", "ai_bundle.json");
 const OUT = resolve(ROOT, "runs", "screens");

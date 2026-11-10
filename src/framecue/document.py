@@ -18,9 +18,9 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from promolens.pipeline import RunResult, coverage, run_summary
-from promolens.ranking import COVERAGE_LABEL, ai_judgement, ai_label, segments, structural
-from promolens.results import (
+from framecue.pipeline import RunResult, coverage, run_summary
+from framecue.ranking import COVERAGE_LABEL, ai_judgement, ai_label, segments, structural
+from framecue.results import (
     AI_SCORE_SYSTEM,
     BASELINE_SCORE_SYSTEM,
     AIJudgement,
@@ -33,9 +33,9 @@ from promolens.results import (
     SourceEvents,
     StructuralFlags,
 )
-from promolens.timecode import format_timestamp
+from framecue.timecode import format_timestamp
 
-SCHEMA_VERSION = "promolens-analysis-v1"
+SCHEMA_VERSION = "framecue-analysis-v1"
 
 
 class _Model(BaseModel):
@@ -130,7 +130,7 @@ class DocSummary(_Model):
 
 
 class AnalysisDocument(_Model):
-    schema_version: Literal["promolens-analysis-v1"] = SCHEMA_VERSION
+    schema_version: Literal["framecue-analysis-v1"] = SCHEMA_VERSION
     summary: DocSummary
     coverage: EvaluationCoverage
     episodes: tuple[DocEpisode, ...]

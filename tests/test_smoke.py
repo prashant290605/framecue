@@ -1,5 +1,5 @@
-import promolens
+import framecue
 
 
 def test_package_imports_with_installed_version():
-    assert promolens.__version__ == "0.0.1"
+    assert framecue.__version__ == "0.0.1"

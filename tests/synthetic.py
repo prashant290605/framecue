@@ -2,9 +2,9 @@
 
 from pathlib import Path
 
-from promolens.parser import parse_episode_text
-from promolens.schemas import Episode
-from promolens.timecode import format_timestamp
+from framecue.parser import parse_episode_text
+from framecue.schemas import Episode
+from framecue.timecode import format_timestamp
 
 FIXTURES = Path(__file__).parent / "fixtures"
 

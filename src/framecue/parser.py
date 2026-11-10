@@ -36,7 +36,7 @@ from pathlib import Path, PurePosixPath
 
 from pydantic import ValidationError
 
-from promolens.schemas import (
+from framecue.schemas import (
     Episode,
     EventType,
     ParseIssue,
@@ -46,7 +46,7 @@ from promolens.schemas import (
     Severity,
     SourceLine,
 )
-from promolens.timecode import parse_timestamp
+from framecue.timecode import parse_timestamp
 
 MAX_ENTRY_BYTES = 5 * 1024 * 1024
 MAX_ARCHIVE_ENTRIES = 10_000

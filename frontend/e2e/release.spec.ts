@@ -54,7 +54,7 @@ test.describe("release checks", () => {
       page.getByRole("menuitem", { name: /Analysis document/ }).click(),
     ]);
     const json = Buffer.concat(await (await download.createReadStream()).toArray());
-    expect(JSON.parse(json.toString("utf-8")).schema_version).toBe("promolens-analysis-v1");
+    expect(JSON.parse(json.toString("utf-8")).schema_version).toBe("framecue-analysis-v1");
     await page.getByRole("button", { name: "Analysis menu" }).click();
     await page.getByRole("menuitem", { name: /Delete analysis/ }).click();
     await page.getByRole("button", { name: /^Delete$/ }).click();

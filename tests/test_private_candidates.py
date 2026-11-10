@@ -1,4 +1,4 @@
-"""Candidate engine on the confidential pack. Skips unless PROMOLENS_TEST_ZIP is set.
+"""Candidate engine on the confidential pack. Skips unless FRAMECUE_TEST_ZIP is set.
 Assertions use counts and ids only, and no screenplay text is printed."""
 
 import os
@@ -8,11 +8,11 @@ from pathlib import Path
 
 import pytest
 
-from promolens.candidates import generate_pack_candidates, summarize, validate_candidates
-from promolens.parser import parse_zip
-from promolens.schemas import CandidateConfig
+from framecue.candidates import generate_pack_candidates, summarize, validate_candidates
+from framecue.parser import parse_zip
+from framecue.schemas import CandidateConfig
 
-ZIP_PATH = os.environ.get("PROMOLENS_TEST_ZIP", "")
+ZIP_PATH = os.environ.get("FRAMECUE_TEST_ZIP", "")
 ROOT = Path(__file__).resolve().parents[1]
 CFG = CandidateConfig()
 
@@ -20,7 +20,7 @@ pytestmark = [
     pytest.mark.private,
     pytest.mark.skipif(
         not ZIP_PATH or not Path(ZIP_PATH).is_file(),
-        reason="set PROMOLENS_TEST_ZIP to the private screenplay ZIP",
+        reason="set FRAMECUE_TEST_ZIP to the private screenplay ZIP",
     ),
 ]
 

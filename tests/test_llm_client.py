@@ -4,8 +4,8 @@ import httpx
 import pydantic
 import pytest
 
+from framecue.llm_client import LLMError, LLMSettings, OpenRouterClient
 from llm_fakes import TEST_KEY, body, error, settings
-from promolens.llm_client import LLMError, LLMSettings, OpenRouterClient
 
 MESSAGES = [{"role": "system", "content": "s"}, {"role": "user", "content": "{}"}]
 SCHEMA = {"type": "object"}
@@ -58,14 +58,14 @@ def test_missing_api_key_is_a_clear_run_level_error() -> None:
 def test_settings_from_env_and_dotenv_never_expose_key(tmp_path) -> None:
     dotenv = tmp_path / ".env"
     dotenv.write_text(
-        "# local\nPROMOLENS_LLM_API_KEY=from-dotenv\nPROMOLENS_EVAL_BATCH_SIZE=6\n",
+        "# local\nFRAMECUE_LLM_API_KEY=from-dotenv\nFRAMECUE_EVAL_BATCH_SIZE=6\n",
         encoding="utf-8",
     )
-    s = LLMSettings.from_env(env={"PROMOLENS_LLM_ZDR": "true"}, dotenv=dotenv)
+    s = LLMSettings.from_env(env={"FRAMECUE_LLM_ZDR": "true"}, dotenv=dotenv)
     assert s.api_key.get_secret_value() == "from-dotenv" and s.batch_size == 6 and s.zdr
     assert "from-dotenv" not in repr(s) and "from-dotenv" not in str(s.inference_identity())
     env_wins = LLMSettings.from_env(env={"OPENROUTER_API_KEY": "from-env"}, dotenv=dotenv)
-    assert env_wins.api_key.get_secret_value() == "from-dotenv"  # PROMOLENS_ name has priority
+    assert env_wins.api_key.get_secret_value() == "from-dotenv"  # FRAMECUE_ name has priority
     with pytest.raises(pydantic.ValidationError):
         LLMSettings(data_collection="allow")  # privacy can't be relaxed by configuration
 

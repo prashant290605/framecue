@@ -9,16 +9,16 @@ from pathlib import Path
 import httpx
 import pytest
 
+from framecue import cli
+from framecue.eval_driver import coverage_first
+from framecue.evaluator import EvaluationCache, EvaluationConfig, Evaluator, cache_key
+from framecue.exports import write_exports
+from framecue.parser import parse_path, parse_zip_bytes
+from framecue.pipeline import NoEpisodesError, analyze_path, coverage, run_summary
+from framecue.ranking import PromoFilter, near_duplicate, page, suppress
+from framecue.results import AIStatus
+from framecue.schemas import CandidateConfig
 from pipeline_fakes import episode_text, fill_cache, groq_settings, pack_bytes, write_pack
-from promolens import cli
-from promolens.eval_driver import coverage_first
-from promolens.evaluator import EvaluationCache, EvaluationConfig, Evaluator, cache_key
-from promolens.exports import write_exports
-from promolens.parser import parse_path, parse_zip_bytes
-from promolens.pipeline import NoEpisodesError, analyze_path, coverage, run_summary
-from promolens.ranking import PromoFilter, near_duplicate, page, suppress
-from promolens.results import AIStatus
-from promolens.schemas import CandidateConfig
 
 NUMBERS = [1, 2, 3]
 
@@ -83,7 +83,7 @@ def test_unsafe_and_oversized_archives_are_rejected(monkeypatch) -> None:
     result = parse_zip_bytes(traversal, "x.zip")
     assert [e.episode_number for e in result.episodes] == [1]
     assert "unsafe_archive_entry" in {i.code for i in result.issues}
-    monkeypatch.setattr("promolens.parser.MAX_ARCHIVE_TOTAL_BYTES", 10_000)
+    monkeypatch.setattr("framecue.parser.MAX_ARCHIVE_TOTAL_BYTES", 10_000)
     capped = parse_zip_bytes(pack_bytes([1, 2, 3]), "big.zip")
     assert "archive_too_large" in {i.code for i in capped.issues}
     assert parse_zip_bytes(b"PK\x03\x04garbage", "broken.zip").issues[0].code == (
@@ -156,7 +156,7 @@ def test_genuine_failures_are_reported_but_budget_stops_are_not(pack, tmp_path) 
     bad = lambda request: httpx.Response(200, json={  # noqa: E731
         "choices": [{"finish_reason": "stop", "message": {"content": '{"evaluations": []}'}}],
         "usage": {"prompt_tokens": 10, "completion_tokens": 5}})  # fmt: skip
-    from promolens.llm_client import ChatCompletionsClient
+    from framecue.llm_client import ChatCompletionsClient
 
     settings = groq_settings()
     client = ChatCompletionsClient(settings, httpx.MockTransport(bad), lambda _: None)
@@ -327,8 +327,8 @@ def test_raw_model_output_is_captured_unmodified_and_exported(pack, tmp_path) ->
     eps = episodes_of(pack)
     raw_dir = tmp_path / "raw"
     cache_dir = tmp_path / "cache"
+    from framecue.llm_client import ChatCompletionsClient
     from llm_fakes import FakeOpenRouter
-    from promolens.llm_client import ChatCompletionsClient
 
     cands = list(run_of(pack, None).candidates[1])[:1]
     fake = FakeOpenRouter(cands)
@@ -351,13 +351,13 @@ def test_raw_model_output_is_captured_unmodified_and_exported(pack, tmp_path) ->
 
 
 def test_cli_analyze_offline_with_summary(pack, tmp_path, capsys, monkeypatch) -> None:
-    from promolens import llm_client
+    from framecue import llm_client
 
     def no_client(*a, **k):
         raise AssertionError("analyze must not create a model client")
 
     monkeypatch.setattr(llm_client.ChatCompletionsClient, "__init__", no_client)
-    monkeypatch.setenv("PROMOLENS_LLM_API_KEY", "sk-should-never-appear-123")
+    monkeypatch.setenv("FRAMECUE_LLM_API_KEY", "sk-should-never-appear-123")
     out = tmp_path / "out"
     code = cli.main(["analyze", str(pack), "--out", str(out), "--cache-dir",
                      str(tmp_path / "cache"), "--raw-dir", str(tmp_path / "raw")])  # fmt: skip
@@ -414,7 +414,7 @@ def _iou(a, b) -> float:
 def test_cache_key_matches_between_evaluator_and_pipeline(pack) -> None:
     run = run_of(pack, None)
     c = run.candidates[1][0]
-    from promolens.pipeline import default_ai_profile
+    from framecue.pipeline import default_ai_profile
 
     assert cache_key(run.episodes[1], c, default_ai_profile(), CandidateConfig()) == cache_key(
         run.episodes[1], c, groq_settings(), CandidateConfig()

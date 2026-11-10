@@ -26,9 +26,9 @@ from typing import Protocol
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from promolens.candidates import EpisodeIndex, intersects
-from promolens.llm_client import LLMError, LLMResponse, LLMSettings
-from promolens.prompts import (
+from framecue.candidates import EpisodeIndex, intersects
+from framecue.llm_client import LLMError, LLMResponse, LLMSettings
+from framecue.prompts import (
     PROMPT_VERSION,
     SCHEMA_NAME,
     alias_maps,
@@ -36,7 +36,7 @@ from promolens.prompts import (
     response_schema,
     to_real_ids,
 )
-from promolens.schemas import (
+from framecue.schemas import (
     CandidateConfig,
     Episode,
     EvaluationProvenance,
@@ -153,7 +153,7 @@ class EvaluationCache:
         return {"format": BUNDLE_FORMAT, "entries": entries, "failures": failures}
 
 
-BUNDLE_FORMAT = "promolens-ai-bundle-v1"
+BUNDLE_FORMAT = "framecue-ai-bundle-v1"
 MAX_BUNDLE_ENTRIES = 5_000
 _KEY = re.compile(r"^[0-9a-f]{64}$")
 

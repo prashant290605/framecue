@@ -10,6 +10,19 @@ import httpx
 import pydantic
 import pytest
 
+from framecue import evaluator as evaluator_module
+from framecue.candidates import generate_candidates
+from framecue.evaluator import EvaluationCache, EvaluationConfig, Evaluator, cache_key
+from framecue.prompts import SYSTEM_PROMPT, build_messages
+from framecue.schemas import (
+    CandidateConfig,
+    EvaluationProvenance,
+    EvaluationStatus,
+    PromoEvaluation,
+    RubricScores,
+    RubricWeights,
+    weighted_score,
+)
 from llm_fakes import (
     REPORTED_MODEL,
     REPORTED_PROVIDER,
@@ -21,19 +34,6 @@ from llm_fakes import (
     request_ids,
     settings,
     user_payload,
-)
-from promolens import evaluator as evaluator_module
-from promolens.candidates import generate_candidates
-from promolens.evaluator import EvaluationCache, EvaluationConfig, Evaluator, cache_key
-from promolens.prompts import SYSTEM_PROMPT, build_messages
-from promolens.schemas import (
-    CandidateConfig,
-    EvaluationProvenance,
-    EvaluationStatus,
-    PromoEvaluation,
-    RubricScores,
-    RubricWeights,
-    weighted_score,
 )
 from synthetic import build, ev, shots
 
@@ -184,7 +184,7 @@ def test_event_overlapping_the_clip_start_is_valid_hook_evidence() -> None:
     blocks = [*shots(0, 60_000, 10_000), ev("ACTION", 8_000, 13_000, "A chair crashes over.")]
     episode = build([(0, 60_000, blocks)])
     cands = list(generate_candidates(episode).shortlist)
-    from promolens.candidates import Anchor, EpisodeIndex, build_candidate
+    from framecue.candidates import Anchor, EpisodeIndex, build_candidate
 
     c = build_candidate(EpisodeIndex(episode), Anchor(10_000, ("t",)), Anchor(40_000, ("t",)),
                         CandidateConfig())  # fmt: skip
