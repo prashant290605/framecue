@@ -10,12 +10,14 @@ import {
 } from "@/lib/doc-index";
 import {
   analysisKey,
-  clearAll,
+  deleteAnalysis,
   loadAnalysis,
+  renameAnalysis,
   saveAnalysis,
   saveReview,
   StorageError,
   type AnalysisMeta,
+  type Restored,
 } from "@/lib/storage";
 
 export type Origin = AnalysisMeta["origin"];
@@ -68,6 +70,7 @@ type Action =
   | { type: "storage"; status: StorageStatus }
   | { type: "notice"; tone: Notice["tone"]; text: string }
   | { type: "dismiss" }
+  | { type: "rename"; name: string }
   | { type: "reset" };
 
 export const initialState: State = {
@@ -98,7 +101,8 @@ export function reducer(state: State, action: Action): State {
     case "loaded": {
       const index = buildIndex(action.doc);
       const hasAi = Object.keys(action.doc.ai_evaluations).length > 0;
-      const view = action.view ?? (hasAi ? "ai" : "coverage");
+      // Without AI reviews there is only the structural ranking.
+      const view = hasAi ? (action.view ?? "ai") : "coverage";
       const selected =
         action.selectedId && index.candidates.has(action.selectedId)
           ? action.selectedId
@@ -119,7 +123,7 @@ export function reducer(state: State, action: Action): State {
       };
     }
     case "view": {
-      if (!state.index) return state;
+      if (!state.index || (action.view === "ai" && state.index.entries.ai.length === 0)) return state;
       const keep =
         state.selectedId && state.index.entryById[action.view].has(state.selectedId)
           ? state.selectedId
@@ -158,6 +162,8 @@ export function reducer(state: State, action: Action): State {
       return { ...state, notice: { id: ++noticeId, tone: action.tone, text: action.text } };
     case "dismiss":
       return { ...state, notice: null };
+    case "rename":
+      return { ...state, fileName: action.name };
     case "reset":
       return { ...initialState, phase: "upload", storage: { state: "idle" } };
   }
@@ -166,8 +172,14 @@ export function reducer(state: State, action: Action): State {
 interface Ctx {
   state: State;
   dispatch: React.Dispatch<Action>;
-  load: (doc: AnalysisDocument, fileName: string, origin: Origin) => void;
-  deleteSaved: () => Promise<void>;
+  load: (doc: AnalysisDocument, fileName: string, origin: Origin, fingerprint?: string | null) => void;
+  /** Open a saved analysis by key; resolves false if it is gone or unreadable. */
+  open: (key: string) => Promise<boolean>;
+  rename: (key: string, name: string) => Promise<void>;
+  /** Delete one saved analysis (the open one by default). */
+  remove: (key?: string) => Promise<void>;
+  /** Key of the open analysis once it is saved. */
+  savedKey: string | null;
 }
 
 const AppContext = React.createContext<Ctx | null>(null);
@@ -183,28 +195,31 @@ const REVIEW_DEBOUNCE_MS = 300;
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const savedKey = React.useRef<string | null>(null);
+  const [openKey, setOpenKey] = React.useState<string | null>(null);
+
+  const restore = React.useCallback((restored: Restored) => {
+    savedKey.current = restored.meta.key;
+    setOpenKey(restored.meta.key);
+    dispatch({
+      type: "loaded",
+      doc: restored.doc,
+      fileName: restored.meta.fileName,
+      origin: restored.meta.origin,
+      reviews: restored.reviews,
+      view: restored.ui?.view,
+      selectedId: restored.ui?.selectedId,
+      filters: restored.ui?.filters ? { ...DEFAULT_FILTERS, ...restored.ui.filters } : undefined,
+      restored: true,
+    });
+    dispatch({ type: "storage", status: { state: "saved", at: restored.meta.savedAt } });
+  }, []);
 
   // Restore the last analysis on start (and after a refresh).
   React.useEffect(() => {
     let cancelled = false;
     loadAnalysis()
       .then((restored) => {
-        if (cancelled) return;
-        if (restored) {
-          savedKey.current = restored.meta.key;
-          dispatch({
-            type: "loaded",
-            doc: restored.doc,
-            fileName: restored.meta.fileName,
-            origin: restored.meta.origin,
-            reviews: restored.reviews,
-            view: restored.ui?.view,
-            selectedId: restored.ui?.selectedId,
-            filters: restored.ui?.filters ? { ...state.filters, ...restored.ui.filters } : undefined,
-            restored: true,
-          });
-          dispatch({ type: "storage", status: { state: "saved", at: restored.meta.savedAt } });
-        }
+        if (!cancelled && restored) restore(restored);
       })
       .catch((error: unknown) => {
         if (cancelled) return;
@@ -221,13 +236,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const load = React.useCallback((doc: AnalysisDocument, fileName: string, origin: Origin) => {
+  const load = React.useCallback((doc: AnalysisDocument, fileName: string, origin: Origin, fingerprint?: string | null) => {
     dispatch({ type: "loaded", doc, fileName, origin });
     // Save in the background; the workspace is usable immediately.
     savedKey.current = null;
-    saveAnalysis(doc, { fileName, origin })
+    setOpenKey(null);
+    saveAnalysis(doc, { fileName, origin, fingerprint })
       .then((meta) => {
         savedKey.current = meta.key;
+        setOpenKey(meta.key);
         dispatch({ type: "storage", status: { state: "saved", at: meta.savedAt } });
       })
       .catch((error: unknown) => {
@@ -252,16 +269,52 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return () => clearTimeout(timer);
   }, [state.doc, state.reviews, state.view, state.selectedId, state.filters, state.storage.state]);
 
-  const deleteSaved = React.useCallback(async () => {
+  const open = React.useCallback(
+    async (key: string) => {
+      try {
+        const restored = await loadAnalysis(key);
+        if (!restored) {
+          dispatch({ type: "notice", tone: "error", text: "That analysis is no longer saved in this browser." });
+          return false;
+        }
+        restore(restored);
+        return true;
+      } catch (error) {
+        const message = error instanceof StorageError ? error.message : "Saved data could not be read.";
+        dispatch({ type: "notice", tone: "error", text: message });
+        return false;
+      }
+    },
+    [restore],
+  );
+
+  const rename = React.useCallback(async (key: string, name: string) => {
     try {
-      await clearAll();
-    } finally {
-      savedKey.current = null;
-      dispatch({ type: "reset" });
-      dispatch({ type: "notice", tone: "info", text: "Saved analysis deleted from this browser." });
+      const meta = await renameAnalysis(key, name);
+      if (meta && key === savedKey.current) dispatch({ type: "rename", name: meta.fileName });
+    } catch (error) {
+      dispatch({ type: "notice", tone: "error", text: error instanceof StorageError ? error.message : "Could not rename." });
     }
   }, []);
 
-  const value = React.useMemo(() => ({ state, dispatch, load, deleteSaved }), [state, load, deleteSaved]);
+  const remove = React.useCallback(async (key?: string) => {
+    const target = key ?? savedKey.current;
+    const current = !key || key === savedKey.current;
+    try {
+      if (target) await deleteAnalysis(target);
+    } finally {
+      if (current) {
+        savedKey.current = null;
+        setOpenKey(null);
+        dispatch({ type: "reset" });
+      }
+      dispatch({ type: "notice", tone: "info", text: "Analysis deleted from this browser." });
+    }
+  }, []);
+
+  const value = React.useMemo(
+    () => ({ state, dispatch, load, open, rename, remove, savedKey: openKey }),
+    [state, load, open, rename, remove, openKey],
+  );
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

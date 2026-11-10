@@ -167,15 +167,17 @@ export const Timeline = React.memo(function Timeline({ model, evidence, activeId
 });
 
 /** Compact legend shown beside the timeline heading. Categories are labelled on the lanes. */
-export function TimelineLegend() {
+export function TimelineLegend({ evidence = true }: { evidence?: boolean }) {
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] font-medium text-muted" aria-hidden>
       <span className="flex items-center gap-1.5">
         <span className="h-2.5 w-4 rounded-[3px] bg-accent/25 ring-1 ring-accent/35" /> First 3 s · last 5 s
       </span>
-      <span className="flex items-center gap-1.5">
-        <span className="h-2 w-4 rounded-full bg-ev-dialogue ring-2 ring-accent ring-offset-1" /> AI evidence
-      </span>
+      {evidence && (
+        <span className="flex items-center gap-1.5">
+          <span className="h-2 w-4 rounded-full bg-ev-dialogue ring-2 ring-accent ring-offset-1" /> AI evidence
+        </span>
+      )}
       <span className="flex items-center gap-1.5 max-sm:hidden">
         <span className="h-3 border-l border-dashed border-line-strong" /> Scene change
       </span>

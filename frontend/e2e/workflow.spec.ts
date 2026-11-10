@@ -22,9 +22,9 @@ test.describe("desktop workflow", () => {
     page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
     await page.goto("/");
     await page.getByRole("button", { name: /Try the fictional sample/ }).click();
-    await expect(page.getByRole("tablist", { name: "Ranking" })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Recommendations" })).toBeVisible();
     await expect(page).toHaveURL(/\/review$/);
-    await expect(page.getByRole("status")).toHaveText(/Saved in this browser/);
+    await expect(page.getByRole("status")).toHaveText(/^\s*Saved$/);
 
     const rows = page.getByRole("option");
     await expect(rows.first()).toBeVisible();
@@ -32,12 +32,12 @@ test.describe("desktop workflow", () => {
     const detail = page.getByRole("main", { name: "Candidate detail" });
     const heading = await detail.getByRole("heading", { level: 2 }).textContent();
     await detail.getByRole("button", { name: /Accept/ }).click();
-    await detail.getByRole("button", { name: /Add a private note/ }).click();
+    await detail.getByRole("button", { name: /Add note/ }).click();
     await detail.getByLabel("Private note").fill("Strong cold open");
     await page.waitForTimeout(800); // debounced saves
 
     await page.reload();
-    await expect(page.getByRole("tablist", { name: "Ranking" })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Recommendations" })).toBeVisible();
     const restored = page.getByRole("main", { name: "Candidate detail" });
     await expect(restored.getByRole("heading", { level: 2 })).toHaveText(heading!);
     await expect(restored.getByRole("button", { name: /Accept/ })).toHaveAttribute("aria-pressed", "true");
@@ -55,8 +55,20 @@ test.describe("desktop workflow", () => {
     expect(text).toContain("heuristic_priority_v1");
     expect(text).toContain("accepted");
 
+    // reopen from the saved-analysis list without analysing again
+    let analyzeCalls = 0;
+    page.on("request", (r) => r.url().endsWith("/api/analyze") && analyzeCalls++);
     await page.getByRole("button", { name: "Analysis menu" }).click();
-    await page.getByRole("menuitem", { name: /Delete saved analysis/ }).click();
+    await page.getByRole("menuitem", { name: /New analysis/ }).click();
+    const recent = page.getByRole("list", { name: "Recent analyses" });
+    await expect(recent).toContainText("The Harbor Light (fictional sample)");
+    await recent.getByText("The Harbor Light (fictional sample)").click();
+    await expect(page.getByRole("main", { name: "Candidate detail" }).getByRole("heading", { level: 2 })).toHaveText(heading!);
+    await expect(page.getByRole("main", { name: "Candidate detail" }).getByRole("button", { name: /Accept/ })).toHaveAttribute("aria-pressed", "true");
+    expect(analyzeCalls).toBe(0);
+
+    await page.getByRole("button", { name: "Analysis menu" }).click();
+    await page.getByRole("menuitem", { name: /Delete analysis/ }).click();
     await page.getByRole("button", { name: /^Delete$/ }).click();
     await expect(page.getByRole("heading", { level: 1, name: /Find the moments worth promoting/ })).toBeVisible();
     await page.reload();

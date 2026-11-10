@@ -1,11 +1,11 @@
-import { FileJson, Info, Layers, SearchX } from "lucide-react";
+import { Info, Layers, SearchX } from "lucide-react";
 import { domAnimation, LazyMotion, MotionConfig } from "motion/react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/overlays";
 import { activeFilterCount, DEFAULT_FILTERS, filterEntries, type Decision } from "@/lib/doc-index";
 import { useApp } from "@/state/app-state";
-import { TopBar, Toolbar } from "./Chrome";
+import { SampleAiNote, TopBar, Toolbar } from "./Chrome";
 import { Detail } from "./Detail";
 import { PromoList } from "./PromoList";
 
@@ -72,22 +72,26 @@ function WorkspaceView() {
   }, [state.selectedId, state.reviews, dispatch]);
 
   if (!index) return null;
+  const cov = state.doc!.coverage;
   const aiEmpty = view === "ai" && index.entries.ai.length === 0;
   const filteredOut = !aiEmpty && entries.length === 0;
 
   const list = (
     <section aria-label="Recommendations" className="flex min-h-0 flex-1 flex-col">
       <Toolbar shown={entries.length} />
-      {view === "ai" && !aiEmpty && state.doc!.views.ai.provisional && (
-        <ViewNote>
-          <span>Provisional: {state.doc!.views.ai.provisional_reason}</span>
-        </ViewNote>
-      )}
-      {view === "coverage" && (
-        <ViewNote>
-          <span>Unverified suggestions ranked by the heuristic baseline (0–1). Not AI quality scores.</span>
-        </ViewNote>
-      )}
+      <ViewNote>
+        {cov.ai_evaluated === 0 ? (
+          "Ranked by screenplay structure · AI review not available"
+        ) : view === "coverage" ? (
+          "All clips, ranked by screenplay structure (0–1)."
+        ) : state.origin === "sample" ? (
+          <SampleAiNote className="text-[12px] leading-snug" />
+        ) : cov.complete ? (
+          "Ranked by AI score (0–100)."
+        ) : (
+          `${cov.ai_evaluated} of ${cov.total_candidates} candidates reviewed by AI so far.`
+        )}
+      </ViewNote>
       <div className="min-h-0 flex-1 pt-1.5">
         {aiEmpty ? (
           <EmptyAi onFullShow={() => dispatch({ type: "view", view: "coverage" })} />
@@ -113,7 +117,7 @@ function WorkspaceView() {
         <div className="grid min-h-0 flex-1 grid-cols-[392px_1fr] xl:grid-cols-[420px_1fr]">
           <div className="flex min-h-0 flex-col border-r border-line">{list}</div>
           <main className="relative min-h-0 overflow-y-auto bg-surface" aria-label="Candidate detail">
-            {aiEmpty ? <AiExplainer /> : <Detail />}
+            <Detail />
           </main>
         </div>
       ) : mobileDetail && selectedId && !aiEmpty ? (
@@ -129,9 +133,9 @@ function WorkspaceView() {
 
 function ViewNote({ children }: { children: React.ReactNode }) {
   return (
-    <p className="flex gap-2 border-b border-line px-4 py-2.5 text-[12px] leading-snug text-muted">
+    <p className="flex gap-2 border-b border-line px-4 py-2 text-[12px] leading-snug text-muted">
       <Info className="mt-px size-3.5 shrink-0 text-faint" aria-hidden />
-      {children}
+      <span>{children}</span>
     </p>
   );
 }
@@ -149,38 +153,10 @@ function EmptyState({ icon, title, children }: { icon: React.ReactNode; title: s
 function EmptyAi({ onFullShow }: { onFullShow: () => void }) {
   return (
     <EmptyState icon={<Layers />} title="No AI-reviewed picks in this analysis">
-      <p className="mt-1.5 max-w-[300px] text-[13px] leading-relaxed text-muted">
-        AI judgements appear only when a validated evaluation bundle is uploaded with the
-        screenplay. Nothing is estimated or generated in its place.
-      </p>
       <Button variant="primary" className="mt-5" onClick={onFullShow}>
         Browse the full show
       </Button>
     </EmptyState>
-  );
-}
-
-function AiExplainer() {
-  return (
-    <div className="mx-auto max-w-[480px] px-8 py-20">
-      <span className="flex size-10 items-center justify-center rounded-full bg-accent-soft text-accent">
-        <FileJson className="size-[18px]" />
-      </span>
-      <h2 className="mt-5 text-[20px] font-bold tracking-[-0.02em] text-ink">How AI review works here</h2>
-      <div className="mt-3 space-y-3 text-[14px] leading-relaxed text-muted">
-        <p>
-          The deployed service never calls a model. AI-reviewed recommendations come from a private
-          evaluation bundle produced locally with the command-line tool, using{" "}
-          <code className="font-mono text-[12px] whitespace-nowrap text-ink-soft">promolens evaluate</code> and then{" "}
-          <code className="font-mono text-[12px] whitespace-nowrap text-ink-soft">promolens export-ai</code>.
-        </p>
-        <p>
-          Upload that bundle with the same screenplay and each judgement is used only if it matches
-          the screenplay exactly and its cited evidence re-validates. Everything else is ignored and
-          counted in the coverage panel.
-        </p>
-      </div>
-    </div>
   );
 }
 

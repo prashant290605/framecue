@@ -17,15 +17,22 @@ test.describe("release checks", () => {
     page.on("pageerror", (e) => errors.push(e.message));
     page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
 
+    // the manifest says whether genuine AI reviews are published for the sample
+    const published = (await (await page.request.get("/sample/manifest.json")).json()).ai_bundle;
     await page.goto("/");
     await page.getByRole("button", { name: /Try the fictional sample/ }).click();
-    const tabs = page.getByRole("tablist", { name: "Ranking" });
-    await expect(tabs).toBeVisible();
+    await expect(page.getByRole("region", { name: "Recommendations" })).toBeVisible();
 
-    // AI-reviewed view: the sample has no AI bundle, so it shows the empty state honestly
-    await tabs.getByRole("tab", { name: /AI-reviewed/ }).click();
-    await expect(tabs.getByRole("tab", { name: /AI-reviewed/ })).toHaveAttribute("aria-selected", "true");
-    await tabs.getByRole("tab", { name: /Full show/ }).click();
+    if (published) {
+      // AI-reviewed picks lead, labelled as genuine model output with the model's name
+      const tabs = page.getByRole("tablist", { name: "Ranking" });
+      await expect(tabs.getByRole("tab", { name: /AI-reviewed/ })).toHaveAttribute("aria-selected", "true");
+      await expect(page.getByText(/Genuine reviews by/)).toContainText("openai/gpt-oss-120b");
+      await expect(page.getByRole("main", { name: "Candidate detail" }).getByText("AI score")).toBeVisible();
+      await tabs.getByRole("tab", { name: /Full show/ }).click();
+    } else {
+      await expect(page.getByText(/AI review not available/)).toBeVisible();
+    }
     const rows = page.getByRole("option");
     await expect(rows.first()).toBeVisible();
     await rows.nth(2).click();
@@ -49,14 +56,14 @@ test.describe("release checks", () => {
     const json = Buffer.concat(await (await download.createReadStream()).toArray());
     expect(JSON.parse(json.toString("utf-8")).schema_version).toBe("promolens-analysis-v1");
     await page.getByRole("button", { name: "Analysis menu" }).click();
-    await page.getByRole("menuitem", { name: /Delete saved analysis/ }).click();
+    await page.getByRole("menuitem", { name: /Delete analysis/ }).click();
     await page.getByRole("button", { name: /^Delete$/ }).click();
     await expect(page.getByRole("heading", { level: 1, name: /Find the moments worth promoting/ })).toBeVisible();
 
     let analyzeCalls = 0;
     page.on("request", (r) => r.url().endsWith("/api/analyze") && analyzeCalls++);
     await page.getByTestId("import-input").setInputFiles({ name: "analysis.json", mimeType: "application/json", buffer: json });
-    await expect(page.getByRole("tablist", { name: "Ranking" })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Recommendations" })).toBeVisible();
     expect(analyzeCalls).toBe(0);
 
     expect(await context.cookies()).toEqual([]);

@@ -51,7 +51,7 @@ test("real pack: AI-reviewed and full-show workspace, metrics", async ({ page })
   await page.setViewportSize({ width: 1440, height: 900 });
   metrics.upload_to_workspace_ms = await uploadRealPack(page);
   await expect(page.getByRole("tab", { name: /AI-reviewed/ })).toHaveAttribute("aria-selected", "true");
-  await expect(page.getByRole("status")).toHaveText(/Saved in this browser/);
+  await expect(page.getByRole("status")).toHaveText(/^\s*Saved$/);
   const aiRows = await page.getByRole("option").count();
   metrics.ai_rows_rendered = aiRows;
   await shot(page, "ai-workspace-1440");

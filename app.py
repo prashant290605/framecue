@@ -1,4 +1,4 @@
-"""Vercel entrypoint: the stateless PromoLens API plus the built frontend.
+"""Vercel entrypoint: the stateless FrameCue API plus the built frontend.
 
 Vercel's FastAPI support detects a root ``app.py`` that exposes ``app``. The package lives in
 ``src/``, so it is put on the import path explicitly; this works whether or not the project

@@ -1022,3 +1022,44 @@ alternative cuts. On the real pack that is 41 (28 primaries and 13 alternatives)
   prompt and 8 from another profile, both ignored, and 0 failing validation.
 
 When no bundle was supplied, the popover now says so.
+
+## 20. Final polish and release
+
+**Interface.** Less text and fewer prominent numbers; no new features in the inspector.
+- **Inspector order:** clip header (episode, rank, timecodes, duration, review actions), then
+  one score line, the AI judgement when there is one, the screenplay map, the script, and a
+  collapsed **Details** section.
+- **Structural score:** shown as `0.84 / 1 Structural score` with a one-sentence reason built
+  from the start and end anchors. The six components and the method id moved into Details.
+- **AI score:** one line with the four rubric scores; the model, provider and prompt version
+  moved into Details. Nothing heuristic is labelled as AI.
+- **List rows:** one preview line and a 66 px row; structural scores to two decimals.
+- **No AI reviews:** the AI tab, the "AI reviewed 0 / N" chip and the AI-only filters are
+  hidden, and one line says the ranking is structural and AI review is not available. With
+  reviews, the AI-reviewed view opens first and the full show stays one tab away.
+
+**Saved analyses (IndexedDB schema v2).** The database keeps every analysis instead of one.
+- **Stores:** `analysis` and `review` keyed by analysis key, `library` for listing metadata,
+  and `app.last` for the analysis reopened after a refresh.
+- **Migration:** opening the v1 database moves the single `current` record under its key,
+  keeps its decisions and notes, and makes it the last opened. Tested with a real v1
+  database in Vitest and in the browser pane.
+- **Start page:** Recent analyses with open, inline rename and delete with confirmation.
+- **Duplicate uploads:** a SHA-256 fingerprint of the file contents (plus any bundle) finds a
+  saved analysis of the same files and offers to open it. The sample reopens silently.
+- **Backup:** "Back up all" exports every analysis with decisions and notes
+  (`framecue-backup-v1`); Import adds the ones not already saved.
+
+**Icons.** The favicon reuses the logo paths and colours, cropped to the mark, with a light
+variant for dark tab bars. PNG icons (180, 192, 512) and a 16/32/48 px ICO are rendered from
+the same paths in Edge; `site.webmanifest` lists them.
+
+**Address.** `framecue.vercel.app` belongs to another Vercel project. `framecue-app.vercel.app`
+was free and is now a domain of the existing project. `promolens-two.vercel.app` keeps
+serving the same deployment rather than redirecting, because saved analyses live in each
+origin's own IndexedDB; Back up all and Import move them.
+
+**Commit attribution.** Earlier commits carried an automatic `Co-Authored-By` trailer, which is
+why GitHub listed a second contributor. Authors and committers were always the repository
+owner. Automatic trailers are now off for this project; AI assistance stays documented in
+`docs/AI_LOG.md` and the solution document.

@@ -6,7 +6,7 @@ import type { DocIndex, Entry, Reviews } from "@/lib/doc-index";
 import { timecode } from "@/lib/time";
 import { cn } from "@/lib/utils";
 
-export const ROW_HEIGHT = 84;
+export const ROW_HEIGHT = 66;
 
 interface Props {
   index: DocIndex;
@@ -103,11 +103,11 @@ const Row = React.memo(function Row({
       aria-selected={selected}
       onClick={() => onSelect(entry.id)}
       className={cn(
-        "group relative mx-2 flex h-[78px] cursor-pointer gap-3 rounded-lg px-3 py-2.5 transition-colors",
+        "group relative mx-2 flex h-[60px] cursor-pointer gap-3 rounded-lg px-3 py-2.5 transition-colors",
         selected ? "bg-surface shadow-[0_1px_2px_rgb(20_34_56/0.06)] ring-1 ring-line" : "hover:bg-subtle",
       )}
     >
-      {selected && <span className="absolute top-3 bottom-3 left-0 w-[3px] rounded-full bg-accent" aria-hidden />}
+      {selected && <span className="absolute top-2.5 bottom-2.5 left-0 w-[3px] rounded-full bg-accent" aria-hidden />}
       <div className="w-6 shrink-0 pt-[3px] text-right">
         {entry.rank !== null ? (
           <span className={cn("text-[12px] font-semibold tabular", selected ? "text-accent" : "text-muted")}>{entry.rank}</span>
@@ -130,18 +130,17 @@ const Row = React.memo(function Row({
           </span>
           <span className="text-[12px] text-muted tabular">{shortSeconds(c.duration_ms)}</span>
         </div>
-        <p className="mt-1.5 line-clamp-2 text-[12px] leading-[1.4] text-muted">{preview}</p>
+        <p className="mt-1 truncate text-[12px] leading-[1.4] text-muted">{preview}</p>
       </div>
       <div className="flex w-12 shrink-0 flex-col items-end justify-between">
         {view === "ai" && ai ? (
-          <span className="text-right">
-            <span className="block text-[16px] leading-none font-bold text-ink tabular">{ai.weighted_score}</span>
-            <span className="mt-1 block text-[10.5px] font-medium text-muted tabular">H{ai.hook_score} · C{ai.cliffhanger_score}</span>
+          <span className="text-right" title="AI score out of 100">
+            <span className="block text-[15px] leading-none font-bold text-ink tabular">{ai.weighted_score}</span>
+            <span className="mt-1 block text-[10.5px] font-medium text-muted">AI</span>
           </span>
         ) : (
-          <span className="text-right">
-            <span className="block text-[13px] leading-none font-semibold text-ink-soft tabular">{c.baseline.priority.toFixed(3)}</span>
-            <span className="mt-1 block text-[10.5px] font-medium text-muted">priority</span>
+          <span className="text-right" title="Structural score, 0 to 1">
+            <span className="block text-[13px] leading-none font-semibold text-ink-soft tabular">{c.baseline.priority.toFixed(2)}</span>
           </span>
         )}
         <span className="flex items-center gap-1.5 [&_svg]:size-3.5">

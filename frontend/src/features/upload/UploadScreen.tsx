@@ -1,19 +1,45 @@
-import { ArrowRight, BookOpen, CircleAlert, FileArchive, FileJson, FileText, FolderOpen, HardDrive, Loader2, ShieldCheck, Upload, X } from "lucide-react";
+import { ArrowRight, BookOpen, CircleAlert, FileArchive, FileJson, FileText, FolderOpen, Loader2, ShieldCheck, Upload, X } from "lucide-react";
 import * as React from "react";
 import { analyze, ApiError, CLI_HINT, DEFAULT_MAX_UPLOAD, getHealth } from "@/api/client";
 import { Brand } from "@/components/Brand";
 import { Button } from "@/components/ui/button";
+import { fingerprint } from "@/lib/fingerprint";
+import { findByFingerprint, importBackup, isBackup, listAnalyses, type AnalysisMeta } from "@/lib/storage";
 import { bytes } from "@/lib/time";
 import { validateDocument } from "@/lib/validate";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/state/app-state";
+import { RecentAnalyses } from "./RecentAnalyses";
 
 export const SAMPLE_FILES = ["harbor-light-01.txt", "harbor-light-02.txt", "harbor-light-03.txt"];
+/** Genuine Groq evaluations of the fictional sample only, made offline with the CLI and
+ *  re-validated by the server like any uploaded bundle. Optional: the sample still works
+ *  without it. */
+export const SAMPLE_BUNDLE = "harbor-light.ai-bundle.json";
+/** Always published; names the bundle once one exists (`ai_bundle: null` until then), so the
+ *  page never requests a missing file. */
+export const SAMPLE_MANIFEST = "manifest.json";
+
+const isJson = (r: Response) => r.ok && (r.headers.get("content-type") ?? "").includes("json");
+
+async function fetchSampleBundle(): Promise<File | null> {
+  try {
+    const m = await fetch(`/sample/${SAMPLE_MANIFEST}`);
+    // the SPA rewrite answers missing files with index.html, so insist on JSON
+    if (!isJson(m) || ((await m.json()) as { ai_bundle?: unknown }).ai_bundle !== SAMPLE_BUNDLE) return null;
+    const r = await fetch(`/sample/${SAMPLE_BUNDLE}`);
+    if (!isJson(r)) return null;
+    return new File([await r.blob()], SAMPLE_BUNDLE, { type: "application/json" });
+  } catch {
+    return null;
+  }
+}
 
 /** Start downloading the workspace code while the analysis request is in flight. */
 const prefetchWorkspace = () => void import("@/features/workspace/Workspace").catch(() => undefined);
 
 type Problem = { title: string; detail?: string } | null;
+type Duplicate = { meta: AnalysisMeta; files: File[]; bundle: File | null; name: string } | null;
 
 export function checkSelection(files: File[], bundle: File | null, maxBytes: number): Problem {
   if (files.length === 0) return { title: "Choose a screenplay file first." };
@@ -30,13 +56,15 @@ export function checkSelection(files: File[], bundle: File | null, maxBytes: num
 }
 
 export function UploadScreen() {
-  const { load, dispatch } = useApp();
+  const { load, open, dispatch } = useApp();
   const [files, setFiles] = React.useState<File[]>([]);
   const [bundle, setBundle] = React.useState<File | null>(null);
   const [dragging, setDragging] = React.useState(false);
   const [busy, setBusy] = React.useState<null | "upload" | "sample">(null);
   const [elapsed, setElapsed] = React.useState(0);
   const [problem, setProblem] = React.useState<Problem>(null);
+  const [duplicate, setDuplicate] = React.useState<Duplicate>(null);
+  const [library, setLibrary] = React.useState<AnalysisMeta[]>([]);
   const [maxBytes, setMaxBytes] = React.useState(DEFAULT_MAX_UPLOAD);
   const [service, setService] = React.useState<"checking" | "ok" | "down">("checking");
   const controller = React.useRef<AbortController | null>(null);
@@ -64,13 +92,35 @@ export function UploadScreen() {
 
   React.useEffect(() => () => controller.current?.abort(), []);
 
-  const run = async (chosen: File[], chosenBundle: File | null, origin: "upload" | "sample", name: string) => {
+  const refresh = React.useCallback(() => {
+    listAnalyses().then(setLibrary).catch(() => setLibrary([]));
+  }, []);
+  React.useEffect(refresh, [refresh]);
+
+  const openSaved = async (key: string) => {
+    prefetchWorkspace();
+    history.pushState(null, "", "/review");
+    return open(key);
+  };
+
+  const run = async (chosen: File[], chosenBundle: File | null, origin: "upload" | "sample", name: string, again = false) => {
     const issue = checkSelection(chosen, chosenBundle, maxBytes);
     if (issue) {
       setProblem(issue);
       return;
     }
     setProblem(null);
+    setDuplicate(null);
+    // Same files analysed before? Reopen the saved analysis (with its decisions) instead.
+    const print = await fingerprint(chosen, chosenBundle);
+    if (print && !again) {
+      const saved = await findByFingerprint(print).catch(() => undefined);
+      if (saved && origin === "sample" && (await openSaved(saved.key))) return;
+      if (saved && origin === "upload") {
+        setDuplicate({ meta: saved, files: chosen, bundle: chosenBundle, name });
+        return;
+      }
+    }
     setBusy(origin);
     setElapsed(0);
     prefetchWorkspace();
@@ -78,7 +128,7 @@ export function UploadScreen() {
     try {
       const doc = await analyze({ files: chosen, bundle: chosenBundle, signal: controller.current.signal });
       history.pushState(null, "", "/review");
-      load(doc, name, origin);
+      load(doc, name, origin, print);
     } catch (error) {
       if (error instanceof ApiError && error.code === "cancelled") setProblem({ title: "Analysis cancelled." });
       else setProblem({ title: error instanceof ApiError ? error.message : "Something went wrong. Please try again." });
@@ -96,15 +146,18 @@ export function UploadScreen() {
     setProblem(null);
     setBusy("sample");
     try {
-      const sample = await Promise.all(
-        SAMPLE_FILES.map(async (name) => {
-          const r = await fetch(`/sample/${name}`);
-          if (!r.ok) throw new Error("sample missing");
-          return new File([await r.blob()], name, { type: "text/plain" });
-        }),
-      );
+      const [sample, sampleBundle] = await Promise.all([
+        Promise.all(
+          SAMPLE_FILES.map(async (name) => {
+            const r = await fetch(`/sample/${name}`);
+            if (!r.ok) throw new Error("sample missing");
+            return new File([await r.blob()], name, { type: "text/plain" });
+          }),
+        ),
+        fetchSampleBundle(),
+      ]);
       setBusy(null);
-      await run(sample, null, "sample", "The Harbor Light (fictional sample)");
+      await run(sample, sampleBundle, "sample", "The Harbor Light (fictional sample)");
     } catch {
       setBusy(null);
       setProblem({ title: "The sample could not be loaded." });
@@ -115,7 +168,16 @@ export function UploadScreen() {
     if (!file) return;
     prefetchWorkspace();
     try {
-      const check = validateDocument(JSON.parse(await file.text()));
+      const data: unknown = JSON.parse(await file.text());
+      if (isBackup(data)) {
+        const { imported, skipped } = await importBackup(data);
+        refresh();
+        const extra = skipped ? ` ${skipped} skipped (already here or unreadable).` : "";
+        const noun = imported === 1 ? "analysis" : "analyses";
+        dispatch({ type: "notice", tone: "info", text: `${imported} ${noun} imported.${extra}` });
+        return;
+      }
+      const check = validateDocument(data);
       if (!check.ok) {
         setProblem({ title: "That file is not a FrameCue analysis.", detail: check.reason });
         return;
@@ -123,8 +185,8 @@ export function UploadScreen() {
       history.pushState(null, "", "/review");
       load(check.doc, check.doc.summary.input.name, "import");
       dispatch({ type: "notice", tone: "info", text: "Analysis opened from file. Nothing was uploaded." });
-    } catch {
-      setProblem({ title: "That file is not valid JSON." });
+    } catch (error) {
+      setProblem({ title: error instanceof SyntaxError ? "That file is not valid JSON." : "The file could not be imported." });
     }
   };
 
@@ -151,16 +213,15 @@ export function UploadScreen() {
               {service === "ok" ? "Analysis service online" : service === "down" ? "Service unreachable" : "Checking service"}
             </span>
             <span className="hidden h-5 w-px bg-line sm:block" aria-hidden />
-            <Button variant="ghost" size="sm" onClick={() => importInput.current?.click()}>
-              <FolderOpen /> <span className="max-sm:hidden">Open saved analysis</span>
-              <span className="sm:hidden">Open</span>
+            <Button variant="ghost" size="sm" onClick={() => importInput.current?.click()} aria-label="Import analysis or backup">
+              <FolderOpen /> Import
             </Button>
             <input
               ref={importInput}
               type="file"
               accept=".json,application/json"
               className="sr-only"
-              aria-label="Saved analysis file"
+              aria-label="Analysis or backup file"
               data-testid="import-input"
               onChange={(e) => {
                 void onImport(e.target.files?.[0]);
@@ -172,14 +233,14 @@ export function UploadScreen() {
       </header>
 
       <main className="flex-1 px-5 sm:px-8">
-        <div className="mx-auto w-full max-w-[640px] pt-12 pb-16 sm:pt-20 lg:pt-24">
+        <div className="mx-auto w-full max-w-[640px] pt-12 pb-16 sm:pt-16 lg:pt-20">
           <p className="text-[13px] font-semibold text-accent">Promo discovery for microdrama</p>
           <h1 className="mt-3 text-[34px] leading-[1.1] font-bold tracking-[-0.035em] text-balance text-ink sm:text-[44px]">
             Find the moments worth promoting.
           </h1>
-          <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-muted sm:text-[16px]">
-            Upload timestamped screenplays and get ranked 20–60 second cuts with exact timecodes and the
-            hook and cliffhanger behind each pick, ready for editorial review.
+          <p className="mt-4 max-w-[520px] text-[15px] leading-relaxed text-muted sm:text-[16px]">
+            Upload timestamped screenplays and get ranked 20–60 second promo cuts with exact timecodes,
+            ready for editorial review.
           </p>
 
           <section aria-labelledby="analyze-heading" className="mt-10 rounded-xl border border-line bg-surface">
@@ -264,7 +325,7 @@ export function UploadScreen() {
                   AI evaluation bundle <span className="ml-1 font-medium text-muted">Optional</span>
                 </p>
                 <p className="mt-0.5 text-[12px] break-all text-muted sm:truncate">
-                  {bundle ? `${bundle.name} · ${bytes(bundle.size)}` : "Adds validated AI-reviewed picks from a local evaluation."}
+                  {bundle ? `${bundle.name} · ${bytes(bundle.size)}` : "Adds AI reviews generated offline with the CLI."}
                 </p>
               </div>
               {bundle ? (
@@ -291,6 +352,22 @@ export function UploadScreen() {
                 }}
               />
             </div>
+
+            {duplicate && (
+              <div aria-live="polite" className="mx-5 mb-4 flex flex-col gap-2.5 rounded-md bg-accent-wash px-3.5 py-3 text-[13px] sm:flex-row sm:items-center sm:justify-between">
+                <p className="min-w-0 text-ink-soft">
+                  Already analyzed as <span className="font-semibold text-ink">{duplicate.meta.fileName}</span>.
+                </p>
+                <div className="flex shrink-0 gap-2">
+                  <Button size="sm" variant="primary" onClick={() => void openSaved(duplicate.meta.key)}>
+                    Open saved
+                  </Button>
+                  <Button size="sm" onClick={() => void run(duplicate.files, duplicate.bundle, "upload", duplicate.name, true)}>
+                    Analyze again
+                  </Button>
+                </div>
+              </div>
+            )}
 
             {problem && (
               <div role="alert" className="mx-5 mb-4 flex gap-2.5 rounded-md bg-no-soft px-3.5 py-3 text-[13px] text-no">
@@ -328,35 +405,14 @@ export function UploadScreen() {
             </div>
           </section>
 
-          <ul className="mt-5 flex flex-col gap-2 text-[12px] text-muted sm:flex-row sm:gap-6">
-            <li className="flex items-center gap-2">
-              <ShieldCheck className="size-3.5 shrink-0 text-faint" aria-hidden />
-              Processed in memory, no AI model called
-            </li>
-            <li className="flex items-center gap-2">
-              <HardDrive className="size-3.5 shrink-0 text-faint" aria-hidden />
-              Results stay in this browser
-            </li>
-          </ul>
+          <p className="mt-4 flex items-center gap-2 text-[12px] text-muted">
+            <ShieldCheck className="size-3.5 shrink-0 text-faint" aria-hidden />
+            Processed in memory with no AI model called. Results stay in this browser.
+          </p>
 
-          <ol className="mt-14 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3" aria-label="How it works">
-            {STEPS.map(([title, text], i) => (
-              <li key={title} className="bg-canvas px-4 py-3.5">
-                <p className="flex items-center gap-2 text-[13px] font-semibold text-ink">
-                  <span className="tabular text-[12px] text-accent">{String(i + 1).padStart(2, "0")}</span> {title}
-                </p>
-                <p className="mt-1 text-[12px] leading-relaxed text-muted">{text}</p>
-              </li>
-            ))}
-          </ol>
+          <RecentAnalyses items={library} onChange={refresh} />
         </div>
       </main>
     </div>
   );
 }
-
-const STEPS = [
-  ["Upload", "A screenplay pack or single episodes, with timestamps."],
-  ["Review", "Ranked cuts with timecodes, evidence and a timeline."],
-  ["Export", "Accept, reject and annotate, then export a shortlist."],
-] as const;

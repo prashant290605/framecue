@@ -5,8 +5,13 @@ import {
   analysisKey,
   clearAll,
   DB_NAME,
-  DB_VERSION,
+  deleteAnalysis,
+  exportBackup,
+  findByFingerprint,
+  importBackup,
+  listAnalyses,
   loadAnalysis,
+  renameAnalysis,
   resetConnectionForTests,
   saveAnalysis,
   saveReview,
@@ -38,18 +43,57 @@ describe("IndexedDB persistence", () => {
     expect(await loadAnalysis()).toBeNull();
   });
 
-  it("drops reviews that belong to a previous analysis", async () => {
+  it("keeps every analysis with its own decisions and reopens any of them", async () => {
     const first = sampleDoc();
-    const meta = await saveAnalysis(first, { fileName: "a", origin: "upload" });
-    await saveReview(meta.key, { x: { decision: "accepted", note: "", updatedAt: "t" } }, null);
+    const a = await saveAnalysis(first, { fileName: "a", origin: "upload", fingerprint: "fp-a" });
+    await saveReview(a.key, { x: { decision: "accepted", note: "", updatedAt: "t" } }, null);
     const second = sampleDoc();
     second.summary.analyzed_at = "2026-11-11T00:00:00+00:00";
-    await saveAnalysis(second, { fileName: "b", origin: "upload" });
+    const b = await saveAnalysis(second, { fileName: "b", origin: "upload" });
+    expect((await loadAnalysis())?.meta.key).toBe(b.key); // the last saved reopens after a refresh
     expect((await loadAnalysis())?.reviews).toEqual({});
+    expect((await loadAnalysis(a.key))?.reviews.x.decision).toBe("accepted");
+    const listed = await listAnalyses();
+    expect(listed.map((m) => m.fileName)).toEqual(["a", "b"]); // most recently opened first
+    expect(listed[0]).toMatchObject({ episodes: first.summary.episodes, candidates: first.summary.candidates, aiReviewed: 0 });
+    expect((await findByFingerprint("fp-a"))?.key).toBe(a.key);
+  });
+
+  it("renames and deletes one analysis without touching the others", async () => {
+    const first = sampleDoc();
+    const a = await saveAnalysis(first, { fileName: "a", origin: "upload" });
+    const second = sampleDoc();
+    second.summary.analyzed_at = "2026-11-11T00:00:00+00:00";
+    const b = await saveAnalysis(second, { fileName: "b", origin: "upload" });
+    await renameAnalysis(a.key, "  Episode pack  ");
+    expect((await loadAnalysis(a.key))?.meta.fileName).toBe("Episode pack");
+    await saveReview(b.key, { y: { decision: "later", note: "n", updatedAt: "t" } }, null);
+    await deleteAnalysis(b.key);
+    expect((await listAnalyses()).map((m) => m.key)).toEqual([a.key]);
+    expect(await loadAnalysis(b.key)).toBeNull();
+  });
+
+  it("moves a v1 saved analysis and its decisions into the library", async () => {
+    const doc = sampleDoc();
+    const key = analysisKey(doc);
+    const v1 = await openDB(DB_NAME, 1, {
+      upgrade(d) {
+        d.createObjectStore("analysis");
+        d.createObjectStore("review", { keyPath: "key" });
+      },
+    });
+    const meta = { key, fileName: "old.zip", origin: "upload", savedAt: "2026-11-10T10:00:00Z", bytes: 1 };
+    await v1.put("analysis", { meta, doc }, "current");
+    await v1.put("review", { key, reviews: { z: { decision: "rejected", note: "kept", updatedAt: "t" } }, ui: null, updatedAt: "t" });
+    v1.close();
+    const restored = await loadAnalysis();
+    expect(restored?.meta.fileName).toBe("old.zip");
+    expect(restored?.reviews.z).toMatchObject({ decision: "rejected", note: "kept" });
+    expect((await listAnalyses()).map((m) => m.key)).toEqual([key]);
   });
 
   it("removes and reports corrupt or outdated data", async () => {
-    const database = await openDB(DB_NAME, DB_VERSION, {
+    const database = await openDB(DB_NAME, 1, {
       upgrade(d) {
         d.createObjectStore("analysis");
         d.createObjectStore("review", { keyPath: "key" });
@@ -60,6 +104,19 @@ describe("IndexedDB persistence", () => {
     await expect(loadAnalysis()).rejects.toMatchObject({ problem: "corrupt" });
     resetConnectionForTests();
     expect(await loadAnalysis()).toBeNull(); // cleaned up, so the next start is clean
+    expect(await listAnalyses()).toEqual([]);
+  });
+
+  it("backs up every analysis with decisions and restores them elsewhere", async () => {
+    const doc = sampleDoc();
+    const a = await saveAnalysis(doc, { fileName: "a", origin: "upload" });
+    await saveReview(a.key, { x: { decision: "accepted", note: "lead", updatedAt: "t" } }, null);
+    const backup = JSON.parse(JSON.stringify(await exportBackup()));
+    await clearAll(); // e.g. a different site or browser
+    expect(await importBackup(backup)).toEqual({ imported: 1, skipped: 0 });
+    expect(await importBackup(backup)).toEqual({ imported: 0, skipped: 1 }); // already here
+    expect((await loadAnalysis(a.key))?.reviews.x).toMatchObject({ decision: "accepted", note: "lead" });
+    expect(await importBackup({ format: "framecue-backup-v1", analyses: [{ doc: { bad: true } }] })).toEqual({ imported: 0, skipped: 1 });
   });
 
   it("reports unavailable storage without throwing anything else", async () => {

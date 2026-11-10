@@ -353,3 +353,50 @@ def test_public_sample_is_fictional_valid_and_analyzable() -> None:
     result = parse_path(sample)
     assert len(result.episodes) == 3 and not result.issues
     assert len(analyze_path(sample, cache_dir=None).by_id) > 30
+
+
+SAMPLE_DIR = REPO / "frontend" / "public" / "sample"
+
+
+def _sample_ai_bundle() -> str | None:
+    """The bundle the always-published sample manifest names (None until one is generated)."""
+    return json.loads((SAMPLE_DIR / "manifest.json").read_text("utf-8"))["ai_bundle"]
+
+
+def test_sample_manifest_lists_exactly_the_published_bundle() -> None:
+    """The page fetches the bundle only when the manifest names it, so the two must agree."""
+    listed = _sample_ai_bundle()
+    assert listed in (None, "harbor-light.ai-bundle.json")
+    published = sorted(p.name for p in SAMPLE_DIR.glob("*.json") if p.name != "manifest.json")
+    assert published == ([listed] if listed else [])
+
+
+def test_public_sample_bundle_is_genuine_sample_only_and_revalidates() -> None:
+    """The published sample bundle must hold real model output for the fictional sample only:
+    every entry's key (derived from episode content) must match a sample candidate, survive
+    the server's re-validation, and come from the Groq free-tier model, not a fake."""
+    if _sample_ai_bundle() is None:
+        pytest.skip("no AI bundle is published for the fictional sample yet")
+    sample = SAMPLE_DIR
+    bundle_path = sample / "harbor-light.ai-bundle.json"
+    bundle = json.loads(bundle_path.read_text("utf-8"))
+    assert bundle["format"] == "promolens-ai-bundle-v1" and bundle["failures"] == {}
+    entries = bundle["entries"]
+    assert 0 < len(entries) <= 44
+    for entry in entries.values():
+        prov = entry["provenance"]
+        assert prov["provider"] == "groq" and prov["model_requested"] == "openai/gpt-oss-120b"
+        assert prov["model_reported"] == "openai/gpt-oss-120b" and prov["evaluator"] == "llm"
+        assert entry["assessment"]["candidate_id"].startswith(("C001-", "C002-", "C003-"))
+    files = [
+        ("files", (p.name, p.read_bytes(), "text/plain")) for p in sorted(sample.glob("*.txt"))
+    ]
+    files.append(("ai_bundle", (bundle_path.name, bundle_path.read_bytes(), "application/json")))
+    app = TestClient(create_serverless_app(frontend_dir=None))
+    doc = app.post("/api/analyze", files=files).json()
+    cache = doc["coverage"]["cache"]
+    assert cache["source"] == "uploaded_bundle"
+    assert cache["used"] == cache["entries_scanned"] == len(entries)  # every entry is the sample's
+    assert cache["stale_prompt_version"] == cache["other_profile_or_input"] == 0
+    assert cache["invalid_on_revalidation"] == []
+    assert doc["coverage"]["ai_evaluated"] == len(entries) == len(doc["ai_evaluations"])

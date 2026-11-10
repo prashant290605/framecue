@@ -607,3 +607,21 @@ architecture draft.
   - Not a bug. The popover copy now explains the no-bundle case.
 - **Tests added:** stepping through events in screenplay order with exact timecodes, and the
   no-bundle explanation.
+
+## Final polish and release (2026-11-11)
+
+**What the AI assistant did:** simplified the inspector, list and status copy; added the
+saved-analysis library with an IndexedDB migration; redrew the favicon set from the logo;
+added the `framecue-app.vercel.app` domain; rewrote the README; checked commit attribution
+(PLAN §20).
+
+### Checks and corrections
+- **Optional bundle request.** Fetching the sample's AI bundle when none was published logged
+  a 404 and failed two end-to-end tests. The page now reads an always-published
+  `sample/manifest.json` and requests a bundle only when it is listed.
+- **Free quota.** The sample's genuine AI reviews were not generated during this pass: the
+  local ledger for the UTC day was already past its budget, and no reviews were invented or
+  reused from an older prompt version (16 older reviews exist but the server rejects them as
+  stale).
+- **Status regex.** An end-to-end check expected "Saved" exactly; the element text has a
+  leading space from its icon, so the check now allows it.

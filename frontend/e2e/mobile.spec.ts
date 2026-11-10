@@ -6,7 +6,7 @@ test("mobile: stacked list and detail navigation", async ({ page }) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0); // no horizontal scrolling
   await page.getByRole("button", { name: /Try the fictional sample/ }).click();
-  await expect(page.getByRole("tablist", { name: "Ranking" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Recommendations" })).toBeVisible();
   await page.getByRole("option").first().click();
   const detail = page.getByRole("main", { name: "Candidate detail" });
   await expect(detail.getByRole("heading", { level: 2 })).toBeVisible();

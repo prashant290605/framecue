@@ -71,6 +71,7 @@ function DetailBody({ index, c, view, onBack }: { index: DocIndex; c: DocCandida
   const [activeId, setActiveId] = React.useState<string | null>(null);
   const showAi = view === "ai" && ai;
   const facts = [
+    seconds(c.duration_ms),
     c.segments.length > 1 && `${c.segments.length} segments`,
     c.structural.crosses_scene && "Crosses a scene",
     c.structural.ends_at_episode_end && "Ends the episode",
@@ -85,39 +86,24 @@ function DetailBody({ index, c, view, onBack }: { index: DocIndex; c: DocCandida
         </Button>
       )}
 
-      <header className="flex flex-wrap items-start justify-between gap-x-8 gap-y-4">
+      <header className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] font-medium text-muted">
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] font-medium text-muted">
             <span className="font-semibold text-ink-soft">Episode {c.episode_number}</span>
             <Dot />
-            {entry?.rank != null ? (
-              <span>
-                {view === "ai" ? "AI" : "Full-show"} rank <span className="font-semibold text-ink-soft tabular">#{entry.rank}</span>
-              </span>
-            ) : entry?.alternativeOf ? (
-              <span>Alternative cut</span>
-            ) : (
-              <span>Not in this view</span>
-            )}
-            <span className="ml-1">
-              {showAi ? (
-                <Badge tone="accent"><BadgeCheck /> AI-reviewed</Badge>
-              ) : (
-                <Badge tone="outline">Unverified suggestion</Badge>
-              )}
+            <span className="tabular">
+              {entry?.rank != null ? `Rank ${entry.rank}` : entry?.alternativeOf ? "Alternative cut" : "Not in this view"}
             </span>
-          </div>
-          <h2 className="mt-2 text-[26px] leading-tight font-bold tracking-[-0.025em] text-ink tabular sm:text-[30px]">
+            {showAi && <Badge tone="accent" className="ml-1"><BadgeCheck /> AI-reviewed</Badge>}
+          </p>
+          <h2 className="mt-1.5 text-[22px] leading-tight font-bold tracking-[-0.02em] text-ink tabular sm:text-[24px]">
             {timecode(c.start_ms)} <span className="font-medium text-faint">→</span> {timecode(c.end_ms)}
           </h2>
-          <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted">
-            <span className="inline-flex items-center gap-1.5 font-semibold text-ink-soft tabular">
-              <Clock3 className="size-3.5 text-muted" /> {seconds(c.duration_ms)}
-            </span>
-            {facts.map((f) => (
+          <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted tabular">
+            {facts.map((f, i) => (
               <React.Fragment key={f}>
-                <Dot />
-                <span>{f}</span>
+                {i > 0 && <Dot />}
+                <span className={cn(i === 0 && "font-semibold text-ink-soft")}>{f}</span>
               </React.Fragment>
             ))}
           </p>
@@ -127,54 +113,36 @@ function DetailBody({ index, c, view, onBack }: { index: DocIndex; c: DocCandida
 
       <NoteField id={c.candidate_id} />
 
-      <Section label="Score">{showAi ? <AiScore j={ai} /> : <BaselineScore c={c} hasAi={Boolean(ai)} />}</Section>
+      <section aria-label="Score" className="mt-5 border-t border-line pt-5">
+        {showAi ? <AiScore j={ai} /> : <BaselineScore c={c} hasAi={Boolean(ai)} />}
+      </section>
 
-      {showAi ? (
-        <Section label="AI judgement" title="Editorial judgement">
-          <div className="grid gap-x-10 gap-y-7 md:grid-cols-2">
-            <Judgement title="Hook" window="first 3 s" score={ai.hook_score} text={ai.hook_explanation} ids={ai.hook_event_ids} onPick={setActiveId} />
-            <Judgement title="Cliffhanger" window="final 5 s" score={ai.cliffhanger_score} text={ai.cliffhanger_explanation} ids={ai.cliffhanger_event_ids} onPick={setActiveId} />
-            <Prose title="Why it works" text={ai.why_it_works} />
-            <Prose title="Weakness" text={ai.weakness}>
-              {ai.warnings.length > 0 && (
-                <div className="mt-2.5 flex flex-wrap gap-1.5">
-                  {ai.warnings.map((w) => <Badge key={w} tone="neutral">{warningLabel(w)}</Badge>)}
-                </div>
-              )}
-            </Prose>
-          </div>
-        </Section>
-      ) : (
-        <Section label="Structural signals" title="Structural signals">
-          <p className="max-w-[640px] text-[13px] leading-relaxed text-muted">
-            {ai
-              ? "An AI review exists for this cut; switch to AI-reviewed to read it. Below are the baseline's structural reasons only."
-              : "No AI review for this candidate. These are the baseline's structural reasons, not an editorial judgement."}
-          </p>
-          <dl className="mt-4 grid gap-x-10 gap-y-3 text-[13px] sm:grid-cols-2">
-            <div>
-              <dt className="text-[12px] font-semibold text-muted">Starts at</dt>
-              <dd className="mt-0.5 text-ink">{c.baseline.start_anchors.map(anchorLabel).join(", ")}</dd>
-            </div>
-            <div>
-              <dt className="text-[12px] font-semibold text-muted">Ends at</dt>
-              <dd className="mt-0.5 text-ink">{c.baseline.end_anchors.map(anchorLabel).join(", ")}</dd>
-            </div>
-          </dl>
-        </Section>
+      {showAi && (
+        <section aria-label="AI judgement" className="mt-5 grid gap-x-10 gap-y-5 md:grid-cols-2">
+          <Prose title="Why it works" text={ai.why_it_works} />
+          <Prose title="Weakness" text={ai.weakness}>
+            {ai.warnings.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {ai.warnings.map((w) => <Badge key={w} tone="neutral">{warningLabel(w)}</Badge>)}
+              </div>
+            )}
+          </Prose>
+          <Judgement title="Hook" window="first 3 s" text={ai.hook_explanation} ids={ai.hook_event_ids} onPick={setActiveId} />
+          <Judgement title="Cliffhanger" window="final 5 s" text={ai.cliffhanger_explanation} ids={ai.cliffhanger_event_ids} onPick={setActiveId} />
+        </section>
       )}
 
-      <Section label="Timeline" title="Screenplay timeline" aside={<TimelineLegend />}>
+      <Section label="Timeline" title="Screenplay map" aside={<TimelineLegend evidence={Boolean(showAi)} />}>
         <Timeline model={model} evidence={evidence} activeId={activeId} onActivate={setActiveId} />
         <EventInspector id={activeId} model={model} evidence={evidence} onActivate={setActiveId} />
       </Section>
 
-      <Section label="Screenplay excerpt" title="Screenplay excerpt">
+      <Section label="Screenplay excerpt" title="Script">
         <Excerpt model={model} evidence={evidence} activeId={activeId} onActivate={setActiveId} />
       </Section>
 
       <Cuts index={index} view={view} c={c} />
-      <SourceRefs c={c} ai={ai} />
+      <Details c={c} ai={ai} />
     </>
   );
 }
@@ -185,9 +153,9 @@ function Dot() {
 
 function Section({ label, title, aside, children }: { label: string; title?: string; aside?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <section aria-label={label} className="mt-8 border-t border-line pt-7">
+    <section aria-label={label} className="mt-7 border-t border-line pt-5">
       {(title || aside) && (
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
           {title && <h3 className="text-[14px] font-bold tracking-[-0.01em] text-ink">{title}</h3>}
           {aside}
         </div>
@@ -252,20 +220,20 @@ function NoteField({ id }: { id: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-4 inline-flex items-center gap-1.5 rounded-md text-[13px] font-semibold text-muted transition-colors hover:text-accent"
+        className="mt-3 inline-flex items-center gap-1.5 rounded-md text-[13px] font-semibold text-muted transition-colors hover:text-accent"
       >
-        <StickyNote className="size-4" /> Add a private note
+        <StickyNote className="size-4" /> Add note
       </button>
     );
   }
   return (
-    <div className="mt-4 max-w-[640px]">
+    <div className="mt-3 max-w-[640px]">
       <label htmlFor={`note-${id}`} className="sr-only">Private note</label>
       <Textarea
         id={`note-${id}`}
         rows={2}
         maxLength={500}
-        placeholder="Private note, saved in this browser only"
+        placeholder="Note (kept in this browser)"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onBlur={() => value !== stored && dispatch({ type: "note", id, note: value })}
@@ -276,99 +244,74 @@ function NoteField({ id }: { id: string }) {
 
 /* Scores ------------------------------------------------------------------------------ */
 
-function ScoreLayout({ figure, children }: { figure: React.ReactNode; children: React.ReactNode }) {
+/** "a, b and c" for short natural-language lists. */
+function listText(items: string[]): string {
+  return items.length < 2 ? (items[0] ?? "") : `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+}
+
+function ScoreLine({ value, scale, label, children }: { value: string; scale: string; label: string; children?: React.ReactNode }) {
   return (
-    <div className="grid gap-x-10 gap-y-6 sm:grid-cols-[200px_1fr]">
-      <div className="sm:border-r sm:border-line sm:pr-8">{figure}</div>
-      <div className="space-y-3 self-center">{children}</div>
+    <div className="flex flex-wrap items-baseline gap-x-5 gap-y-2">
+      <p className="flex items-baseline gap-1.5">
+        <span className="text-[24px] leading-none font-bold tracking-[-0.02em] text-ink tabular">{value}</span>
+        <span className="text-[13px] font-medium text-muted tabular">{scale}</span>
+        <span className="ml-1 text-[13px] font-semibold text-ink-soft">{label}</span>
+      </p>
+      {children}
     </div>
   );
 }
 
 function AiScore({ j }: { j: AIJudgement }) {
   return (
-    <ScoreLayout
-      figure={
-        <>
-          <p className="text-[12px] font-semibold text-muted">AI weighted score</p>
-          <p className="mt-1.5 text-[44px] leading-none font-bold tracking-[-0.03em] text-ink tabular">
-            {Number.isInteger(j.weighted_score) ? j.weighted_score : j.weighted_score.toFixed(1)}
-            <span className="ml-1.5 text-[15px] font-semibold tracking-normal text-muted">/ 100</span>
-          </p>
-          <p className="mt-3 text-[12px] leading-snug text-muted">
-            Editorial estimate from a validated model review · <span className="font-mono text-[11px]">ai_weighted_v1</span>
-          </p>
-        </>
-      }
-    >
-      {RUBRIC.map((r) => (
-        <div key={r.key} className="grid grid-cols-[96px_1fr_40px] items-center gap-4 text-[13px]">
-          <Tip content={`${r.hint} · weight ${Math.round((j.rubric_weights[RUBRIC_WEIGHT_KEY[r.key]] ?? 0) * 100)}%`}>
-            <span className="w-fit font-medium text-ink-soft">{r.label}</span>
+    <ScoreLine value={Number.isInteger(j.weighted_score) ? String(j.weighted_score) : j.weighted_score.toFixed(1)} scale="/ 100" label="AI score">
+      <dl className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
+        {RUBRIC.map((r) => (
+          <Tip key={r.key} content={`${r.hint} · weight ${Math.round((j.rubric_weights[RUBRIC_WEIGHT_KEY[r.key]] ?? 0) * 100)}%`}>
+            <div className="flex gap-1.5">
+              <dt className="text-muted">{r.label}</dt>
+              <dd className="font-semibold text-ink tabular">{j[r.key]}/5</dd>
+            </div>
           </Tip>
-          <Meter value={j[r.key]} max={5} label={`${r.label} ${j[r.key]} of 5`} />
-          <span className="text-right font-semibold text-ink tabular">{j[r.key]}<span className="font-medium text-muted">/5</span></span>
-        </div>
-      ))}
-      <p className="pt-1 text-[12px] text-muted">
-        {j.model_reported ?? j.model_requested ?? "model"} · {j.provider ?? "provider n/a"} · prompt {j.prompt_version}
-      </p>
-    </ScoreLayout>
+        ))}
+      </dl>
+    </ScoreLine>
   );
 }
 
 function BaselineScore({ c, hasAi }: { c: DocCandidate; hasAi: boolean }) {
-  const { dispatch } = useApp();
+  const { state, dispatch } = useApp();
+  const anyAi = (state.doc?.coverage.ai_evaluated ?? 0) > 0; // the list already says so when none exist
+  const starts = c.baseline.start_anchors.map(anchorLabel);
+  const ends = c.baseline.end_anchors.map(anchorLabel);
   return (
-    <ScoreLayout
-      figure={
-        <>
-          <p className="text-[12px] font-semibold text-muted">Heuristic priority</p>
-          <p className="mt-1.5 text-[44px] leading-none font-bold tracking-[-0.03em] text-ink-soft tabular">
-            {c.baseline.priority.toFixed(3)}
-            <span className="ml-1.5 text-[15px] font-semibold tracking-normal text-muted">/ 1</span>
-          </p>
-          <p className="mt-3 text-[12px] leading-snug text-muted">
-            Unverified ordering signal, not an AI judgement · <span className="font-mono text-[11px]">heuristic_priority_v1</span>
-          </p>
-          {hasAi && (
-            <Button variant="link" size="sm" className="mt-2 font-semibold" onClick={() => dispatch({ type: "view", view: "ai" })}>
-              View AI review <ChevronRight />
-            </Button>
-          )}
-        </>
-      }
-    >
-      {Object.entries(c.baseline.components).map(([k, v]) => (
-        <div key={k} className="grid grid-cols-[120px_1fr_40px] items-center gap-4 text-[13px]">
-          <span className="font-medium text-ink-soft">{COMPONENT_LABELS[k] ?? k}</span>
-          <Meter value={v} max={1} muted label={`${COMPONENT_LABELS[k] ?? k} ${v.toFixed(2)}`} />
-          <span className="text-right font-semibold text-ink tabular">{v.toFixed(2)}</span>
-        </div>
-      ))}
-    </ScoreLayout>
+    <>
+      <ScoreLine value={c.baseline.priority.toFixed(2)} scale="/ 1" label="Structural score">
+        {hasAi && (
+          <Button variant="link" size="sm" className="h-auto font-semibold" onClick={() => dispatch({ type: "view", view: "ai" })}>
+            View AI review <ChevronRight />
+          </Button>
+        )}
+      </ScoreLine>
+      <p className="mt-2 max-w-[640px] text-[13px] leading-relaxed text-ink-soft">
+        {starts.length > 0 && <>Starts at {listText(starts)}. </>}
+        {ends.length > 0 && <>Ends at {listText(ends)}.</>}
+      </p>
+      {anyAi && <p className="mt-1 text-[12px] text-muted">Ranked from screenplay structure, not reviewed by AI.</p>}
+    </>
   );
 }
 
-function Meter({ value, max, label, muted }: { value: number; max: number; label: string; muted?: boolean }) {
-  return (
-    <div role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={value} className="h-1.5 overflow-hidden rounded-full bg-subtle">
-      <div className={cn("h-full rounded-full", muted ? "bg-ink-soft/55" : "bg-accent")} style={{ width: `${(value / max) * 100}%` }} />
-    </div>
-  );
-}
-
-function Judgement({ title, window, score, text, ids, onPick }: { title: string; window: string; score: number; text: string; ids: string[]; onPick: (id: string) => void }) {
+function Judgement({ title, window, text, ids, onPick }: { title: string; window: string; text: string; ids: string[]; onPick: (id: string) => void }) {
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-baseline gap-2">
         <h4 className="text-[13px] font-bold text-ink">{title}</h4>
         <span className="text-[12px] font-medium text-muted">{window}</span>
-        <span className="ml-auto rounded-[5px] bg-subtle px-1.5 py-0.5 text-[11px] font-bold text-ink-soft tabular">{score}/5</span>
       </div>
-      <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">{text}</p>
+      <p className="mt-1.5 text-[14px] leading-relaxed text-ink-soft">{text}</p>
       {ids.length > 0 ? (
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
           {ids.map((id) => (
             <button
               key={id}
@@ -472,7 +415,7 @@ function Cuts({ index, view, c }: { index: DocIndex; view: ViewName; c: DocCandi
   const family = cutFamily(index, view, c.candidate_id);
   if (family.length < 2) return null;
   return (
-    <section aria-label="Alternative cuts" className="mt-8 border-t border-line pt-7">
+    <section aria-label="Alternative cuts" className="mt-7 border-t border-line pt-5">
       <div className="mb-3 flex items-baseline justify-between gap-4">
         <h3 className="text-[14px] font-bold tracking-[-0.01em] text-ink">Cuts of this moment</h3>
         <span className="text-[12px] font-medium text-muted">{family.length} cuts</span>
@@ -501,7 +444,7 @@ function Cuts({ index, view, c }: { index: DocIndex; view: ViewName; c: DocCandi
                   <span className="text-[12px] font-medium text-muted">{i === 0 ? "Primary" : "Alternative"}</span>
                 </span>
                 <span className="font-semibold text-ink-soft tabular">
-                  {score === undefined ? "" : view === "ai" ? `${score} / 100` : score.toFixed(3)}
+                  {score === undefined ? "" : view === "ai" ? `${score} / 100` : score.toFixed(2)}
                 </span>
               </button>
             </li>
@@ -512,24 +455,35 @@ function Cuts({ index, view, c }: { index: DocIndex; view: ViewName; c: DocCandi
   );
 }
 
-function SourceRefs({ c, ai }: { c: DocCandidate; ai?: AIJudgement }) {
+function Details({ c, ai }: { c: DocCandidate; ai?: AIJudgement }) {
   const copy = (text: string) => void navigator.clipboard?.writeText(text).catch(() => undefined);
   return (
-    <details className="group mt-8 border-t border-line">
-      <summary className="flex cursor-pointer list-none items-center justify-between py-5 text-[14px] font-bold text-ink">
-        Source references
+    <details className="group mt-7 border-t border-line">
+      <summary className="flex cursor-pointer list-none items-center justify-between py-4 text-[14px] font-bold text-ink">
+        Details
         <ChevronRight className="size-4 text-muted transition-transform group-open:rotate-90" />
       </summary>
-      <dl className="grid gap-x-10 gap-y-4 pb-2 text-[12.5px] sm:grid-cols-2">
-        <Ref label="Candidate" value={c.candidate_id} onCopy={copy} />
-        <Ref label="Segments" value={c.segments.map((s) => `${s.start_timestamp}–${s.end_timestamp}`).join(", ")} />
-        <Ref label="Opening window events" value={c.source_events.opening_window.join(", ") || "none"} />
-        <Ref label="Ending window events" value={c.source_events.ending_window.join(", ") || "none"} />
-        {ai && <Ref label="AI hook evidence" value={ai.hook_event_ids.join(", ") || "none"} />}
-        {ai && <Ref label="AI cliffhanger evidence" value={ai.cliffhanger_event_ids.join(", ") || "none"} />}
-        {ai && <Ref label="Model" value={`${ai.model_reported ?? ai.model_requested} · ${ai.provider ?? ""} · ${ai.prompt_version}`} />}
-        <Ref label="Baseline" value={`${c.baseline.method} · ${c.baseline.selection_reason ?? ""}`} />
-      </dl>
+      <div className="pb-2">
+        <h4 className="text-[12px] font-semibold text-muted">Structural score breakdown</h4>
+        <dl className="mt-2 grid grid-cols-2 gap-x-8 gap-y-1.5 text-[13px] sm:grid-cols-3">
+          {Object.entries(c.baseline.components).map(([k, v]) => (
+            <div key={k} className="flex justify-between gap-3">
+              <dt className="text-ink-soft">{COMPONENT_LABELS[k] ?? k}</dt>
+              <dd className="font-semibold text-ink tabular">{v.toFixed(2)}</dd>
+            </div>
+          ))}
+        </dl>
+        <dl className="mt-5 grid gap-x-10 gap-y-4 text-[12.5px] sm:grid-cols-2">
+          <Ref label="Candidate" value={c.candidate_id} onCopy={copy} />
+          <Ref label="Segments" value={c.segments.map((s) => `${s.start_timestamp}–${s.end_timestamp}`).join(", ")} />
+          <Ref label="Opening window events" value={c.source_events.opening_window.join(", ") || "none"} />
+          <Ref label="Ending window events" value={c.source_events.ending_window.join(", ") || "none"} />
+          {ai && <Ref label="AI hook evidence" value={ai.hook_event_ids.join(", ") || "none"} />}
+          {ai && <Ref label="AI cliffhanger evidence" value={ai.cliffhanger_event_ids.join(", ") || "none"} />}
+          {ai && <Ref label="AI model" value={`${ai.model_reported ?? ai.model_requested} · ${ai.provider ?? ""} · prompt ${ai.prompt_version}`} />}
+          <Ref label="Structural method" value={`${c.baseline.method}${c.baseline.selection_reason ? ` · ${c.baseline.selection_reason}` : ""}`} />
+        </dl>
+      </div>
     </details>
   );
 }

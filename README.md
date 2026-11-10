@@ -1,347 +1,246 @@
 # FrameCue
 
-FrameCue is an editorial workspace for discovering, evaluating and reviewing promotional moments
-in microdrama screenplays. It reads timestamped screenplays and proposes 20–60 second promo
-clips, with exact segment timestamps, hook and cliffhanger evidence, and reasons.
+FrameCue finds and ranks 20–60 second promo clips in timestamped microdrama screenplays.
 
-The project was first built as PromoLens. The Python package, the `promolens` command and the
-`PROMOLENS_*` settings keep that name, so existing commands, saved analyses and exports still
-work.
-- **Deterministic code:** hard constraints (timing, boundaries, validation), candidate
-  discovery and the baseline.
-- **Optional AI review:** a free, swappable LLM (GroqCloud `openai/gpt-oss-120b`) adds
-  editorial judgement. Its output is used only after every cited event is validated.
+**Live site:** https://framecue-app.vercel.app (the earlier address, https://promolens-two.vercel.app, still works).
 
-Built for the Kuku AI Generalist take-home (Problem 1). The other docs:
-- [docs/PLAN.md](docs/PLAN.md): the architecture contract;
-- [docs/API.md](docs/API.md): the HTTP contract for the frontend;
-- [docs/AI_LOG.md](docs/AI_LOG.md): the AI-assistance log.
+## Overview
 
-## Status
+Microdrama platforms release many short episodes and need a steady supply of promo clips:
+a moment that hooks a viewer in the first seconds and ends on a question they want answered.
+Finding those moments by reading every script is slow.
 
-| Phase | State |
-|---|---|
-| 0–2: Audit, parser, candidates, heuristic baseline | Done |
-| 3–3.5: Evidence-grounded AI evaluator, live validation on the GroqCloud Free Plan ($0) | Done |
-| 4: Full-pack pipeline, two ranking views, exports, CLI, FastAPI backend | Done |
-| 4b: Vercel adaptation (stateless `/api/analyze`, one project and URL) | Done |
-| 5: React + TypeScript + Vite + Tailwind + shadcn/ui editorial workspace | Done |
-| 6: Final QA, release and submission | Done; production deployed and verified |
+FrameCue reads the screenplays, proposes continuous 20–60 second clips with exact
+timestamps, ranks them, and gives an editor a workspace to review, annotate and export a
+shortlist. It is meant for promo editors and marketing teams; the output is a starting point
+for editorial judgement, not a replacement for it.
 
-**Live demo:** https://promolens-two.vercel.app. It is public and ships only the code and a fictional
-three-episode sample. Click **Try the fictional sample**, or upload your own screenplay files.
+![FrameCue workspace with the fictional sample: ranked clips on the left, the selected clip's score, screenplay map and script on the right](docs/screenshot.png)
 
-**AI coverage today: 41 of 788 candidates (5.2%) in 12 of 50 episodes.** These were
-evaluated on the GroqCloud Free Plan within its daily token limit, at $0. The other 747
-candidates have heuristic scores only, so the AI-reviewed ranking is *provisional*. Every
-candidate in every episode is still available in the full-show baseline view.
+## Features
 
-## Quick start (Windows, PowerShell)
+- Upload one `.zip` pack or individual `.txt` episodes (up to 4 MB online; any size with the
+  command-line tool).
+- Candidate clips of 20–60 seconds that start and end on structural boundaries (scene
+  changes, lines, actions, camera cuts), each with `MM:SS.cc` timecodes.
+- A structural score (0–1) for every candidate, explained in plain language.
+- Optional AI reviews: hook, cliffhanger, standalone clarity and pacing, a 0–100 score, and
+  the screenplay events each judgement cites. Reviews are produced offline and checked
+  against the screenplay before they are shown.
+- AI-reviewed and structural rankings shown as separate lists; their scores are never mixed.
+- A screenplay map of each clip with its surrounding context, and the script excerpt.
+- Search and filters (episode, duration, AI status, warnings, your decision).
+- Accept, later and reject decisions (keys `A`, `L`, `R`) and private notes.
+- Saved analyses in the browser: reopen, rename and delete, with duplicate-upload detection.
+- Exports: ranked list and shortlist (CSV or JSON), the analysis document, and a backup of
+  every saved analysis that can be imported in another browser.
+- A fictional three-episode sample, *The Harbor Light*, to try the workflow without your own
+  files.
 
-Requires Python 3.11+. Put the pack in `data\private\` (gitignored).
+## How it works
+
+1. **Parse.** Each episode becomes a list of timed events: dialogue, action, sound and
+   camera directions, grouped into scenes.
+2. **Generate candidates.** Clips of 20–60 seconds are cut at structural boundaries and
+   checked against hard rules on length and boundaries.
+3. **Score structurally.** A deterministic baseline scores each clip from six signals:
+   opening, ending, activity, clean boundaries, duration fit and context. This needs no model
+   and runs in seconds for a 50-episode pack.
+4. **Review with AI (optional).** The command-line tool sends selected clips to a language
+   model (GroqCloud `openai/gpt-oss-120b`, free plan). The model rates the hook (first 3 s),
+   cliffhanger (last 5 s), standalone clarity and pacing on 1–5 scales and must cite event
+   IDs as evidence. A review is kept only if every cited event exists inside the right part of
+   the clip.
+5. **Rank.** AI-reviewed clips are ranked by their 0–100 score; all clips are also ranked by
+   the structural score. A clip that mostly overlaps a better one is listed as an alternative
+   cut instead of a separate pick.
+
+The structural score measures shape, not storytelling quality. Only the AI review makes an
+editorial judgement, and it is still one model's estimate.
+
+## Architecture
+
+| Part | Technology | Role |
+|---|---|---|
+| Frontend | React 19, TypeScript, Vite, Tailwind | Upload, review workspace, exports |
+| Backend | Python 3.11+, FastAPI | Parsing, candidates, scoring, validation of AI reviews |
+| AI evaluator | GroqCloud API (command line only) | Produces AI reviews offline, within the free quota |
+| Hosting | Vercel | Static frontend on the CDN; one stateless Python function for `/api` |
+| Persistence | IndexedDB in the browser | Saved analyses, decisions and notes |
+
+The deployed API has two routes, `GET /api/health` and `POST /api/analyze`. It is stateless
+and never calls a model. AI reviews reach the website only as a bundle uploaded with the
+screenplay, which the server re-validates against that screenplay.
+
+The Python package and command are still called `promolens`, the project's first name, so
+existing scripts, settings (`PROMOLENS_*`) and saved data keep working.
+
+## Getting started
+
+**Prerequisites:** Python 3.11 or later and Node.js 24. The commands below use Windows
+paths; on macOS or Linux use `.venv/bin/` instead of `.venv\Scripts\`.
+
+Install the backend:
 
 ```bash
-py -3.11 -m venv .venv
+python -m venv .venv
 ```
 
 ```bash
 .venv\Scripts\python -m pip install -e ".[dev]"
 ```
 
+Install the frontend:
+
 ```bash
-.venv\Scripts\promolens analyze "data\private\pack.zip" --out runs\outputs\full-pack
+cd frontend && npm ci
 ```
 
-`analyze` is **offline**. It never calls a model, needs no API key, and takes a few seconds
-for the full pack (2–10 s measured, depending on machine load). It also works on a single new episode (`episode.txt`) or a folder of `.txt`
-files. The console shows counts, IDs and scores, never screenplay text.
+**Environment variables** are needed only for live AI evaluation. Copy `.env.example` to
+`.env` (gitignored) and set:
 
-Exit codes: `0` success, `2` unreadable or unsupported input, `3` no valid episode.
+- `PROMOLENS_LLM_API_KEY` (or `GROQ_API_KEY`): a GroqCloud key on the free plan;
+- `PROMOLENS_DAILY_TOKEN_BUDGET` (optional): tokens per UTC day, default 180,000.
 
-Options:
-- `--cache-dir` (default `runs\cache\evaluations`);
-- `--no-cache` (baseline only);
-- `--ai-profile env` (reuse evaluations made under the settings in `.env`);
-- `--top N` (picks printed per view).
-
-Equivalent module form: `.venv\Scripts\python -m promolens analyze ...`.
-
-### Outputs (in the chosen private directory)
-
-| File | What it is |
-|---|---|
-| `manifest.json` | Run summary, AI coverage, cache audit, notes, file list with sha256 |
-| `rankings_ai.json` / `ai_recommendations.csv` | **AI-reviewed** recommendations: primaries plus alternative cuts |
-| `rankings_coverage.json` / `coverage_candidates.csv` | **Full-show** baseline suggestions for all 788 candidates (unverified) |
-| `candidates.jsonl` | Every candidate: segments, timestamps, baseline, AI judgement if any, ranks in both views |
-| `ai_evaluations.jsonl` | Validated AI evaluations (derived from model output) |
-| `raw_model_outputs.jsonl` | Unmodified model responses. Only written when they were captured; existing evaluations predate capture |
-| `episodes.json` | Per-episode summary |
-
-## Rankings and scoring provenance
-
-There are two separate views. AI scores and heuristic priorities are **never ranked
-together**.
-
-- **AI-reviewed (`view=ai`, score `ai_weighted_v1`, 0–100).**
-  - **Contents:** only candidates with a valid AI evaluation. The evaluation must have been
-    made under the current prompt and inference profile, on the same episode file checksum,
-    and its evidence must re-validate against the parsed screenplay.
-  - **Order:** score, then cliffhanger, hook, standalone and pacing, then position.
-  - **Provisional:** marked as such while coverage is incomplete.
-- **Full-show coverage (`view=coverage`, score `heuristic_priority_v1`, 0–1).**
-  - **Contents:** every shortlisted candidate.
-  - **Order:** the deterministic baseline.
-  - **Labelling:** marked as unverified suggestions, with no AI scores, explanations or
-    confidence.
-- **Near-duplicates.** In both views, a clip that overlaps a higher-ranked clip in the same
-  episode (IoU ≥ 0.5, or ≥ 80 % of the shorter clip) becomes an unranked *alternative cut* of
-  it. Nothing is forced into the top results, including episode endings.
-
-Cache entries from older prompt versions or other inference profiles are excluded and
-counted in the manifest. Today that is 24 older-prompt entries and 8 medium-reasoning
-entries.
-
-## Backend (FastAPI)
+Start the backend (http://127.0.0.1:8000):
 
 ```bash
 .venv\Scripts\promolens serve --port 8000
 ```
 
-The server binds to `127.0.0.1`, serves OpenAPI docs at `/api/docs`, and allows CORS only
-from `http://localhost:5173`. Main endpoints (full contract in [docs/API.md](docs/API.md)):
-
-| Method | Path | Returns |
-|---|---|---|
-| GET | `/api/health` | Status (offline, no live AI) |
-| POST | `/api/runs` | Upload one `.zip` or `.txt` files (multipart `files`); returns RunSummary |
-| GET | `/api/runs/{id}` · `/coverage` · `/episodes` | Summary, AI coverage, per-episode summaries |
-| GET | `/api/runs/{id}/promos?view=ai\|coverage` | Ranked page with filters and pagination |
-| GET | `/api/runs/{id}/promos/{candidate_id}` | Detail with AI judgement, baseline and timeline events |
-| GET | `/api/runs/{id}/export[/{file}]` | Export manifest, or one allowlisted file |
-
-No endpoint runs model inference.
-
-## Frontend (editorial workspace)
-
-`frontend/` is a React 19 + TypeScript + Vite 8 app, styled with Tailwind 4 and
-shadcn/ui-style components on Radix, with Lucide icons and minimal Motion. It talks only to
-`GET /api/health` and `POST /api/analyze`.
-
-**Design system.** All tokens live in `frontend/src/index.css`:
-- **Colours:** a cool neutral scale (canvas `#F5F7FA`, surface `#FFFFFF`, ink `#142238`, muted
-  `#64748B`, borders `#E2E8F0`) and one blue accent (`#345CE0`, hover `#2649BC`).
-- **Type:** Manrope, self-hosted.
-- **Hierarchy:** hairlines and spacing rather than shadows or nested cards.
-- **Logo:** the mark (a split frame with a playhead cue) is drawn as SVG in
-  `src/components/Brand.tsx` and `public/favicon.svg`.
-
-**Upload screen:**
-- **Inputs:** drag-and-drop or choose files, plus an optional AI bundle.
-- **Validation:** type and size are checked against the limit reported by `/api/health`
-  before anything is sent.
-- **Feedback:** analysis can be cancelled, and errors are shown in plain language.
-- **Try the fictional sample:** sends an original three-episode story (*The Harbor Light*,
-  `frontend/public/sample/`, generated by `frontend/scripts/make_sample.py`) through the
-  real API.
-
-**Workspace:**
-- **Layout:** a list and a detail view side by side on desktop; stacked list → detail on
-  mobile.
-- **Two separate views:**
-  - **AI-reviewed:** genuine judgements only, 0–100, provisional while coverage is
-    incomplete;
-  - **Full show:** heuristic 0–1 priority, labelled unverified.
-- **Navigation and filtering:** search, filters (episode, duration, status, warning,
-  decision, alternative cuts) and a virtualized list.
-- **Detail:**
-  - exact `MM:SS.cc` timecodes and the score with its provenance;
-  - hook and cliffhanger judgements with evidence chips;
-  - an interactive **screenplay timeline**: real event timings, overlapping events packed
-    into rows, the clip plus its first 3 s and last 5 s, ±10 s context;
-  - the screenplay excerpt (before, in and after the clip), cuts of the same moment, and
-    source references.
-- **Review:** accept, later or reject (also with `A`/`L`/`R`), plus private notes.
-
-**Saved in this browser (IndexedDB only).** The last analysis, your decisions, notes and
-position survive a refresh.
-- **Failure handling:** if storage is unavailable, full or corrupt, the analysis stays in
-  memory and the UI says it is not saved.
-- **Deleting:** "Delete saved analysis" removes everything.
-- **Eviction:** browsers may clear this data on their own.
-- **Not used:** cookies, localStorage and URLs.
-
-**Exports (client-side):**
-- ranked CSV, with the same columns as the CLI plus the editor's decision and note;
-- editor shortlist (CSV or JSON);
-- the full analysis JSON, which can be re-imported without being uploaded.
-
-Exports can contain confidential screenplay text.
-
-```bash
-cd frontend && npm ci && npm run build
-```
+Start the frontend (http://localhost:5173, with `/api` proxied to port 8000):
 
 ```bash
 cd frontend && npm run dev
 ```
 
-`npm run dev` serves on http://localhost:5173 and proxies `/api` to `promolens serve`
-(port 8000).
+## Usage
 
-## Deployment (Vercel, one project and one URL)
+**Analyze a screenplay.** Drop a `.zip` pack or `.txt` episodes on the start page and choose
+**Analyze**. Without an AI bundle, clips are ranked by structure and the list says that AI
+review is not available.
 
-- **Entrypoint:** `app.py` (stateless FastAPI). Vercel's FastAPI support detects it.
-- **Python:** 3.12, from `.python-version`.
-- **Frontend:** `vercel.json` builds the Vite frontend (`frontend/`). `app.frontend()` serves `frontend/dist` from Vercel's CDN, with `index.html` as
-  the fallback for deep links. API routes always take priority over frontend paths.
-- **Routes:** only `GET /api/health` and `POST /api/analyze`. The local run store is not
-  used, because the function filesystem is read-only and instances are not shared.
-- **Payload:** uploads up to 4.0 MB. The full pack is 0.54 MB and its response 1.8 MB, under
-  Vercel's 4.5 MB body limit. Larger inputs get a 413 pointing to the local CLI.
-- **No inference:** the deployment never calls a model and ships no AI cache.
-  - To show genuine AI results online, run `promolens export-ai` locally and upload
-    `runs\ai_bundle.json` together with the screenplay. It is validated against the
-    screenplay at request time.
-- **Static files on the CDN:** `[tool.vercel.fastapi.static] cdn = true` in
-  `pyproject.toml` serves the built frontend from Vercel's CDN. Without it, our middleware
-  would keep the static files inside the Python function. Verified on the preview.
-- **Upload allowlist:** `.vercelignore` uploads only `app.py`, `src/`, `frontend/` (no
-  `node_modules`/`dist`), `pyproject.toml`, `README.md`, `vercel.json` and
-  `.python-version`. It also blocks ZIPs, PDFs, `episode-*.txt`, `runs`, `outputs`, `data`,
-  `.env*`, keys and AI bundles anywhere.
-- **Uploaded files:** they are processed in memory by Vercel's infrastructure for the
-  duration of the request. FrameCue does not store them, but they do pass through the
-  platform.
+**Try the sample.** Choose **Try the fictional sample**. It runs an invented three-episode
+story through the real API, together with any AI reviews published for it in
+`frontend/public/sample/`.
 
-Preview deployment (protected by Vercel Authentication):
+**Add AI reviews.**
 
-```bash
-npx vercel@65.4.0 deploy
-```
-
-Production deployment (public):
-
-```bash
-npx vercel@65.4.0 deploy --prod
-```
-
-The project's very first deployment went to production automatically and was removed; see
-PLAN §17. The current production deployment was made on purpose for submission (Phase 6).
-
-## Opt-in live AI evaluation (free quota)
-
-Live evaluation is a separate, explicit command and never part of `analyze` or the API.
-
-**Setup:**
-1. Copy `.env.example` to `.env`.
-2. Set a Groq key (Free Plan, Zero Data Retention enabled, no payment method).
-3. Dry-run first, which plans only:
+1. Plan the run without calling the model:
 
    ```bash
    .venv\Scripts\promolens evaluate --zip "data\private\pack.zip" --schedule coverage-first --levels 1
    ```
 
-4. Add `--allow-large --live` to actually evaluate.
+2. Add `--allow-large --live` to evaluate. Requests are paced to the free plan's limits and
+   stop at the daily budget; results are cached in `runs\cache\evaluations`.
+3. Export the cached reviews:
 
-**How it runs:**
-- `coverage-first` picks the best un-evaluated candidate from each episode that has no AI
-  assessment yet (38 episodes today, about 107k tokens), before any alternatives.
-  `--levels 2` adds a second per episode.
-- **Guards:**
-  - **Pacing:** requests are paced to Groq's free 8,000 tokens/minute and honour
-    `Retry-After`.
-  - **Daily budget:** a local daily token budget (default 180,000) applies. It is our own
-    accounting by UTC day; the provider's reset time is not documented, so a daily 429 is
-    authoritative.
-  - **Paid tiers:** paid tiers are never requested.
-- **Progress:** accepted results are cached, so the next `analyze` picks them up and an
-  interrupted run resumes.
-- **Raw responses:** unmodified responses are kept in `runs\raw\`.
+   ```bash
+   .venv\Scripts\promolens export-ai --out runs\ai_bundle.json
+   ```
 
-Measured limits, token use and quality findings: [PLAN §10b](docs/PLAN.md).
+4. Upload `runs\ai_bundle.json` as the **AI evaluation bundle** together with the same
+   screenplay. Reviews that do not match the screenplay or fail validation are ignored and
+   counted.
+
+**Save and export.** Every analysis is saved in the browser automatically. **Recent
+analyses** on the start page reopens, renames or deletes them, and **Back up all** downloads
+a file that **Import** restores elsewhere. Inside an analysis, **Export** offers the ranked
+list, your shortlist and the analysis document.
+
+**Command line.**
+
+| Command | Purpose |
+|---|---|
+| `promolens analyze <zip, txt or folder> --out <dir>` | Offline analysis; writes rankings, CSVs and a manifest |
+| `promolens serve --port 8000` | Local API for the frontend |
+| `promolens evaluate --zip <path> [--live]` | Opt-in AI evaluation (dry run without `--live`) |
+| `promolens export-ai --out <file>` | Bundle cached AI reviews for upload |
+
+`analyze` never calls a model and prints counts, IDs and scores, never screenplay text.
 
 ## Testing
+
+Python tests and lint:
 
 ```bash
 .venv\Scripts\python -m pytest
 ```
 
 ```bash
-.venv\Scripts\ruff check . ; .venv\Scripts\ruff format --check .
+.venv\Scripts\ruff check .
 ```
 
-Private end-to-end tests on the real pack skip unless the path is given:
-
-```bash
-$env:PROMOLENS_TEST_ZIP="data\private\pack.zip"; .venv\Scripts\python -m pytest -m private
-```
-
-Mocked tests never contact a real API: network transports are patched to fail.
-CI (`.github/workflows/ci.yml`) runs Ruff and pytest, then the frontend type check, build
-and Vitest.
-
-**Frontend:**
-- **Unit tests:** Vitest and Testing Library, with fake IndexedDB and synthetic fixtures.
-- **End-to-end:** Playwright against the real `app.py`, in the installed Microsoft Edge (no
-  browser download).
+Frontend unit tests (Vitest, with a fake IndexedDB):
 
 ```bash
 cd frontend && npm test
 ```
 
+End-to-end tests (Playwright, using the installed Microsoft Edge against the real `app.py`):
+
 ```bash
 cd frontend && npm run build && npx playwright test
 ```
 
-The same specs run against a deployment with no local server, for example production:
+Set `E2E_BASE_URL` to run the same specs against a deployment. Tests that need the private
+screenplay pack are skipped unless `PROMOLENS_TEST_ZIP` points to it. CI runs Ruff, pytest,
+the TypeScript check, the build and Vitest on every push.
+
+## Deployment
+
+The repository deploys to Vercel as one project:
+
+- `app.py` is the Python entrypoint; `.python-version` selects Python 3.12.
+- `vercel.json` builds the frontend (`npm --prefix frontend ci && npm --prefix frontend run
+  build`), sends unknown non-API paths to `index.html`, and allows the function 60 s.
+- `.vercelignore` is an allowlist: only the app, `src/`, `frontend/` and build settings are
+  uploaded. ZIPs, PDFs, `runs/`, `data/`, `.env` files and private AI bundles are excluded.
 
 ```bash
-cd frontend && $env:E2E_BASE_URL="https://promolens-two.vercel.app"; npx playwright test
+npx vercel@65.4.0 deploy
 ```
 
-`e2e/release.spec.ts` asserts only same-origin requests (no model or third-party calls), no
-cookies or localStorage, both views, the timeline, deep-link reload, and export then
-re-import.
+```bash
+npx vercel@65.4.0 deploy --prod
+```
 
-`e2e/private.spec.ts` runs only when `PROMOLENS_TEST_ZIP` is set. It writes screenshots
-and metrics to the gitignored `runs/screens/`.
+**Limits:** uploads up to 4 MB (Vercel's request limit is 4.5 MB); larger inputs need the
+command-line tool. The function runs in one US region, so a full 50-episode pack takes a few
+seconds from India.
 
-## Known limitations
+## Limitations
 
-- **Partial AI coverage:** 5.2 % of candidates. The AI view is provisional, and most
-  episodes have baseline suggestions only.
-- **Subjective judgements:** AI scores are editorial estimates from one model on a small
-  reviewed sample (PLAN §10b). They are not accuracy or conversion measurements. Explanation
-  prose is not machine-checked; evidence IDs are.
-- **No raw responses for past runs:** the 41 evaluations were stored as validated, parsed
-  results. Unmodified responses (`runs
-aw\`) are captured only for runs made after that
-  feature was added.
-- **Known AI failure modes**, from a rubric review of the top 10 picks by the AI coding
-  assistant (not human labels):
-  - explanations sometimes cite events just after the clip ends;
-  - small embellishments at low reasoning effort;
-  - compressed, generous scores on quiet scenes;
-  - two heavily overlapping cuts (IoU 0.42) can both rank as primaries.
-  
-  See PLAN §18.
-- **Prototype run store:** files under `runs\api\` (30 runs kept). Editor accept/reject
-  decisions are not stored server-side.
-- **Single segments:** v1 clips are one continuous segment; multi-segment montage is not
-  generated.
-- **Frontend persistence:** it is per browser and per device. A new analysis replaces the
-  saved one, and there is no cross-device sync.
-- **Function region:** the Vercel function runs in `iad1` (US East). From India a
-  full-pack round trip is 6–7 s, with about 3 s of compute. Pinning a nearer region is a
-  possible follow-up.
+- **Partial AI coverage.** AI reviews exist only where the free quota allowed: 41 of the 788
+  candidates in the 50-episode assignment pack. The AI ranking is provisional, and the rest
+  are ranked by structure only.
+- **AI judgements are estimates.** Scores come from one model and were checked by rubric
+  review, not by human labels or viewer data. Evidence IDs are validated; the wording of
+  explanations is not.
+- **Continuous clips only.** Each clip is one continuous stretch; montages of several moments
+  are not generated.
+- **No video.** FrameCue works on screenplays and does not cut or render video.
+- **Screenplay time is not video time.** Timecodes come from the screenplay. Edits, pacing
+  and music in the final video can shift them.
+- **Provider quotas.** Live evaluation depends on GroqCloud's free daily and per-minute
+  limits. When they run out, evaluation stops until the next day.
+- **Browser storage.** Saved analyses stay in one browser on one device and are separate for
+  each site address. Use **Back up all** and **Import** to move them.
 
-## Confidentiality
+## Privacy
 
-- The pack, `.env`, `runs\` (outputs, cache, uploads, raw model text) and `data\private\` are
-  gitignored. Tests use invented fixtures only.
-- **Model calls:** none happen without `--live`. Diagnostics, logs and console output never
-  contain screenplay text. Secrets live only in `.env`.
-- **API exposure:** the API binds to localhost, uses unguessable run IDs without a listing
-  endpoint, limits upload size, parses ZIPs in memory with path-traversal, symlink and
-  zip-bomb guards, and returns sanitized errors without tracebacks.
+- Confidential screenplays, outputs, caches and raw model responses are gitignored (`data/`,
+  `runs/`) and excluded from deployments. Tests use invented fixtures.
+- API keys live only in `.env` on the machine that runs the evaluator. The website never
+  receives a key and never calls a model.
+- Uploads are processed in memory for the duration of the request and not stored.
+- Saved analyses stay in the browser's IndexedDB; no cookies, localStorage or URL parameters
+  carry screenplay data.
+- The public sample and any AI reviews published for it are fictional.
+
+## Development notes
+
+The architecture, decisions and measurements are in [docs/PLAN.md](docs/PLAN.md) and the HTTP
+contract in [docs/API.md](docs/API.md). The project was built with an AI coding assistant;
+[docs/AI_LOG.md](docs/AI_LOG.md) records how it was used.

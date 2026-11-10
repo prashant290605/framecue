@@ -11,6 +11,8 @@ export const sampleDocWithAi = () => structuredClone(withAi) as unknown as Analy
 export interface FetchPlan {
   analyze?: (init: RequestInit) => Response | Promise<Response>;
   health?: () => Response;
+  /** The fictional sample's published AI bundle; omitted = not published (non-JSON reply). */
+  sampleBundle?: () => Response;
 }
 
 export const json = (body: unknown, status = 200) =>
@@ -29,6 +31,9 @@ export function mockFetch(plan: FetchPlan = {}) {
       if (!plan.analyze) throw new Error("unexpected analyze call");
       return plan.analyze(init ?? {});
     }
+    if (url === "/sample/manifest.json")
+      return json({ ai_bundle: plan.sampleBundle ? "harbor-light.ai-bundle.json" : null });
+    if (url.endsWith(".ai-bundle.json") && plan.sampleBundle) return plan.sampleBundle();
     if (url.startsWith("/sample/")) return new Response("EPISODE NUMBER: Episode 1\n", { status: 200 });
     throw new Error(`unexpected fetch ${url}`);
   });

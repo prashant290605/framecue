@@ -7,6 +7,7 @@ import { timecode } from "./lib/time";
 import { file, json, mockFetch, sampleDoc, sampleDocWithAi } from "./test/helpers";
 
 const user = () => userEvent.setup();
+const ready = () => screen.findByRole("region", { name: "Recommendations" }, { timeout: 10_000 });
 
 async function analyzeWith(doc = sampleDoc()) {
   const fetchMock = mockFetch({ analyze: () => json(doc) });
@@ -15,7 +16,7 @@ async function analyzeWith(doc = sampleDoc()) {
   const input = await screen.findByTestId("screenplay-input");
   await u.upload(input, file("pack.zip", "PK"));
   await u.click(screen.getByRole("button", { name: /^Analyze/ }));
-  await screen.findByRole("tablist", { name: "Ranking" }, { timeout: 10_000 });
+  await ready();
   return { u, fetchMock, doc };
 }
 
@@ -47,7 +48,7 @@ describe("upload", () => {
     await u.upload(await screen.findByTestId("screenplay-input"), file("e.txt"));
     await u.click(screen.getByRole("button", { name: /^Analyze/ }));
     expect(await screen.findByRole("alert")).toHaveTextContent(/No valid screenplay episode/);
-    expect(screen.queryByRole("tablist", { name: "Ranking" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Recommendations" })).not.toBeInTheDocument();
   });
 
   it("runs the fictional sample through the real API contract", async () => {
@@ -55,35 +56,43 @@ describe("upload", () => {
     const u = user();
     render(<App />);
     await u.click(await screen.findByRole("button", { name: /Try the fictional sample/ }));
-    await screen.findByRole("tablist", { name: "Ranking" }, { timeout: 10_000 });
+    await ready();
     const sent = calls.find((c) => c.url === "/api/analyze")!.init!.body as FormData;
     expect((sent.getAll("files") as File[]).map((f) => f.name)).toEqual([
       "harbor-light-01.txt",
       "harbor-light-02.txt",
       "harbor-light-03.txt",
     ]);
+    expect(sent.get("ai_bundle")).toBeNull(); // no published sample bundle: plain sample only
+    expect(calls.some((c) => c.url.endsWith(".ai-bundle.json"))).toBe(false); // never requested
+  });
+
+  it("sends the fictional sample's published AI bundle and labels its reviews as genuine", async () => {
+    const bundle = { format: "promolens-ai-bundle-v1", entries: {}, failures: {} };
+    const { calls } = mockFetch({ analyze: () => json(sampleDocWithAi()), sampleBundle: () => json(bundle) });
+    const u = user();
+    render(<App />);
+    await u.click(await screen.findByRole("button", { name: /Try the fictional sample/ }));
+    await ready();
+    const sent = calls.find((c) => c.url === "/api/analyze")!.init!.body as FormData;
+    expect((sent.get("ai_bundle") as File).name).toBe("harbor-light.ai-bundle.json");
+    expect(screen.getByRole("tab", { name: /AI-reviewed/ })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText(/Genuine reviews by/)).toHaveTextContent(/generated offline for this fictional sample/);
   });
 });
 
 describe("views and provenance", () => {
-  it("shows full-show candidates as unverified heuristic suggestions", async () => {
+  it("shows the structural ranking plainly when there are no AI reviews", async () => {
     const { doc } = await analyzeWith();
-    expect(screen.getByRole("tab", { name: /Full show/ })).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByText(/Unverified suggestions ranked by the heuristic baseline/)).toBeInTheDocument();
+    expect(screen.queryByRole("tablist", { name: "Ranking" })).not.toBeInTheDocument(); // one ranking only
+    expect(screen.queryByRole("button", { name: /AI reviewed/ })).not.toBeInTheDocument(); // no "0 / N" chip
+    expect(screen.getByText(/AI review not available/)).toBeInTheDocument();
     const options = within(list()).getAllByRole("option");
     expect(options.length).toBe(doc.views.coverage.primaries);
-    expect(within(detail()).getByText("Heuristic priority")).toBeInTheDocument();
-    expect(within(detail()).getByText("Unverified suggestion")).toBeInTheDocument();
-    expect(within(detail()).queryByText("AI weighted score")).not.toBeInTheDocument();
-    expect(within(detail()).getByText(/No AI review for this candidate/)).toBeInTheDocument();
-  });
-
-  it("explains an empty AI view and offers the full show", async () => {
-    const { u } = await analyzeWith();
-    await u.click(screen.getByRole("tab", { name: /AI-reviewed/ }));
-    expect(screen.getByText("No AI-reviewed picks in this analysis")).toBeInTheDocument();
-    await u.click(screen.getByRole("button", { name: /Browse the full show/ }));
-    expect(screen.getByRole("tab", { name: /Full show/ })).toHaveAttribute("aria-selected", "true");
+    expect(within(detail()).getByText("Structural score")).toBeInTheDocument();
+    expect(within(detail()).getByText(/^Starts at /)).toBeInTheDocument(); // reasons in plain words
+    expect(within(detail()).queryByText("AI score")).not.toBeInTheDocument();
+    expect(within(detail()).getByRole("region", { name: "Score" })).not.toHaveTextContent(/_v1|heuristic/); // ids live in Details
   });
 
   it("shows genuine AI judgements on the 0–100 scale with evidence", async () => {
@@ -93,13 +102,13 @@ describe("views and provenance", () => {
     const topId = doc.views.ai.order[0];
     const j = doc.ai_evaluations[topId];
     const d = detail();
-    expect(within(d).getByText("AI weighted score")).toBeInTheDocument();
+    expect(within(d).getByText("AI score")).toBeInTheDocument();
     expect(within(d).getByText(String(j.weighted_score))).toBeInTheDocument();
     expect(within(d).getByText("/ 100")).toBeInTheDocument();
     expect(within(d).getByText(j.hook_explanation)).toBeInTheDocument();
     expect(within(d).getByText(j.cliffhanger_explanation)).toBeInTheDocument();
     expect(within(d).getAllByRole("button", { name: j.hook_event_ids[0] }).length).toBeGreaterThan(0);
-    expect(screen.getByText(/^Provisional:/)).toBeInTheDocument();
+    expect(screen.getByText(/candidates reviewed by AI so far/)).toBeInTheDocument();
   });
 
   it("marks AI availability in the full show without mixing scores", async () => {
@@ -107,7 +116,8 @@ describe("views and provenance", () => {
     const { u } = await analyzeWith(doc);
     await u.click(screen.getByRole("tab", { name: /Full show/ }));
     expect(within(list()).getAllByLabelText("AI review available").length).toBeGreaterThan(0);
-    expect(within(detail()).queryByText("AI weighted score")).not.toBeInTheDocument();
+    expect(within(detail()).queryByText("AI score")).not.toBeInTheDocument();
+    expect(within(detail()).getByText("Structural score")).toBeInTheDocument();
   });
 });
 
@@ -143,7 +153,7 @@ describe("inspection, filters and review", () => {
     await u.click(within(detail()).getByRole("button", { name: /Accept/ }));
     expect(within(detail()).getByRole("button", { name: /Accept/ })).toHaveAttribute("aria-pressed", "true");
     expect(within(list()).getAllByLabelText("Accepted")).toHaveLength(1);
-    await u.click(within(detail()).getByRole("button", { name: /Add a private note/ }));
+    await u.click(within(detail()).getByRole("button", { name: /Add note/ }));
     await u.type(within(detail()).getByLabelText("Private note"), "Use as lead promo");
     await u.click(screen.getByRole("button", { name: /^Filters/ }));
     await u.selectOptions(screen.getByLabelText("Your decision"), "accepted");
@@ -211,10 +221,11 @@ describe("inspection, filters and review", () => {
     expect(card).toHaveTextContent(`${timecode(ev.start_ms)} – ${timecode(ev.end_ms)}`);
   });
 
-  it("explains a zero AI count when no bundle was supplied", async () => {
-    const { u } = await analyzeWith();
+  it("summarises AI coverage when some candidates have reviews", async () => {
+    const doc = sampleDocWithAi();
+    const { u } = await analyzeWith(doc);
     await u.click(screen.getByRole("button", { name: /AI reviewed/ }));
-    expect(await screen.findByText(/No AI evaluation bundle was supplied with this analysis/)).toBeInTheDocument();
+    expect(await screen.findByText(`${doc.coverage.ai_evaluated} of ${doc.coverage.total_candidates} candidates have a validated AI review. The rest are ranked by structure only.`)).toBeInTheDocument();
   });
 });
 
@@ -223,14 +234,14 @@ describe("persistence", () => {
     const { u } = await analyzeWith();
     await u.click(within(list()).getAllByRole("option")[2]);
     await u.click(within(detail()).getByRole("button", { name: /Later/ }));
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Saved in this browser"));
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent(/^Saved$/));
     await act(() => new Promise((r) => setTimeout(r, 450))); // debounced review save
     const selectedBefore = within(detail()).getByRole("heading", { level: 2 }).textContent;
     cleanup(); // unmount, like closing the tab
     resetConnectionForTests(); // like a page reload: new connection, same database
     mockFetch();
     render(<App />);
-    await screen.findByRole("tablist", { name: "Ranking" }, { timeout: 10_000 });
+    await ready();
     expect(within(detail()).getByRole("heading", { level: 2 }).textContent).toBe(selectedBefore);
     expect(within(detail()).getByRole("button", { name: /Later/ })).toHaveAttribute("aria-pressed", "true");
   });
@@ -245,17 +256,55 @@ describe("persistence", () => {
 
   it("deletes saved data on request", async () => {
     const { u } = await analyzeWith();
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Saved in this browser"));
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent(/^Saved$/));
     await u.click(screen.getByRole("button", { name: "Analysis menu" }));
-    await u.click(await screen.findByRole("menuitem", { name: /Delete saved analysis/ }));
+    await u.click(await screen.findByRole("menuitem", { name: /Delete analysis/ }));
     await u.click(await screen.findByRole("button", { name: /^Delete$/ }));
-    expect(await screen.findByText("Saved analysis deleted from this browser.")).toBeInTheDocument();
+    expect(await screen.findByText("Analysis deleted from this browser.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Analyze a screenplay/ })).toBeInTheDocument();
     cleanup();
     resetConnectionForTests();
     mockFetch();
     render(<App />);
     expect(await screen.findByRole("heading", { name: /Analyze a screenplay/ })).toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Recent analyses" })).not.toBeInTheDocument();
+  });
+
+  it("lists saved analyses to reopen, rename and delete without uploading again", async () => {
+    const { u, fetchMock } = await analyzeWith();
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent(/^Saved$/));
+    await u.click(screen.getByRole("button", { name: "Analysis menu" }));
+    await u.click(await screen.findByRole("menuitem", { name: /New analysis/ }));
+    const recent = await screen.findByRole("list", { name: "Recent analyses" });
+    expect(recent).toHaveTextContent("pack.zip");
+    await u.click(within(recent).getByRole("button", { name: "Rename pack.zip" }));
+    const field = within(recent).getByLabelText("Analysis name");
+    await u.clear(field);
+    await u.type(field, "Season one{Enter}");
+    await waitFor(() => expect(within(recent).getByText("Season one")).toBeInTheDocument());
+    await u.click(within(recent).getByText("Season one"));
+    await ready();
+    expect(screen.getByRole("heading", { level: 1, name: "Season one" })).toBeInTheDocument();
+    expect(fetchMock.calls.filter((c) => c.url === "/api/analyze")).toHaveLength(1); // reopened, not re-analysed
+    await u.click(screen.getByRole("button", { name: "Analysis menu" }));
+    await u.click(await screen.findByRole("menuitem", { name: /New analysis/ }));
+    const again = await screen.findByRole("list", { name: "Recent analyses" });
+    await u.click(within(again).getByRole("button", { name: "Delete Season one" }));
+    await u.click(within(again).getByRole("button", { name: "Confirm delete Season one" }));
+    await waitFor(() => expect(screen.queryByRole("list", { name: "Recent analyses" })).not.toBeInTheDocument());
+  });
+
+  it("offers the saved analysis when the same files are uploaded again", async () => {
+    const { u, fetchMock } = await analyzeWith();
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent(/^Saved$/));
+    await u.click(screen.getByRole("button", { name: "Analysis menu" }));
+    await u.click(await screen.findByRole("menuitem", { name: /New analysis/ }));
+    await u.upload(await screen.findByTestId("screenplay-input"), file("renamed.zip", "PK"));
+    await u.click(screen.getByRole("button", { name: /^Analyze/ }));
+    expect(await screen.findByText(/Already analyzed as/)).toHaveTextContent("pack.zip");
+    await u.click(screen.getByRole("button", { name: "Open saved" }));
+    await ready();
+    expect(fetchMock.calls.filter((c) => c.url === "/api/analyze")).toHaveLength(1);
   });
 
   it("imports a saved analysis JSON locally without uploading it", async () => {
@@ -264,7 +313,7 @@ describe("persistence", () => {
     render(<App />);
     const doc = sampleDocWithAi();
     await u.upload(await screen.findByTestId("import-input"), file("saved.json", JSON.stringify(doc), "application/json"));
-    await screen.findByRole("tablist", { name: "Ranking" }, { timeout: 10_000 });
+    await ready();
     expect(calls.some((c) => c.url === "/api/analyze")).toBe(false);
     expect(await screen.findByText(/Nothing was uploaded/)).toBeInTheDocument();
   });
