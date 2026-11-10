@@ -16,12 +16,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/input";
 import { Tip } from "@/components/ui/overlays";
-import { buildTimeline, cutFamily, type Decision, type DocIndex, type Lane } from "@/lib/doc-index";
-import { anchorLabel, COMPONENT_LABELS, LANE_LABELS, RUBRIC, RUBRIC_WEIGHT_KEY, warningLabel } from "@/lib/labels";
+import { buildTimeline, cutFamily, type Decision, type DocIndex } from "@/lib/doc-index";
+import { anchorLabel, COMPONENT_LABELS, RUBRIC, RUBRIC_WEIGHT_KEY, warningLabel } from "@/lib/labels";
 import { seconds, timecode } from "@/lib/time";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/state/app-state";
-import { Timeline, TimelineLegend } from "./Timeline";
+import { EventInspector, Timeline, TimelineLegend } from "./Timeline";
 
 type Model = ReturnType<typeof buildTimeline>;
 type Evidence = { hook: Set<string>; cliffhanger: Set<string> };
@@ -166,7 +166,7 @@ function DetailBody({ index, c, view, onBack }: { index: DocIndex; c: DocCandida
 
       <Section label="Timeline" title="Screenplay timeline" aside={<TimelineLegend />}>
         <Timeline model={model} evidence={evidence} activeId={activeId} onActivate={setActiveId} />
-        <ActiveEvent id={activeId} model={model} evidence={evidence} />
+        <EventInspector id={activeId} model={model} evidence={evidence} onActivate={setActiveId} />
       </Section>
 
       <Section label="Screenplay excerpt" title="Screenplay excerpt">
@@ -353,7 +353,7 @@ function BaselineScore({ c, hasAi }: { c: DocCandidate; hasAi: boolean }) {
 function Meter({ value, max, label, muted }: { value: number; max: number; label: string; muted?: boolean }) {
   return (
     <div role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={value} className="h-1.5 overflow-hidden rounded-full bg-subtle">
-      <div className={cn("h-full rounded-full", muted ? "bg-ev-action" : "bg-accent")} style={{ width: `${(value / max) * 100}%` }} />
+      <div className={cn("h-full rounded-full", muted ? "bg-ink-soft/55" : "bg-accent")} style={{ width: `${(value / max) * 100}%` }} />
     </div>
   );
 }
@@ -393,41 +393,6 @@ function Prose({ title, text, children }: { title: string; text: string; childre
       <h4 className="text-[13px] font-bold text-ink">{title}</h4>
       <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">{text}</p>
       {children}
-    </div>
-  );
-}
-
-/* Timeline helpers ------------------------------------------------------------------- */
-
-function ActiveEvent({ id, model, evidence }: { id: string | null; model: Model; evidence: Evidence }) {
-  const placed = id ? model.events.find((p) => p.event.id === id) : undefined;
-  if (!placed) {
-    return (
-      <p className="mt-4 rounded-md bg-canvas px-3.5 py-3 text-[12.5px] text-muted">
-        Select an event bar to read it here. Tab moves through events.
-      </p>
-    );
-  }
-  const ev = placed.event;
-  const tags = [
-    placed.inClip ? "In clip" : ev.start_ms < model.clip[0] ? "Before clip" : "After clip",
-    placed.inHook && "Hook window",
-    placed.inEnding && "Ending window",
-    evidence.hook.has(ev.id) && "AI hook evidence",
-    evidence.cliffhanger.has(ev.id) && "AI cliffhanger evidence",
-  ].filter(Boolean) as string[];
-  return (
-    <div className="mt-4 rounded-md bg-canvas px-3.5 py-3" aria-live="polite">
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[12px] text-muted">
-        <span className="font-bold text-ink">{LANE_LABELS[ev.type as Lane] ?? ev.type}</span>
-        <span className="font-semibold tabular text-ink-soft">{timecode(ev.start_ms)} – {timecode(ev.end_ms)}</span>
-        <span className="font-mono text-[11px]">{ev.id}</span>
-        {tags.map((t) => <Badge key={t} tone={t.startsWith("AI") ? "accent" : "outline"}>{t}</Badge>)}
-      </div>
-      <p className="mt-1.5 text-[14px] leading-relaxed text-ink">
-        {ev.speaker && <span className="font-bold">{ev.speaker}{ev.annotations.length ? ` (${ev.annotations.join(", ")})` : ""}: </span>}
-        {ev.text}
-      </p>
     </div>
   );
 }

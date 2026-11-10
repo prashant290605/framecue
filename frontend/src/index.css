@@ -33,10 +33,10 @@
   --color-later: #475569;
   --color-later-soft: #edf1f6;
 
-  /* timeline lanes: muted slate steps, all readable against the canvas */
+  /* timeline categories: soft hues, distinct without harsh contrast; blue is kept for the clip */
   --color-ev-dialogue: #2c4268;
-  --color-ev-action: #6b7d98;
-  --color-ev-sound: #8e9bb3;
+  --color-ev-action: #3a9d90;
+  --color-ev-sound: #8a7bdc;
   --color-ev-camera: #c3cddb;
 
   --radius-sm: 6px;

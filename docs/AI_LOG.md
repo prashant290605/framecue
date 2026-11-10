@@ -592,3 +592,18 @@ architecture draft.
   - deep links return 200, and unknown `/api` paths return a JSON 404;
   - the Playwright suite (5 tests) passes against production;
   - the served bundles and the workspace chunk contain no confidential names or key strings.
+
+## Timeline redesign and AI coverage check (2026-11-11)
+- **Timeline:** redesigned as a screenplay map (PLAN §19). The timing maths are unchanged.
+- **Bug found during QA:** absolutely positioned screen-reader-only text escaped the detail
+  scroll pane. The document became 37 px taller than the viewport, so the top bar scrolled
+  away when chips were clicked. Fixed by making the panes `relative`, then re-measured:
+  document height equals viewport height.
+- **"AI reviewed 0 / 788":**
+  - Reproduced with the real pack: 0 / 788 without a bundle (source `none`), 41 / 788 with
+    the local bundle.
+  - Every count agrees: the header, the evaluations, the statuses, the AI view (28 primaries
+    plus 13 alternatives) and the per-episode counts.
+  - Not a bug. The popover copy now explains the no-bundle case.
+- **Tests added:** stepping through events in screenplay order with exact timecodes, and the
+  no-bundle explanation.

@@ -995,3 +995,30 @@ defects were found and fixed:
 - the view switcher animated its background, showing the wrong segment for 150 ms.
 
 There is no horizontal overflow at 768 or 390 px.
+
+**Timeline redesign (follow-up).** The inspector timeline is now a screenplay map. The
+millisecond positioning and overlap rows from `buildTimeline` are unchanged.
+- **Clip band:** In and Out times, the clip duration, and tinted end-caps for the first 3 s
+  and the last 5 s.
+- **Event ribbons:** one row of rounded chips per category, with soft hue coding (dialogue
+  navy, action teal, sound violet, camera slate). Blue is reserved for the clip and the AI
+  evidence rings.
+- **Context:** shaded outside the clip, with dashed scene-change lines from the model's scene
+  data.
+- **Selection:** the selected event's exact time is pinned on the axis.
+- **Event card:** previous and next stepping. Left and right arrow keys move between events.
+
+Layout fix: the detail panes are now `relative`. Screen-reader-only text inside them was
+absolutely positioned against the page, which made the document 37 px taller than the
+viewport. Clicking evidence chips or using the timeline then scrolled the whole page and
+pushed the top bar out of view.
+
+**AI coverage chip.** "AI reviewed N / M" is `coverage.ai_evaluated / total_candidates` from
+the analysis document. N counts validated AI judgements: the ranked AI primaries plus their
+alternative cuts. On the real pack that is 41 (28 primaries and 13 alternatives).
+- N is 0 whenever no AI bundle is supplied, because the deployment never calls a model and
+  ships no cache.
+- With the local `runs/ai_bundle.json` it is 41 of 788: 73 entries scanned, 24 from an older
+  prompt and 8 from another profile, both ignored, and 0 failing validation.
+
+When no bundle was supplied, the popover now says so.

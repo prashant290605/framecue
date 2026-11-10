@@ -106,7 +106,9 @@ function CoverageChip() {
         <p className="mt-1 text-[12.5px] leading-relaxed text-muted">
           {cov.complete
             ? "Every candidate has a validated AI review."
-            : `${cov.ai_evaluated} of ${cov.total_candidates} candidates (${pct}%) in ${cov.episodes_with_ai} of ${cov.total_episodes} episodes have a validated AI review. AI rankings are provisional.`}
+            : cov.cache.source === "none"
+              ? `No AI evaluation bundle was supplied with this analysis, so none of the ${cov.total_candidates} candidates has an AI review yet. Analyze the same screenplay again with its bundle to see AI-reviewed picks.`
+              : `${cov.ai_evaluated} of ${cov.total_candidates} candidates (${pct}%) in ${cov.episodes_with_ai} of ${cov.total_episodes} episodes have a validated AI review. AI rankings are provisional.`}
         </p>
         <dl className="mt-3 grid grid-cols-[1fr_auto] gap-x-4 gap-y-2 border-t border-line pt-3 text-[12.5px]">
           <dt className="text-muted">Source</dt>

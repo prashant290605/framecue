@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { App } from "./App";
 import { resetConnectionForTests } from "./lib/storage";
+import { timecode } from "./lib/time";
 import { file, json, mockFetch, sampleDoc, sampleDocWithAi } from "./test/helpers";
 
 const user = () => userEvent.setup();
@@ -183,13 +184,37 @@ describe("inspection, filters and review", () => {
     const timeline = within(detail()).getByRole("figure", { name: /Screenplay timeline/ });
     const dialogue = within(timeline).getByRole("group", { name: "Dialogue events" });
     const bar = within(dialogue).getAllByRole("button")[0];
-    expect(within(detail()).getByText(/Select an event bar to read it here/)).toBeInTheDocument();
+    expect(within(detail()).getByText(/Select an event to read it here/)).toBeInTheDocument();
     await u.click(bar);
     expect(bar).toHaveAttribute("aria-pressed", "true");
     const id = bar.getAttribute("data-event-id")!;
     expect(within(detail()).getAllByText(id).length).toBeGreaterThan(0); // inspector shows it
     const excerptLine = within(detail()).getAllByRole("button").find((b) => b.hasAttribute("data-excerpt-line") && b.dataset.active === "true");
     expect(excerptLine).toBeDefined(); // the excerpt highlights the same event
+  });
+
+  it("steps through timeline events in screenplay order with exact timecodes", async () => {
+    const { u, doc } = await analyzeWith();
+    const timeline = within(detail()).getByRole("figure", { name: /Screenplay timeline/ });
+    const chips = within(timeline).getAllByRole("button");
+    await u.click(within(detail()).getByRole("button", { name: "Next event" }));
+    const first = chips.find((b) => b.getAttribute("aria-pressed") === "true")!;
+    expect(first).toBeDefined(); // the first event inside the clip
+    const firstId = first.getAttribute("data-event-id")!;
+    await u.click(within(detail()).getByRole("button", { name: "Next event" }));
+    const second = chips.find((b) => b.getAttribute("aria-pressed") === "true")!;
+    const secondId = second.getAttribute("data-event-id")!;
+    const order = doc.events.map((e) => e.id);
+    expect(order.indexOf(secondId)).toBe(order.indexOf(firstId) + 1);
+    const ev = doc.events.find((e) => e.id === secondId)!;
+    const card = within(detail()).getByText(secondId).closest("div")!.parentElement!;
+    expect(card).toHaveTextContent(`${timecode(ev.start_ms)} – ${timecode(ev.end_ms)}`);
+  });
+
+  it("explains a zero AI count when no bundle was supplied", async () => {
+    const { u } = await analyzeWith();
+    await u.click(screen.getByRole("button", { name: /AI reviewed/ }));
+    expect(await screen.findByText(/No AI evaluation bundle was supplied with this analysis/)).toBeInTheDocument();
   });
 });
 

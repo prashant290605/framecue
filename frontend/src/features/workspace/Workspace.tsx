@@ -112,12 +112,12 @@ function WorkspaceView() {
       {desktop ? (
         <div className="grid min-h-0 flex-1 grid-cols-[392px_1fr] xl:grid-cols-[420px_1fr]">
           <div className="flex min-h-0 flex-col border-r border-line">{list}</div>
-          <main className="min-h-0 overflow-y-auto bg-surface" aria-label="Candidate detail">
+          <main className="relative min-h-0 overflow-y-auto bg-surface" aria-label="Candidate detail">
             {aiEmpty ? <AiExplainer /> : <Detail />}
           </main>
         </div>
       ) : mobileDetail && selectedId && !aiEmpty ? (
-        <main className="min-h-0 flex-1 overflow-y-auto bg-surface" aria-label="Candidate detail">
+        <main className="relative min-h-0 flex-1 overflow-y-auto bg-surface" aria-label="Candidate detail">
           <Detail onBack={() => setMobileDetail(false)} />
         </main>
       ) : (
