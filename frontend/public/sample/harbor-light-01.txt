@@ -1,0 +1,160 @@
+EPISODE NUMBER: Episode 1
+EPISODE LOGLINE: A lighthouse keeper hears a dead man's voice on the storm radio.
+CONTINUITY NOTES: Fictional sample written for PromoLens. Not derived from any real screenplay.
+
+--- SCRIPT START ---
+
+SCENE 01
+Scene heading: INT. LIGHTHOUSE LAMP ROOM – NIGHT
+Scene start: 00:00.00
+Scene end: 00:30.01
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:00.00) | End: (00:05.00)
+Wide shot of the lamp room as the great lens turns slowly.
+
+**ACTION:**
+Start: (00:00.40) | End: (00:03.00)
+Mara wipes salt spray from the glass with a rag.
+
+**SOUND FX:**
+Start: (00:03.25) | End: (00:04.75)
+Thunder rolls across the bay.
+
+**CAMERA:**
+Start: (00:05.00) | End: (00:09.65)
+Close-up on Mara, exhausted, rain streaking the window behind her.
+
+**MARA (Tired):**
+Start: (00:05.40) | End: (00:09.40)
+"Third storm this week. The lens won't last the winter."
+
+**CAMERA:**
+Start: (00:09.65) | End: (00:25.75)
+Insert on the desk radio as its dial light flickers.
+
+**SOUND FX:**
+Start: (00:10.05) | End: (00:11.55)
+Static, then a faint voice breaking through.
+
+**VOICE ON RADIO (O.S., Distorted):**
+Start: (00:11.80) | End: (00:16.46)
+"Harbor Light, do you read? A boat is coming in without lights."
+
+**ACTION:**
+Start: (00:16.71) | End: (00:19.31)
+Mara snatches up the radio handset.
+
+**MARA (Urgent):**
+Start: (00:19.56) | End: (00:22.24)
+"Who is this? Identify your vessel."
+
+**VOICE ON RADIO (O.S.):**
+Start: (00:22.49) | End: (00:25.50)
+"Tell Mara her brother is on board."
+
+**CAMERA:**
+Start: (00:25.75) | End: (00:30.01)
+Extreme close-up on Mara's face, frozen.
+
+**MARA (Whispering):**
+Start: (00:26.15) | End: (00:29.16)
+"Elias has been dead for six years."
+
+SCENE 02
+Scene heading: INT. LIGHTHOUSE STAIRS – NIGHT
+Scene start: 00:30.01
+Scene end: 00:53.03
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:30.01) | End: (00:35.01)
+Tracking shot as Mara runs down the spiral stairs.
+
+**ACTION:**
+Start: (00:30.41) | End: (00:33.01)
+Her lantern swings wildly against the stone walls.
+
+**SOUND FX:**
+Start: (00:33.26) | End: (00:34.76)
+A heavy knock on the iron door below.
+
+**CAMERA:**
+Start: (00:35.01) | End: (00:43.79)
+Low angle on the door as rainwater pours beneath it.
+
+**MARA (Breathless):**
+Start: (00:35.41) | End: (00:36.77)
+"Who's there?"
+
+**ELIAS (O.S., Hoarse):**
+Start: (00:37.02) | End: (00:40.69)
+"You kept the light burning. I knew you would."
+
+**ACTION:**
+Start: (00:40.94) | End: (00:43.54)
+Mara slides the bolt back with shaking hands.
+
+**CAMERA:**
+Start: (00:43.79) | End: (00:49.76)
+The door swings open on a soaked man holding a sealed envelope.
+
+**ELIAS (Quiet):**
+Start: (00:44.19) | End: (00:49.51)
+"This was never meant for you. But you have to read it before dawn."
+
+**CAMERA:**
+Start: (00:49.76) | End: (00:53.03)
+Close-up on the wax seal, pressed with the harbor master's crest.
+
+**MARA (Stunned):**
+Start: (00:50.16) | End: (00:52.18)
+"That's Captain Rhee's seal."
+
+SCENE 03
+Scene heading: EXT. LIGHTHOUSE GALLERY – NIGHT
+Scene start: 00:53.03
+Scene end: 01:13.46
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:53.03) | End: (01:02.80)
+Mara and Elias on the gallery as the storm begins to ease.
+
+**MARA (Shaken):**
+Start: (00:53.43) | End: (00:56.44)
+"Where have you been all this time?"
+
+**ELIAS (Evasive):**
+Start: (00:56.69) | End: (00:59.70)
+"On the boats Rhee said were lost."
+
+**ACTION:**
+Start: (00:59.95) | End: (01:02.55)
+Elias rolls up his sleeve to show a rope-burn scar.
+
+**CAMERA:**
+Start: (01:02.80) | End: (01:08.87)
+Close-up on the scar, pale against his wet skin.
+
+**ELIAS (Low):**
+Start: (01:03.20) | End: (01:06.87)
+"He keeps the crews quiet. One way or another."
+
+**SOUND FX:**
+Start: (01:07.12) | End: (01:08.62)
+A distant engine coughs out on the water.
+
+**CAMERA:**
+Start: (01:08.87) | End: (01:13.46)
+Mara turns toward the dark bay.
+
+**MARA (Alarmed):**
+Start: (01:09.27) | End: (01:12.61)
+"Someone's out there right now. With no lights."
+
+--- SCRIPT END ---

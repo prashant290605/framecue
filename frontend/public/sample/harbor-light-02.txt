@@ -1,0 +1,144 @@
+EPISODE NUMBER: Episode 2
+EPISODE LOGLINE: A sealed letter suggests the harbor's wrecks were no accident.
+CONTINUITY NOTES: Fictional sample written for PromoLens. Not derived from any real screenplay.
+
+--- SCRIPT START ---
+
+SCENE 01
+Scene heading: INT. LIGHTHOUSE KITCHEN – NIGHT
+Scene start: 00:00.00
+Scene end: 00:23.03
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:00.00) | End: (00:11.52)
+Elias drips by the stove while Mara keeps the table between them.
+
+**MARA (Cold):**
+Start: (00:00.40) | End: (00:02.75)
+"Six years. Not one word."
+
+**ELIAS (Defensive):**
+Start: (00:03.00) | End: (00:06.67)
+"Rhee told everyone I drowned. It kept me alive."
+
+**ACTION:**
+Start: (00:06.92) | End: (00:09.52)
+Mara breaks the wax seal with her thumb.
+
+**SOUND FX:**
+Start: (00:09.77) | End: (00:11.27)
+Paper tears.
+
+**CAMERA:**
+Start: (00:11.52) | End: (00:18.77)
+Insert on the letter: a column of ship names and dates.
+
+**MARA (Reading, Confused):**
+Start: (00:11.92) | End: (00:15.26)
+"These are the boats lost on the reef."
+
+**ELIAS (Grim):**
+Start: (00:15.51) | End: (00:18.52)
+"They weren't lost. They were steered there."
+
+**CAMERA:**
+Start: (00:18.77) | End: (00:23.03)
+Mara looks up at the lens turning in the dark above them.
+
+**MARA (Realising):**
+Start: (00:19.17) | End: (00:22.18)
+"Someone dimmed the light on those nights."
+
+SCENE 02
+Scene heading: EXT. HARBOR PIER – DAWN
+Scene start: 00:23.03
+Scene end: 00:48.81
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:23.03) | End: (00:34.12)
+Wide shot of the empty pier in grey morning light.
+
+**ACTION:**
+Start: (00:23.43) | End: (00:26.03)
+Captain Rhee walks the boards with his collar turned up.
+
+**RHEE (Friendly):**
+Start: (00:26.28) | End: (00:29.29)
+"Mara. You look like you haven't slept."
+
+**MARA (Guarded):**
+Start: (00:29.54) | End: (00:33.87)
+"The radio kept me up. A boat came in without lights."
+
+**CAMERA:**
+Start: (00:34.12) | End: (00:44.88)
+Close-up on Rhee's hand tightening around his cane.
+
+**RHEE (Too Calm):**
+Start: (00:34.52) | End: (00:38.19)
+"No boat came in last night. I'd have known."
+
+**ACTION:**
+Start: (00:38.44) | End: (00:41.04)
+Mara steps back toward the lighthouse path.
+
+**RHEE (Soft, Threatening):**
+Start: (00:41.29) | End: (00:44.63)
+"Whatever you found, burn it. For Elias's sake."
+
+**CAMERA:**
+Start: (00:44.88) | End: (00:48.81)
+Extreme close-up on Mara as the gulls go quiet.
+
+**MARA (Whispering):**
+Start: (00:45.28) | End: (00:47.96)
+"How do you know about Elias?"
+
+SCENE 03
+Scene heading: INT. HARBOR OFFICE – DAY
+Scene start: 00:48.81
+Scene end: 01:04.65
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:48.81) | End: (00:55.98)
+Rhee's office, sea charts pinned to every wall.
+
+**ACTION:**
+Start: (00:49.21) | End: (00:51.81)
+Mara slips through the unlocked door and closes it softly.
+
+**MARA (Whispering, To Herself):**
+Start: (00:52.06) | End: (00:55.73)
+"A chart for every night a boat went down."
+
+**CAMERA:**
+Start: (00:55.98) | End: (01:00.98)
+Insert on a chart: the reef circled in red ink.
+
+**SOUND FX:**
+Start: (00:56.38) | End: (00:57.88)
+Footsteps climb the wooden stairs outside.
+
+**ACTION:**
+Start: (00:58.13) | End: (01:00.73)
+Mara folds the chart into her coat.
+
+**CAMERA:**
+Start: (01:00.98) | End: (01:03.65)
+The brass door handle begins to turn.
+
+**RHEE (O.S., Sharp):**
+Start: (01:01.38) | End: (01:03.40)
+"Who's in my office?"
+
+**CAMERA:**
+Start: (01:03.65) | End: (01:04.65)
+Mara presses herself flat behind the door.
+
+--- SCRIPT END ---

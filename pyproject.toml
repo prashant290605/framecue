@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "promolens"
+version = "0.0.1"
+description = "Find and rank 20-60 second promo clips in timestamped microdrama screenplays."
+readme = "README.md"
+requires-python = ">=3.11"
+# Runtime dependencies are added in the phase that first needs them (see docs/PLAN.md).
+dependencies = [
+    "pydantic>=2.6,<3",
+    "httpx>=0.27,<1",
+    "fastapi>=0.115,<1",
+    "uvicorn>=0.30,<1",
+    "python-multipart>=0.0.9,<1",
+]
+
+[project.scripts]
+promolens = "promolens.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = ["private: needs the confidential screenplay ZIP via PROMOLENS_TEST_ZIP"]
+# Starlette deprecates its httpx-based TestClient in favour of httpx2; harmless here.
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient`"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+
+# Vercel FastAPI: serve the built frontend (app.frontend) from the CDN. Vercel otherwise keeps
+# static files in the function whenever top-level middleware exists. Our middleware only adds
+# headers to /api responses and CORS is irrelevant for same-origin static files, so bypassing
+# the function for static assets is safe. See docs/PLAN.md §17.
+[tool.vercel.fastapi.static]
+cdn = true

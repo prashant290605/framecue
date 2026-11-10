@@ -1,0 +1,1306 @@
+{
+ "components": {
+  "schemas": {
+   "AIJudgement": {
+    "additionalProperties": false,
+    "description": "A genuine, validated model evaluation. Every id here was checked against the parsed\nepisode by interval intersection.",
+    "properties": {
+     "cache_key": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cache Key"
+     },
+     "cliffhanger_event_ids": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Cliffhanger Event Ids",
+      "type": "array"
+     },
+     "cliffhanger_explanation": {
+      "title": "Cliffhanger Explanation",
+      "type": "string"
+     },
+     "cliffhanger_score": {
+      "maximum": 5.0,
+      "minimum": 0.0,
+      "title": "Cliffhanger Score",
+      "type": "integer"
+     },
+     "hook_event_ids": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Hook Event Ids",
+      "type": "array"
+     },
+     "hook_explanation": {
+      "title": "Hook Explanation",
+      "type": "string"
+     },
+     "hook_score": {
+      "maximum": 5.0,
+      "minimum": 0.0,
+      "title": "Hook Score",
+      "type": "integer"
+     },
+     "model_reported": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Model Reported"
+     },
+     "model_requested": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Model Requested"
+     },
+     "pacing_score": {
+      "maximum": 5.0,
+      "minimum": 0.0,
+      "title": "Pacing Score",
+      "type": "integer"
+     },
+     "prompt_version": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Prompt Version"
+     },
+     "provider": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Provider"
+     },
+     "rubric_weights": {
+      "additionalProperties": {
+       "type": "number"
+      },
+      "title": "Rubric Weights",
+      "type": "object"
+     },
+     "standalone_score": {
+      "maximum": 5.0,
+      "minimum": 0.0,
+      "title": "Standalone Score",
+      "type": "integer"
+     },
+     "warnings": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+     },
+     "weakness": {
+      "title": "Weakness",
+      "type": "string"
+     },
+     "weighted_score": {
+      "maximum": 100.0,
+      "minimum": 0.0,
+      "title": "Weighted Score",
+      "type": "number"
+     },
+     "why_it_works": {
+      "title": "Why It Works",
+      "type": "string"
+     }
+    },
+    "required": [
+     "weighted_score",
+     "hook_score",
+     "cliffhanger_score",
+     "standalone_score",
+     "pacing_score",
+     "rubric_weights",
+     "hook_event_ids",
+     "cliffhanger_event_ids",
+     "hook_explanation",
+     "cliffhanger_explanation",
+     "why_it_works",
+     "weakness",
+     "warnings",
+     "model_requested",
+     "model_reported",
+     "provider",
+     "prompt_version",
+     "cache_key"
+    ],
+    "title": "AIJudgement",
+    "type": "object"
+   },
+   "AIProfile": {
+    "additionalProperties": false,
+    "properties": {
+     "model": {
+      "title": "Model",
+      "type": "string"
+     },
+     "prompt_version": {
+      "title": "Prompt Version",
+      "type": "string"
+     },
+     "provider": {
+      "title": "Provider",
+      "type": "string"
+     },
+     "reasoning_effort": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reasoning Effort"
+     },
+     "scoring_rules": {
+      "title": "Scoring Rules",
+      "type": "string"
+     }
+    },
+    "required": [
+     "provider",
+     "model",
+     "reasoning_effort",
+     "prompt_version",
+     "scoring_rules"
+    ],
+    "title": "AIProfile",
+    "type": "object"
+   },
+   "AIStatus": {
+    "enum": [
+     "ai_evaluated",
+     "not_evaluated",
+     "failed"
+    ],
+    "title": "AIStatus",
+    "type": "string"
+   },
+   "AnalysisDocument": {
+    "additionalProperties": false,
+    "properties": {
+     "ai_evaluations": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/AIJudgement"
+      },
+      "title": "Ai Evaluations",
+      "type": "object"
+     },
+     "candidates": {
+      "items": {
+       "$ref": "#/components/schemas/DocCandidate"
+      },
+      "title": "Candidates",
+      "type": "array"
+     },
+     "coverage": {
+      "$ref": "#/components/schemas/EvaluationCoverage"
+     },
+     "episodes": {
+      "items": {
+       "$ref": "#/components/schemas/DocEpisode"
+      },
+      "title": "Episodes",
+      "type": "array"
+     },
+     "events": {
+      "items": {
+       "$ref": "#/components/schemas/DocEvent"
+      },
+      "title": "Events",
+      "type": "array"
+     },
+     "notes": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+     },
+     "schema_version": {
+      "const": "promolens-analysis-v1",
+      "default": "promolens-analysis-v1",
+      "title": "Schema Version",
+      "type": "string"
+     },
+     "summary": {
+      "$ref": "#/components/schemas/DocSummary"
+     },
+     "views": {
+      "$ref": "#/components/schemas/DocViews"
+     }
+    },
+    "required": [
+     "summary",
+     "coverage",
+     "episodes",
+     "events",
+     "candidates",
+     "ai_evaluations",
+     "views",
+     "notes"
+    ],
+    "title": "AnalysisDocument",
+    "type": "object"
+   },
+   "BaselineInfo": {
+    "additionalProperties": false,
+    "properties": {
+     "components": {
+      "additionalProperties": {
+       "type": "number"
+      },
+      "title": "Components",
+      "type": "object"
+     },
+     "end_anchors": {
+      "items": {
+       "type": "string"
+      },
+      "title": "End Anchors",
+      "type": "array"
+     },
+     "method": {
+      "title": "Method",
+      "type": "string"
+     },
+     "priority": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Priority",
+      "type": "number"
+     },
+     "selection_reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Selection Reason"
+     },
+     "start_anchors": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Start Anchors",
+      "type": "array"
+     }
+    },
+    "required": [
+     "method",
+     "priority",
+     "components",
+     "start_anchors",
+     "end_anchors",
+     "selection_reason"
+    ],
+    "title": "BaselineInfo",
+    "type": "object"
+   },
+   "Body_analyze_api_analyze_post": {
+    "properties": {
+     "ai_bundle": {
+      "anyOf": [
+       {
+        "contentMediaType": "application/octet-stream",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ai Bundle"
+     },
+     "files": {
+      "items": {
+       "contentMediaType": "application/octet-stream",
+       "type": "string"
+      },
+      "title": "Files",
+      "type": "array"
+     }
+    },
+    "required": [
+     "files"
+    ],
+    "title": "Body_analyze_api_analyze_post",
+    "type": "object"
+   },
+   "CacheAudit": {
+    "additionalProperties": false,
+    "description": "What was found in the AI cache and why entries were or were not used.",
+    "properties": {
+     "cache_dir_present": {
+      "title": "Cache Dir Present",
+      "type": "boolean"
+     },
+     "entries_scanned": {
+      "title": "Entries Scanned",
+      "type": "integer"
+     },
+     "invalid_on_revalidation": {
+      "description": "Cache keys rejected.",
+      "items": {
+       "type": "string"
+      },
+      "title": "Invalid On Revalidation",
+      "type": "array"
+     },
+     "not_in_this_input": {
+      "title": "Not In This Input",
+      "type": "integer"
+     },
+     "other_profile_or_input": {
+      "title": "Other Profile Or Input",
+      "type": "integer"
+     },
+     "source": {
+      "default": "none",
+      "description": "Where AI evaluations were looked up.",
+      "enum": [
+       "local_cache",
+       "uploaded_bundle",
+       "none"
+      ],
+      "title": "Source",
+      "type": "string"
+     },
+     "stale_prompt_version": {
+      "title": "Stale Prompt Version",
+      "type": "integer"
+     },
+     "stale_prompt_versions_seen": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Stale Prompt Versions Seen",
+      "type": "array"
+     },
+     "used": {
+      "title": "Used",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "cache_dir_present",
+     "entries_scanned",
+     "used",
+     "invalid_on_revalidation",
+     "stale_prompt_version",
+     "other_profile_or_input",
+     "not_in_this_input",
+     "stale_prompt_versions_seen"
+    ],
+    "title": "CacheAudit",
+    "type": "object"
+   },
+   "DocCandidate": {
+    "additionalProperties": false,
+    "properties": {
+     "ai_alternative_of": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ai Alternative Of"
+     },
+     "ai_failure_reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ai Failure Reason"
+     },
+     "ai_rank": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ai Rank"
+     },
+     "baseline": {
+      "$ref": "#/components/schemas/BaselineInfo"
+     },
+     "candidate_id": {
+      "title": "Candidate Id",
+      "type": "string"
+     },
+     "coverage_alternative_of": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Coverage Alternative Of"
+     },
+     "coverage_rank": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Coverage Rank"
+     },
+     "duration_ms": {
+      "title": "Duration Ms",
+      "type": "integer"
+     },
+     "end_ms": {
+      "title": "End Ms",
+      "type": "integer"
+     },
+     "end_timestamp": {
+      "title": "End Timestamp",
+      "type": "string"
+     },
+     "episode_number": {
+      "title": "Episode Number",
+      "type": "integer"
+     },
+     "evaluation_status": {
+      "$ref": "#/components/schemas/AIStatus"
+     },
+     "segments": {
+      "items": {
+       "$ref": "#/components/schemas/Segment"
+      },
+      "title": "Segments",
+      "type": "array"
+     },
+     "source_events": {
+      "$ref": "#/components/schemas/SourceEvents"
+     },
+     "start_ms": {
+      "title": "Start Ms",
+      "type": "integer"
+     },
+     "start_timestamp": {
+      "title": "Start Timestamp",
+      "type": "string"
+     },
+     "structural": {
+      "$ref": "#/components/schemas/StructuralFlags"
+     }
+    },
+    "required": [
+     "candidate_id",
+     "episode_number",
+     "segments",
+     "start_ms",
+     "end_ms",
+     "start_timestamp",
+     "end_timestamp",
+     "duration_ms",
+     "evaluation_status",
+     "ai_failure_reason",
+     "baseline",
+     "structural",
+     "source_events",
+     "ai_rank",
+     "ai_alternative_of",
+     "coverage_rank",
+     "coverage_alternative_of"
+    ],
+    "title": "DocCandidate",
+    "type": "object"
+   },
+   "DocEpisode": {
+    "additionalProperties": false,
+    "properties": {
+     "ai_evaluated_count": {
+      "title": "Ai Evaluated Count",
+      "type": "integer"
+     },
+     "best_ai_candidate_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Best Ai Candidate Id"
+     },
+     "candidate_count": {
+      "title": "Candidate Count",
+      "type": "integer"
+     },
+     "continuity_notes": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Continuity Notes"
+     },
+     "duration_ms": {
+      "title": "Duration Ms",
+      "type": "integer"
+     },
+     "duration_timestamp": {
+      "title": "Duration Timestamp",
+      "type": "string"
+     },
+     "episode_number": {
+      "title": "Episode Number",
+      "type": "integer"
+     },
+     "event_range": {
+      "description": "[first, last) indices into events.",
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "integer"
+       }
+      ],
+      "title": "Event Range",
+      "type": "array"
+     },
+     "logline": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Logline"
+     },
+     "parse_warnings": {
+      "title": "Parse Warnings",
+      "type": "integer"
+     },
+     "scenes": {
+      "items": {
+       "$ref": "#/components/schemas/DocScene"
+      },
+      "title": "Scenes",
+      "type": "array"
+     },
+     "source_name": {
+      "title": "Source Name",
+      "type": "string"
+     },
+     "top_coverage_candidate_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Top Coverage Candidate Id"
+     }
+    },
+    "required": [
+     "episode_number",
+     "source_name",
+     "duration_ms",
+     "duration_timestamp",
+     "logline",
+     "continuity_notes",
+     "scenes",
+     "event_range",
+     "candidate_count",
+     "ai_evaluated_count",
+     "best_ai_candidate_id",
+     "top_coverage_candidate_id",
+     "parse_warnings"
+    ],
+    "title": "DocEpisode",
+    "type": "object"
+   },
+   "DocEvent": {
+    "additionalProperties": false,
+    "properties": {
+     "annotations": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Annotations",
+      "type": "array"
+     },
+     "end_ms": {
+      "title": "End Ms",
+      "type": "integer"
+     },
+     "episode": {
+      "title": "Episode",
+      "type": "integer"
+     },
+     "id": {
+      "title": "Id",
+      "type": "string"
+     },
+     "scene": {
+      "title": "Scene",
+      "type": "integer"
+     },
+     "speaker": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Speaker"
+     },
+     "start_ms": {
+      "title": "Start Ms",
+      "type": "integer"
+     },
+     "text": {
+      "title": "Text",
+      "type": "string"
+     },
+     "type": {
+      "title": "Type",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "episode",
+     "scene",
+     "type",
+     "start_ms",
+     "end_ms",
+     "speaker",
+     "annotations",
+     "text"
+    ],
+    "title": "DocEvent",
+    "type": "object"
+   },
+   "DocScene": {
+    "additionalProperties": false,
+    "properties": {
+     "end_ms": {
+      "title": "End Ms",
+      "type": "integer"
+     },
+     "heading": {
+      "title": "Heading",
+      "type": "string"
+     },
+     "scene_number": {
+      "title": "Scene Number",
+      "type": "integer"
+     },
+     "start_ms": {
+      "title": "Start Ms",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "scene_number",
+     "heading",
+     "start_ms",
+     "end_ms"
+    ],
+    "title": "DocScene",
+    "type": "object"
+   },
+   "DocSummary": {
+    "additionalProperties": false,
+    "properties": {
+     "ai_source": {
+      "enum": [
+       "local_cache",
+       "uploaded_bundle",
+       "none"
+      ],
+      "title": "Ai Source",
+      "type": "string"
+     },
+     "analyzed_at": {
+      "title": "Analyzed At",
+      "type": "string"
+     },
+     "candidates": {
+      "title": "Candidates",
+      "type": "integer"
+     },
+     "episodes": {
+      "title": "Episodes",
+      "type": "integer"
+     },
+     "events": {
+      "title": "Events",
+      "type": "integer"
+     },
+     "input": {
+      "$ref": "#/components/schemas/InputInfo"
+     },
+     "live_ai_calls": {
+      "title": "Live Ai Calls",
+      "type": "integer"
+     },
+     "parse": {
+      "$ref": "#/components/schemas/ParseSummary"
+     },
+     "scenes": {
+      "title": "Scenes",
+      "type": "integer"
+     },
+     "timings_ms": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "title": "Timings Ms",
+      "type": "object"
+     },
+     "versions": {
+      "additionalProperties": {
+       "type": "string"
+      },
+      "title": "Versions",
+      "type": "object"
+     }
+    },
+    "required": [
+     "analyzed_at",
+     "input",
+     "episodes",
+     "scenes",
+     "events",
+     "candidates",
+     "parse",
+     "timings_ms",
+     "versions",
+     "live_ai_calls",
+     "ai_source"
+    ],
+    "title": "DocSummary",
+    "type": "object"
+   },
+   "DocView": {
+    "additionalProperties": false,
+    "properties": {
+     "label": {
+      "title": "Label",
+      "type": "string"
+     },
+     "order": {
+      "description": "All members in display order: each primary followed by its alternatives.",
+      "items": {
+       "type": "string"
+      },
+      "title": "Order",
+      "type": "array"
+     },
+     "primaries": {
+      "title": "Primaries",
+      "type": "integer"
+     },
+     "provisional": {
+      "title": "Provisional",
+      "type": "boolean"
+     },
+     "provisional_reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Provisional Reason"
+     },
+     "score_scale_max": {
+      "title": "Score Scale Max",
+      "type": "number"
+     },
+     "scoring_system": {
+      "title": "Scoring System",
+      "type": "string"
+     },
+     "view": {
+      "enum": [
+       "ai",
+       "coverage"
+      ],
+      "title": "View",
+      "type": "string"
+     }
+    },
+    "required": [
+     "view",
+     "scoring_system",
+     "score_scale_max",
+     "label",
+     "provisional",
+     "provisional_reason",
+     "primaries",
+     "order"
+    ],
+    "title": "DocView",
+    "type": "object"
+   },
+   "DocViews": {
+    "additionalProperties": false,
+    "properties": {
+     "ai": {
+      "$ref": "#/components/schemas/DocView"
+     },
+     "coverage": {
+      "$ref": "#/components/schemas/DocView"
+     }
+    },
+    "required": [
+     "ai",
+     "coverage"
+    ],
+    "title": "DocViews",
+    "type": "object"
+   },
+   "EvaluationCoverage": {
+    "additionalProperties": false,
+    "properties": {
+     "ai_evaluated": {
+      "title": "Ai Evaluated",
+      "type": "integer"
+     },
+     "cache": {
+      "$ref": "#/components/schemas/CacheAudit"
+     },
+     "candidate_coverage": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Candidate Coverage",
+      "type": "number"
+     },
+     "complete": {
+      "title": "Complete",
+      "type": "boolean"
+     },
+     "episode_coverage": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Episode Coverage",
+      "type": "number"
+     },
+     "episodes_with_ai": {
+      "title": "Episodes With Ai",
+      "type": "integer"
+     },
+     "episodes_without_ai": {
+      "items": {
+       "type": "integer"
+      },
+      "title": "Episodes Without Ai",
+      "type": "array"
+     },
+     "failed": {
+      "title": "Failed",
+      "type": "integer"
+     },
+     "not_evaluated": {
+      "title": "Not Evaluated",
+      "type": "integer"
+     },
+     "profile": {
+      "$ref": "#/components/schemas/AIProfile"
+     },
+     "total_candidates": {
+      "title": "Total Candidates",
+      "type": "integer"
+     },
+     "total_episodes": {
+      "title": "Total Episodes",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "total_episodes",
+     "total_candidates",
+     "ai_evaluated",
+     "not_evaluated",
+     "failed",
+     "episodes_with_ai",
+     "episodes_without_ai",
+     "candidate_coverage",
+     "episode_coverage",
+     "complete",
+     "profile",
+     "cache"
+    ],
+    "title": "EvaluationCoverage",
+    "type": "object"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "title": "Detail",
+      "type": "array"
+     }
+    },
+    "title": "HTTPValidationError",
+    "type": "object"
+   },
+   "InputInfo": {
+    "additionalProperties": false,
+    "properties": {
+     "files": {
+      "title": "Files",
+      "type": "integer"
+     },
+     "kind": {
+      "enum": [
+       "zip",
+       "txt",
+       "directory",
+       "files"
+      ],
+      "title": "Kind",
+      "type": "string"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     },
+     "sha256": {
+      "title": "Sha256",
+      "type": "string"
+     },
+     "size_bytes": {
+      "title": "Size Bytes",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "name",
+     "kind",
+     "sha256",
+     "size_bytes",
+     "files"
+    ],
+    "title": "InputInfo",
+    "type": "object"
+   },
+   "ParseSummary": {
+    "additionalProperties": false,
+    "properties": {
+     "errors": {
+      "title": "Errors",
+      "type": "integer"
+     },
+     "excluded_sources": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Excluded Sources",
+      "type": "array"
+     },
+     "info": {
+      "title": "Info",
+      "type": "integer"
+     },
+     "issue_codes": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "title": "Issue Codes",
+      "type": "object"
+     },
+     "warnings": {
+      "title": "Warnings",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "errors",
+     "warnings",
+     "info",
+     "excluded_sources",
+     "issue_codes"
+    ],
+    "title": "ParseSummary",
+    "type": "object"
+   },
+   "Segment": {
+    "additionalProperties": false,
+    "properties": {
+     "duration_ms": {
+      "exclusiveMinimum": 0.0,
+      "title": "Duration Ms",
+      "type": "integer"
+     },
+     "end_ms": {
+      "minimum": 0.0,
+      "title": "End Ms",
+      "type": "integer"
+     },
+     "end_timestamp": {
+      "title": "End Timestamp",
+      "type": "string"
+     },
+     "index": {
+      "minimum": 0.0,
+      "title": "Index",
+      "type": "integer"
+     },
+     "start_ms": {
+      "minimum": 0.0,
+      "title": "Start Ms",
+      "type": "integer"
+     },
+     "start_timestamp": {
+      "title": "Start Timestamp",
+      "type": "string"
+     }
+    },
+    "required": [
+     "index",
+     "start_ms",
+     "end_ms",
+     "start_timestamp",
+     "end_timestamp",
+     "duration_ms"
+    ],
+    "title": "Segment",
+    "type": "object"
+   },
+   "SourceEvents": {
+    "additionalProperties": false,
+    "description": "Structural event references: events intersecting the first 3 s and the last 5 s.\nThese are windows computed by code, not model evidence.",
+    "properties": {
+     "ending_window": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Ending Window",
+      "type": "array"
+     },
+     "opening_window": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Opening Window",
+      "type": "array"
+     }
+    },
+    "required": [
+     "opening_window",
+     "ending_window"
+    ],
+    "title": "SourceEvents",
+    "type": "object"
+   },
+   "StructuralFlags": {
+    "additionalProperties": false,
+    "description": "Deterministic facts about the window's boundaries. Not quality judgements.",
+    "properties": {
+     "clean_end_cut": {
+      "title": "Clean End Cut",
+      "type": "boolean"
+     },
+     "clean_start_cut": {
+      "title": "Clean Start Cut",
+      "type": "boolean"
+     },
+     "crosses_scene": {
+      "title": "Crosses Scene",
+      "type": "boolean"
+     },
+     "ends_at_episode_end": {
+      "title": "Ends At Episode End",
+      "type": "boolean"
+     },
+     "ends_at_scene_end": {
+      "title": "Ends At Scene End",
+      "type": "boolean"
+     },
+     "starts_at_scene_start": {
+      "title": "Starts At Scene Start",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "crosses_scene",
+     "starts_at_scene_start",
+     "ends_at_scene_end",
+     "ends_at_episode_end",
+     "clean_start_cut",
+     "clean_end_cut"
+    ],
+    "title": "StructuralFlags",
+    "type": "object"
+   },
+   "ValidationError": {
+    "properties": {
+     "ctx": {
+      "title": "Context",
+      "type": "object"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "title": "Location",
+      "type": "array"
+     },
+     "msg": {
+      "title": "Message",
+      "type": "string"
+     },
+     "type": {
+      "title": "Error Type",
+      "type": "string"
+     }
+    },
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError",
+    "type": "object"
+   }
+  }
+ },
+ "info": {
+  "title": "PromoLens (stateless)",
+  "version": "0.0.1"
+ },
+ "openapi": "3.1.0",
+ "paths": {
+  "/api/analyze": {
+   "post": {
+    "operationId": "analyze_api_analyze_post",
+    "requestBody": {
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_analyze_api_analyze_post"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AnalysisDocument"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Analyze"
+   }
+  },
+  "/api/health": {
+   "get": {
+    "operationId": "health_api_health_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Health Api Health Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Health"
+   }
+  }
+ }
+}

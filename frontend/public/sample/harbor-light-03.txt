@@ -1,0 +1,152 @@
+EPISODE NUMBER: Episode 3
+EPISODE LOGLINE: Mara sets a trap in the dark lamp room as a ship drifts toward the reef.
+CONTINUITY NOTES: Fictional sample written for PromoLens. Not derived from any real screenplay.
+
+--- SCRIPT START ---
+
+SCENE 01
+Scene heading: INT. LIGHTHOUSE LAMP ROOM – DUSK
+Scene start: 00:00.00
+Scene end: 00:23.83
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:00.00) | End: (00:13.50)
+Mara and Elias spread the letter beside the lamp controls.
+
+**ELIAS (Urgent):**
+Start: (00:00.40) | End: (00:04.73)
+"He'll come tonight. He still has a key to this room."
+
+**ACTION:**
+Start: (00:04.98) | End: (00:07.58)
+Mara wires a small brass bell to the trapdoor hinge.
+
+**SOUND FX:**
+Start: (00:07.83) | End: (00:09.33)
+Wind howls through the iron gallery.
+
+**MARA (Determined):**
+Start: (00:09.58) | End: (00:13.25)
+"Then we let him think the light is his."
+
+**CAMERA:**
+Start: (00:13.50) | End: (00:15.65)
+The lens slows as Mara pulls the main power lever.
+
+**SOUND FX:**
+Start: (00:13.90) | End: (00:15.40)
+The motor winds down into silence.
+
+**CAMERA:**
+Start: (00:15.65) | End: (00:23.83)
+Darkness. Only Elias's lantern glows.
+
+**ELIAS (Uneasy):**
+Start: (00:16.05) | End: (00:20.05)
+"If a boat is out there, we just blinded it."
+
+**MARA (Firm):**
+Start: (00:20.30) | End: (00:22.98)
+"Two minutes. That's all we need."
+
+SCENE 02
+Scene heading: INT. LIGHTHOUSE STAIRS – NIGHT
+Scene start: 00:23.83
+Scene end: 00:50.14
+
+Actions and dialogue:
+
+**SOUND FX:**
+Start: (00:23.83) | End: (00:25.33)
+The trapdoor bell rings once.
+
+**CAMERA:**
+Start: (00:25.58) | End: (00:37.00)
+Low angle as a figure climbs the stairs behind a lantern.
+
+**RHEE (O.S., Calling):**
+Start: (00:25.98) | End: (00:29.32)
+"Mara? The light's gone out. Let me help."
+
+**ACTION:**
+Start: (00:29.57) | End: (00:32.17)
+Mara steps into the lantern light, holding the letter.
+
+**MARA (Steady):**
+Start: (00:32.42) | End: (00:36.75)
+"Help the way you helped the Seabird? And the Northern Star?"
+
+**CAMERA:**
+Start: (00:37.00) | End: (00:44.13)
+Rhee's face hardens.
+
+**RHEE (Cold):**
+Start: (00:37.40) | End: (00:39.42)
+"Give me the letter."
+
+**ACTION:**
+Start: (00:39.67) | End: (00:42.27)
+Elias steps out of the shadows behind him.
+
+**ELIAS (Quiet):**
+Start: (00:42.52) | End: (00:43.88)
+"Hello, Captain."
+
+**CAMERA:**
+Start: (00:44.13) | End: (00:50.14)
+Extreme close-up on Rhee as the lens flickers back to life.
+
+**SOUND FX:**
+Start: (00:44.53) | End: (00:46.03)
+A ship's horn blares close to the rocks.
+
+**MARA (Alarmed):**
+Start: (00:46.28) | End: (00:49.29)
+"That's a boat. Right on the reef."
+
+SCENE 03
+Scene heading: EXT. THE REEF – NIGHT
+Scene start: 00:50.14
+Scene end: 01:04.74
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:50.14) | End: (00:52.29)
+A fishing boat drifts toward the rocks, its deck lamps dark.
+
+**SOUND FX:**
+Start: (00:50.54) | End: (00:52.04)
+Waves crash against the hull.
+
+**CAMERA:**
+Start: (00:52.29) | End: (00:58.47)
+The lighthouse beam sweeps back across the water.
+
+**ACTION:**
+Start: (00:52.69) | End: (00:55.29)
+The crew scramble to haul the wheel around.
+
+**CREW MEMBER (Shouting):**
+Start: (00:55.54) | End: (00:58.22)
+"Hard to port! The light's back!"
+
+**CAMERA:**
+Start: (00:58.47) | End: (01:00.81)
+Wide shot as the boat slides past the reef with a metre to spare.
+
+**ELIAS (O.S., Exhausted):**
+Start: (00:58.87) | End: (01:00.56)
+"We made it."
+
+**CAMERA:**
+Start: (01:00.81) | End: (01:04.74)
+Mara watches from the gallery, the letter still in her hand.
+
+**MARA (Quiet):**
+Start: (01:01.21) | End: (01:03.89)
+"Not all of them. Not yet."
+
+--- SCRIPT END ---

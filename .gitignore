@@ -1,0 +1,52 @@
+# --- Confidential inputs (never commit) ---
+data/private/
+data/raw/
+*.zip
+*.pdf
+# Extracted episode screenplays, wherever they land
+episode-*.txt
+# Synthetic test fixtures are written from scratch and may be committed
+!tests/fixtures/synthetic_*.txt
+
+# --- Run outputs (contain script excerpts) ---
+runs/
+outputs/
+*.log
+
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets*.toml
+.streamlit/secrets.toml
+
+# --- Python / tooling ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Frontend tooling
+node_modules/
+
+# Vercel CLI project link (local)
+.vercel/
+
+# Local Claude Code session config
+.claude/

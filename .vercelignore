@@ -1,0 +1,31 @@
+# Vercel CLI upload rules. ALLOWLIST: everything is excluded unless named below. Vercel does
+# not read .gitignore, and .env is not in its default ignore list.
+/*
+!/app.py
+!/src
+!/frontend
+!/pyproject.toml
+!/README.md
+!/vercel.json
+!/.python-version
+
+# Never upload, even inside the allowed folders: confidential inputs, outputs, caches, secrets.
+**/*.zip
+**/*.pdf
+**/episode-*.txt
+**/runs
+**/outputs
+**/data
+**/review
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/secrets*
+**/ai_bundle*.json
+# Build artefacts and local tooling (rebuilt on Vercel).
+**/__pycache__
+**/*.pyc
+**/*.egg-info
+frontend/node_modules
+frontend/dist

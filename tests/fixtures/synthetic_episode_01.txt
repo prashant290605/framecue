@@ -1,0 +1,65 @@
+EPISODE NUMBER: Episode 1
+EPISODE LOGLINE: A lighthouse keeper receives a sealed letter that was never meant for her.
+CONTINUITY NOTES: Synthetic fixture. Not derived from any real screenplay.
+
+--- SCRIPT START ---
+
+SCENE 01
+Scene heading: INT. LIGHTHOUSE KITCHEN – NIGHT
+Scene start: 00:00.00
+Scene end: 00:12.50
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:00.00) | End: (00:04.00)
+Wide shot of a cramped kitchen lit by a swinging lamp.
+
+**ACTION:**
+Start: (00:01.00) | End: (00:04.00)
+Mara sets down a kettle as a knock rattles the door.
+
+**SOUND FX:**
+Start: (00:01.50) | End: (00:02.20)
+Three sharp knocks.
+
+**MARA (Wary):**
+Start: (00:02.30) | End: (00:03.90)
+"Who's out there at this hour?"
+
+**CAMERA:**
+Start: (00:04.00) | End: (00:08.75)
+Close-up on an envelope sliding under the door.
+
+**COURIER (O.S.) (Muffled, Urgent):**
+Start: (00:04.50) | End: (00:06.10)
+"Sign nothing. Burn it after reading."
+
+**CAMERA:**
+Start: (00:08.75) | End: (00:12.50)
+Insert of a wax seal stamped with a crown.
+
+SCENE 02
+Scene heading: EXT. CLIFF PATH – CONTINUOUS
+Scene start: 00:12.50
+Scene end: 00:25.03
+
+Actions and dialogue:
+
+**CAMERA:**
+Start: (00:12.50) | End: (00:18.00)
+Tracking shot as Mara runs along the cliff edge, letter in hand.
+
+**MARA (Breathless):**
+Start: (00:13.00) | End: (00:14.20)
+"Wait! Come back!"
+
+**CAMERA:**
+Start: (00:18.00) | End: (00:25.03)
+Low angle on a cloaked figure turning — the courier wears her brother's ring.
+
+**ACTION:**
+Start: (00:19.10) | End: (00:25.03)
+The figure raises a lantern; Mara freezes, café-brown eyes wide.
+
+--- SCRIPT END ---

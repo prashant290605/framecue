@@ -1,0 +1,4288 @@
+{
+ "ai_evaluations": {},
+ "candidates": [
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.8883,
+     "boundary": 1.0,
+     "context": 1.0,
+     "duration": 0.7875,
+     "ending": 0.3,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.637002,
+    "selection_reason": "distinct_moment",
+    "start_anchors": [
+     "camera_cut",
+     "episode_start",
+     "scene_start"
+    ]
+   },
+   "candidate_id": "C001-0000000-0025750",
+   "coverage_alternative_of": null,
+   "coverage_rank": 9,
+   "duration_ms": 25750,
+   "end_ms": 25750,
+   "end_timestamp": "00:25.75",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 25750,
+     "end_ms": 25750,
+     "end_timestamp": "00:25.75",
+     "index": 0,
+     "start_ms": 0,
+     "start_timestamp": "00:00.00"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S01-0005",
+     "E001-S01-0009",
+     "E001-S01-0010"
+    ],
+    "opening_window": [
+     "E001-S01-0000",
+     "E001-S01-0001"
+    ]
+   },
+   "start_ms": 0,
+   "start_timestamp": "00:00.00",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": false,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9408,
+     "boundary": 0.55,
+     "context": 1.0,
+     "duration": 0.6103,
+     "ending": 0.85,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "before_answer",
+     "before_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.697152,
+    "selection_reason": "distinct_moment",
+    "start_anchors": [
+     "camera_cut",
+     "episode_start",
+     "scene_start"
+    ]
+   },
+   "candidate_id": "C001-0000000-0056690",
+   "coverage_alternative_of": "C001-0009650-0037020",
+   "coverage_rank": null,
+   "duration_ms": 56690,
+   "end_ms": 56690,
+   "end_timestamp": "00:56.69",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 56690,
+     "end_ms": 56690,
+     "end_timestamp": "00:56.69",
+     "index": 0,
+     "start_ms": 0,
+     "start_timestamp": "00:00.00"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S02-0022",
+     "E001-S02-0023",
+     "E001-S03-0024",
+     "E001-S03-0025"
+    ],
+    "opening_window": [
+     "E001-S01-0000",
+     "E001-S01-0001"
+    ]
+   },
+   "start_ms": 0,
+   "start_timestamp": "00:00.00",
+   "structural": {
+    "clean_end_cut": false,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9444,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.625,
+     "ending": 0.3,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.606667,
+    "selection_reason": "alternative_cut_of:C001-0000000-0025750",
+    "start_anchors": [
+     "cue:sound_fx",
+     "sound_onset"
+    ]
+   },
+   "candidate_id": "C001-0003250-0025750",
+   "coverage_alternative_of": "C001-0000000-0025750",
+   "coverage_rank": null,
+   "duration_ms": 22500,
+   "end_ms": 25750,
+   "end_timestamp": "00:25.75",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 22500,
+     "end_ms": 25750,
+     "end_timestamp": "00:25.75",
+     "index": 0,
+     "start_ms": 3250,
+     "start_timestamp": "00:03.25"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S01-0005",
+     "E001-S01-0009",
+     "E001-S01-0010"
+    ],
+    "opening_window": [
+     "E001-S01-0000",
+     "E001-S01-0002",
+     "E001-S01-0003",
+     "E001-S01-0004"
+    ]
+   },
+   "start_ms": 3250,
+   "start_timestamp": "00:03.25",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": false,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9567,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.8685,
+     "ending": 0.85,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "before_answer",
+     "before_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.770356,
+    "selection_reason": "best_in_region:1/3",
+    "start_anchors": [
+     "camera_cut"
+    ]
+   },
+   "candidate_id": "C001-0009650-0037020",
+   "coverage_alternative_of": null,
+   "coverage_rank": 3,
+   "duration_ms": 27370,
+   "end_ms": 37020,
+   "end_timestamp": "00:37.02",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 27370,
+     "end_ms": 37020,
+     "end_timestamp": "00:37.02",
+     "index": 0,
+     "start_ms": 9650,
+     "start_timestamp": "00:09.65"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S02-0013",
+     "E001-S02-0014",
+     "E001-S02-0015",
+     "E001-S02-0016",
+     "E001-S02-0017"
+    ],
+    "opening_window": [
+     "E001-S01-0005",
+     "E001-S01-0006",
+     "E001-S01-0007"
+    ]
+   },
+   "start_ms": 9650,
+   "start_timestamp": "00:09.65",
+   "structural": {
+    "clean_end_cut": false,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9956,
+     "boundary": 0.1,
+     "context": 0.7,
+     "duration": 0.761,
+     "ending": 0.85,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "before_answer",
+     "before_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.622946,
+    "selection_reason": "alternative_cut_of:C001-0009650-0037020",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C001-0011800-0037020",
+   "coverage_alternative_of": "C001-0009650-0037020",
+   "coverage_rank": null,
+   "duration_ms": 25220,
+   "end_ms": 37020,
+   "end_timestamp": "00:37.02",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 25220,
+     "end_ms": 37020,
+     "end_timestamp": "00:37.02",
+     "index": 0,
+     "start_ms": 11800,
+     "start_timestamp": "00:11.80"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S02-0013",
+     "E001-S02-0014",
+     "E001-S02-0015",
+     "E001-S02-0016",
+     "E001-S02-0017"
+    ],
+    "opening_window": [
+     "E001-S01-0005",
+     "E001-S01-0007"
+    ]
+   },
+   "start_ms": 11800,
+   "start_timestamp": "00:11.80",
+   "structural": {
+    "clean_end_cut": false,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9924,
+     "boundary": 0.1,
+     "context": 0.7,
+     "duration": 0.5155,
+     "ending": 0.85,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "before_answer",
+     "before_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.597905,
+    "selection_reason": "alternative_cut_of:C001-0009650-0037020",
+    "start_anchors": [
+     "action_onset"
+    ]
+   },
+   "candidate_id": "C001-0016710-0037020",
+   "coverage_alternative_of": "C001-0009650-0037020",
+   "coverage_rank": null,
+   "duration_ms": 20310,
+   "end_ms": 37020,
+   "end_timestamp": "00:37.02",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 20310,
+     "end_ms": 37020,
+     "end_timestamp": "00:37.02",
+     "index": 0,
+     "start_ms": 16710,
+     "start_timestamp": "00:16.71"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S02-0013",
+     "E001-S02-0014",
+     "E001-S02-0015",
+     "E001-S02-0016",
+     "E001-S02-0017"
+    ],
+    "opening_window": [
+     "E001-S01-0005",
+     "E001-S01-0008",
+     "E001-S01-0009"
+    ]
+   },
+   "start_ms": 16710,
+   "start_timestamp": "00:16.71",
+   "structural": {
+    "clean_end_cut": false,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9473,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.8635,
+     "ending": 0.3,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.555948,
+    "selection_reason": "distinct_moment",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C001-0022490-0049760",
+   "coverage_alternative_of": null,
+   "coverage_rank": 10,
+   "duration_ms": 27270,
+   "end_ms": 49760,
+   "end_timestamp": "00:49.76",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 27270,
+     "end_ms": 49760,
+     "end_timestamp": "00:49.76",
+     "index": 0,
+     "start_ms": 22490,
+     "start_timestamp": "00:22.49"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S02-0020",
+     "E001-S02-0021"
+    ],
+    "opening_window": [
+     "E001-S01-0005",
+     "E001-S01-0010"
+    ]
+   },
+   "start_ms": 22490,
+   "start_timestamp": "00:22.49",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9607,
+     "boundary": 1.0,
+     "context": 0.7,
+     "duration": 0.9097,
+     "ending": 0.65,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.717566,
+    "selection_reason": "distinct_moment",
+    "start_anchors": [
+     "camera_cut"
+    ]
+   },
+   "candidate_id": "C001-0025750-0073460",
+   "coverage_alternative_of": "C001-0053030-0073460",
+   "coverage_rank": null,
+   "duration_ms": 47710,
+   "end_ms": 73460,
+   "end_timestamp": "01:13.46",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 47710,
+     "end_ms": 73460,
+     "end_timestamp": "01:13.46",
+     "index": 0,
+     "start_ms": 25750,
+     "start_timestamp": "00:25.75"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S03-0028",
+     "E001-S03-0030",
+     "E001-S03-0031",
+     "E001-S03-0032"
+    ],
+    "opening_window": [
+     "E001-S01-0011",
+     "E001-S01-0012"
+    ]
+   },
+   "start_ms": 25750,
+   "start_timestamp": "00:25.75",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9979,
+     "boundary": 0.1,
+     "context": 0.7,
+     "duration": 0.6715,
+     "ending": 0.85,
+     "opening": 1.0
+    },
+    "end_anchors": [
+     "before_answer",
+     "before_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.764341,
+    "selection_reason": "best_in_region:2/3",
+    "start_anchors": [
+     "cue:sound_fx",
+     "sound_onset"
+    ]
+   },
+   "candidate_id": "C001-0033260-0056690",
+   "coverage_alternative_of": null,
+   "coverage_rank": 4,
+   "duration_ms": 23430,
+   "end_ms": 56690,
+   "end_timestamp": "00:56.69",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 23430,
+     "end_ms": 56690,
+     "end_timestamp": "00:56.69",
+     "index": 0,
+     "start_ms": 33260,
+     "start_timestamp": "00:33.26"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S02-0022",
+     "E001-S02-0023",
+     "E001-S03-0024",
+     "E001-S03-0025"
+    ],
+    "opening_window": [
+     "E001-S02-0013",
+     "E001-S02-0015",
+     "E001-S02-0016",
+     "E001-S02-0017"
+    ]
+   },
+   "start_ms": 33260,
+   "start_timestamp": "00:33.26",
+   "structural": {
+    "clean_end_cut": false,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9699,
+     "boundary": 0.1,
+     "context": 0.7,
+     "duration": 0.564,
+     "ending": 0.85,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "before_answer",
+     "before_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.674389,
+    "selection_reason": "alternative_cut_of:C001-0033260-0056690",
+    "start_anchors": [
+     "cue:question",
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C001-0035410-0056690",
+   "coverage_alternative_of": "C001-0033260-0056690",
+   "coverage_rank": null,
+   "duration_ms": 21280,
+   "end_ms": 56690,
+   "end_timestamp": "00:56.69",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 21280,
+     "end_ms": 56690,
+     "end_timestamp": "00:56.69",
+     "index": 0,
+     "start_ms": 35410,
+     "start_timestamp": "00:35.41"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S02-0022",
+     "E001-S02-0023",
+     "E001-S03-0024",
+     "E001-S03-0025"
+    ],
+    "opening_window": [
+     "E001-S02-0016",
+     "E001-S02-0017",
+     "E001-S02-0018"
+    ]
+   },
+   "start_ms": 35410,
+   "start_timestamp": "00:35.41",
+   "structural": {
+    "clean_end_cut": false,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9923,
+     "boundary": 1.0,
+     "context": 0.7,
+     "duration": 0.685,
+     "ending": 0.65,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.77484,
+    "selection_reason": "alternative_cut_of:C001-0053030-0073460",
+    "start_anchors": [
+     "camera_cut"
+    ]
+   },
+   "candidate_id": "C001-0049760-0073460",
+   "coverage_alternative_of": "C001-0053030-0073460",
+   "coverage_rank": null,
+   "duration_ms": 23700,
+   "end_ms": 73460,
+   "end_timestamp": "01:13.46",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 23700,
+     "end_ms": 73460,
+     "end_timestamp": "01:13.46",
+     "index": 0,
+     "start_ms": 49760,
+     "start_timestamp": "00:49.76"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S03-0028",
+     "E001-S03-0030",
+     "E001-S03-0031",
+     "E001-S03-0032"
+    ],
+    "opening_window": [
+     "E001-S02-0022",
+     "E001-S02-0023"
+    ]
+   },
+   "start_ms": 49760,
+   "start_timestamp": "00:49.76",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.979,
+     "boundary": 1.0,
+     "context": 1.0,
+     "duration": 0.5215,
+     "ending": 0.65,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.786493,
+    "selection_reason": "best_in_region:3/3",
+    "start_anchors": [
+     "camera_cut",
+     "scene_start"
+    ]
+   },
+   "candidate_id": "C001-0053030-0073460",
+   "coverage_alternative_of": null,
+   "coverage_rank": 2,
+   "duration_ms": 20430,
+   "end_ms": 73460,
+   "end_timestamp": "01:13.46",
+   "episode_number": 1,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 20430,
+     "end_ms": 73460,
+     "end_timestamp": "01:13.46",
+     "index": 0,
+     "start_ms": 53030,
+     "start_timestamp": "00:53.03"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E001-S03-0028",
+     "E001-S03-0030",
+     "E001-S03-0031",
+     "E001-S03-0032"
+    ],
+    "opening_window": [
+     "E001-S03-0024",
+     "E001-S03-0025"
+    ]
+   },
+   "start_ms": 53030,
+   "start_timestamp": "00:53.03",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": false,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 1.0,
+     "boundary": 1.0,
+     "context": 1.0,
+     "duration": 0.6515,
+     "ending": 0.15,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.60265,
+    "selection_reason": "fill_alternative_cut_of:C002-0000000-0034120",
+    "start_anchors": [
+     "camera_cut",
+     "episode_start",
+     "scene_start"
+    ]
+   },
+   "candidate_id": "C002-0000000-0023030",
+   "coverage_alternative_of": "C002-0000000-0034120",
+   "coverage_rank": null,
+   "duration_ms": 23030,
+   "end_ms": 23030,
+   "end_timestamp": "00:23.03",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 23030,
+     "end_ms": 23030,
+     "end_timestamp": "00:23.03",
+     "index": 0,
+     "start_ms": 0,
+     "start_timestamp": "00:00.00"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S01-0005",
+     "E002-S01-0007",
+     "E002-S01-0008",
+     "E002-S01-0009"
+    ],
+    "opening_window": [
+     "E002-S01-0000",
+     "E002-S01-0001"
+    ]
+   },
+   "start_ms": 0,
+   "start_timestamp": "00:00.00",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": false,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 1.0,
+     "boundary": 0.55,
+     "context": 1.0,
+     "duration": 0.977,
+     "ending": 0.3,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "before_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.6052,
+    "selection_reason": "fill_alternative_cut_of:C002-0000000-0034120",
+    "start_anchors": [
+     "camera_cut",
+     "episode_start",
+     "scene_start"
+    ]
+   },
+   "candidate_id": "C002-0000000-0029540",
+   "coverage_alternative_of": "C002-0000000-0034120",
+   "coverage_rank": null,
+   "duration_ms": 29540,
+   "end_ms": 29540,
+   "end_timestamp": "00:29.54",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 29540,
+     "end_ms": 29540,
+     "end_timestamp": "00:29.54",
+     "index": 0,
+     "start_ms": 0,
+     "start_timestamp": "00:00.00"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S02-0010",
+     "E002-S02-0011",
+     "E002-S02-0012"
+    ],
+    "opening_window": [
+     "E002-S01-0000",
+     "E002-S01-0001"
+    ]
+   },
+   "start_ms": 0,
+   "start_timestamp": "00:00.00",
+   "structural": {
+    "clean_end_cut": false,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9885,
+     "boundary": 1.0,
+     "context": 1.0,
+     "duration": 1.0,
+     "ending": 0.3,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.673271,
+    "selection_reason": "best_in_region:1/3",
+    "start_anchors": [
+     "camera_cut",
+     "episode_start",
+     "scene_start"
+    ]
+   },
+   "candidate_id": "C002-0000000-0034120",
+   "coverage_alternative_of": null,
+   "coverage_rank": 8,
+   "duration_ms": 34120,
+   "end_ms": 34120,
+   "end_timestamp": "00:34.12",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 34120,
+     "end_ms": 34120,
+     "end_timestamp": "00:34.12",
+     "index": 0,
+     "start_ms": 0,
+     "start_timestamp": "00:00.00"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S02-0010",
+     "E002-S02-0012",
+     "E002-S02-0013"
+    ],
+    "opening_window": [
+     "E002-S01-0000",
+     "E002-S01-0001"
+    ]
+   },
+   "start_ms": 0,
+   "start_timestamp": "00:00.00",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9985,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.5015,
+     "ending": 0.15,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.489925,
+    "selection_reason": "fill_alternative_cut_of:C002-0000000-0034120",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C002-0003000-0023030",
+   "coverage_alternative_of": "C002-0000000-0034120",
+   "coverage_rank": null,
+   "duration_ms": 20030,
+   "end_ms": 23030,
+   "end_timestamp": "00:23.03",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 20030,
+     "end_ms": 23030,
+     "end_timestamp": "00:23.03",
+     "index": 0,
+     "start_ms": 3000,
+     "start_timestamp": "00:03.00"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S01-0005",
+     "E002-S01-0007",
+     "E002-S01-0008",
+     "E002-S01-0009"
+    ],
+    "opening_window": [
+     "E002-S01-0000",
+     "E002-S01-0002"
+    ]
+   },
+   "start_ms": 3000,
+   "start_timestamp": "00:03.00",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": false,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.964,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 1.0,
+     "ending": 0.3,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.572102,
+    "selection_reason": "fill_alternative_cut_of:C002-0000000-0034120",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C002-0003000-0034120",
+   "coverage_alternative_of": "C002-0000000-0034120",
+   "coverage_rank": null,
+   "duration_ms": 31120,
+   "end_ms": 34120,
+   "end_timestamp": "00:34.12",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 31120,
+     "end_ms": 34120,
+     "end_timestamp": "00:34.12",
+     "index": 0,
+     "start_ms": 3000,
+     "start_timestamp": "00:03.00"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S02-0010",
+     "E002-S02-0012",
+     "E002-S02-0013"
+    ],
+    "opening_window": [
+     "E002-S01-0000",
+     "E002-S01-0002"
+    ]
+   },
+   "start_ms": 3000,
+   "start_timestamp": "00:03.00",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9498,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.86,
+     "ending": 0.3,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.630963,
+    "selection_reason": "alternative_cut_of:C002-0000000-0034120",
+    "start_anchors": [
+     "action_onset"
+    ]
+   },
+   "candidate_id": "C002-0006920-0034120",
+   "coverage_alternative_of": "C002-0000000-0034120",
+   "coverage_rank": null,
+   "duration_ms": 27200,
+   "end_ms": 34120,
+   "end_timestamp": "00:34.12",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 27200,
+     "end_ms": 34120,
+     "end_timestamp": "00:34.12",
+     "index": 0,
+     "start_ms": 6920,
+     "start_timestamp": "00:06.92"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S02-0010",
+     "E002-S02-0012",
+     "E002-S02-0013"
+    ],
+    "opening_window": [
+     "E002-S01-0000",
+     "E002-S01-0003",
+     "E002-S01-0004"
+    ]
+   },
+   "start_ms": 6920,
+   "start_timestamp": "00:06.92",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9238,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.5757,
+     "ending": 0.8,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.723643,
+    "selection_reason": "alternative_cut_of:C002-0018770-0064650",
+    "start_anchors": [
+     "action_onset"
+    ]
+   },
+   "candidate_id": "C002-0006920-0064650",
+   "coverage_alternative_of": "C002-0018770-0064650",
+   "coverage_rank": null,
+   "duration_ms": 57730,
+   "end_ms": 64650,
+   "end_timestamp": "01:04.65",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 57730,
+     "end_ms": 64650,
+     "end_timestamp": "01:04.65",
+     "index": 0,
+     "start_ms": 6920,
+     "start_timestamp": "00:06.92"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S03-0023",
+     "E002-S03-0025",
+     "E002-S03-0026",
+     "E002-S03-0027",
+     "E002-S03-0028"
+    ],
+    "opening_window": [
+     "E002-S01-0000",
+     "E002-S01-0003",
+     "E002-S01-0004"
+    ]
+   },
+   "start_ms": 6920,
+   "start_timestamp": "00:06.92",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9791,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.7175,
+     "ending": 0.3,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.621119,
+    "selection_reason": "alternative_cut_of:C002-0000000-0034120",
+    "start_anchors": [
+     "cue:sound_fx",
+     "sound_onset"
+    ]
+   },
+   "candidate_id": "C002-0009770-0034120",
+   "coverage_alternative_of": "C002-0000000-0034120",
+   "coverage_rank": null,
+   "duration_ms": 24350,
+   "end_ms": 34120,
+   "end_timestamp": "00:34.12",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 24350,
+     "end_ms": 34120,
+     "end_timestamp": "00:34.12",
+     "index": 0,
+     "start_ms": 9770,
+     "start_timestamp": "00:09.77"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S02-0010",
+     "E002-S02-0012",
+     "E002-S02-0013"
+    ],
+    "opening_window": [
+     "E002-S01-0000",
+     "E002-S01-0004",
+     "E002-S01-0005",
+     "E002-S01-0006"
+    ]
+   },
+   "start_ms": 9770,
+   "start_timestamp": "00:09.77",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9414,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.6707,
+     "ending": 0.8,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.735784,
+    "selection_reason": "alternative_cut_of:C002-0018770-0064650",
+    "start_anchors": [
+     "cue:sound_fx",
+     "sound_onset"
+    ]
+   },
+   "candidate_id": "C002-0009770-0064650",
+   "coverage_alternative_of": "C002-0018770-0064650",
+   "coverage_rank": null,
+   "duration_ms": 54880,
+   "end_ms": 64650,
+   "end_timestamp": "01:04.65",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 54880,
+     "end_ms": 64650,
+     "end_timestamp": "01:04.65",
+     "index": 0,
+     "start_ms": 9770,
+     "start_timestamp": "00:09.77"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S03-0023",
+     "E002-S03-0025",
+     "E002-S03-0026",
+     "E002-S03-0027",
+     "E002-S03-0028"
+    ],
+    "opening_window": [
+     "E002-S01-0000",
+     "E002-S01-0004",
+     "E002-S01-0005",
+     "E002-S01-0006"
+    ]
+   },
+   "start_ms": 9770,
+   "start_timestamp": "00:09.77",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9505,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.61,
+     "ending": 0.3,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.531068,
+    "selection_reason": "fill_alternative_cut_of:C002-0000000-0034120",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C002-0011920-0034120",
+   "coverage_alternative_of": "C002-0000000-0034120",
+   "coverage_rank": null,
+   "duration_ms": 22200,
+   "end_ms": 34120,
+   "end_timestamp": "00:34.12",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 22200,
+     "end_ms": 34120,
+     "end_timestamp": "00:34.12",
+     "index": 0,
+     "start_ms": 11920,
+     "start_timestamp": "00:11.92"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S02-0010",
+     "E002-S02-0012",
+     "E002-S02-0013"
+    ],
+    "opening_window": [
+     "E002-S01-0005",
+     "E002-S01-0006"
+    ]
+   },
+   "start_ms": 11920,
+   "start_timestamp": "00:11.92",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9482,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.7423,
+     "ending": 0.8,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.668967,
+    "selection_reason": "fill_alternative_cut_of:C002-0018770-0064650",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C002-0011920-0064650",
+   "coverage_alternative_of": "C002-0018770-0064650",
+   "coverage_rank": null,
+   "duration_ms": 52730,
+   "end_ms": 64650,
+   "end_timestamp": "01:04.65",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 52730,
+     "end_ms": 64650,
+     "end_timestamp": "01:04.65",
+     "index": 0,
+     "start_ms": 11920,
+     "start_timestamp": "00:11.92"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S03-0023",
+     "E002-S03-0025",
+     "E002-S03-0026",
+     "E002-S03-0027",
+     "E002-S03-0028"
+    ],
+    "opening_window": [
+     "E002-S01-0005",
+     "E002-S01-0006"
+    ]
+   },
+   "start_ms": 11920,
+   "start_timestamp": "00:11.92",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9327,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.862,
+     "ending": 0.8,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.678606,
+    "selection_reason": "fill_alternative_cut_of:C002-0018770-0064650",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C002-0015510-0064650",
+   "coverage_alternative_of": "C002-0018770-0064650",
+   "coverage_rank": null,
+   "duration_ms": 49140,
+   "end_ms": 64650,
+   "end_timestamp": "01:04.65",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 49140,
+     "end_ms": 64650,
+     "end_timestamp": "01:04.65",
+     "index": 0,
+     "start_ms": 15510,
+     "start_timestamp": "00:15.51"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S03-0023",
+     "E002-S03-0025",
+     "E002-S03-0026",
+     "E002-S03-0027",
+     "E002-S03-0028"
+    ],
+    "opening_window": [
+     "E002-S01-0005",
+     "E002-S01-0007"
+    ]
+   },
+   "start_ms": 15510,
+   "start_timestamp": "00:15.51",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9082,
+     "boundary": 1.0,
+     "context": 0.7,
+     "duration": 0.9707,
+     "ending": 0.8,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.753292,
+    "selection_reason": "best_in_region:2/3",
+    "start_anchors": [
+     "camera_cut"
+    ]
+   },
+   "candidate_id": "C002-0018770-0064650",
+   "coverage_alternative_of": null,
+   "coverage_rank": 5,
+   "duration_ms": 45880,
+   "end_ms": 64650,
+   "end_timestamp": "01:04.65",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 45880,
+     "end_ms": 64650,
+     "end_timestamp": "01:04.65",
+     "index": 0,
+     "start_ms": 18770,
+     "start_timestamp": "00:18.77"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S03-0023",
+     "E002-S03-0025",
+     "E002-S03-0026",
+     "E002-S03-0027",
+     "E002-S03-0028"
+    ],
+    "opening_window": [
+     "E002-S01-0008",
+     "E002-S01-0009"
+    ]
+   },
+   "start_ms": 18770,
+   "start_timestamp": "00:18.77",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9439,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.6265,
+     "ending": 0.7,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "scene_end",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.631728,
+    "selection_reason": "distinct_moment",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C002-0026280-0048810",
+   "coverage_alternative_of": "C002-0018770-0064650",
+   "coverage_rank": null,
+   "duration_ms": 22530,
+   "end_ms": 48810,
+   "end_timestamp": "00:48.81",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 22530,
+     "end_ms": 48810,
+     "end_timestamp": "00:48.81",
+     "index": 0,
+     "start_ms": 26280,
+     "start_timestamp": "00:26.28"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S02-0014",
+     "E002-S02-0017",
+     "E002-S02-0018",
+     "E002-S02-0019"
+    ],
+    "opening_window": [
+     "E002-S02-0010",
+     "E002-S02-0012"
+    ]
+   },
+   "start_ms": 26280,
+   "start_timestamp": "00:26.28",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": false,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.8881,
+     "boundary": 0.1,
+     "context": 0.7,
+     "duration": 0.626,
+     "ending": 0.65,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "before_answer",
+     "before_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.543315,
+    "selection_reason": "alternative_cut_of:C002-0026280-0048810",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C002-0029540-0052060",
+   "coverage_alternative_of": "C002-0018770-0064650",
+   "coverage_rank": null,
+   "duration_ms": 22520,
+   "end_ms": 52060,
+   "end_timestamp": "00:52.06",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 22520,
+     "end_ms": 52060,
+     "end_timestamp": "00:52.06",
+     "index": 0,
+     "start_ms": 29540,
+     "start_timestamp": "00:29.54"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S02-0018",
+     "E002-S02-0019",
+     "E002-S03-0020",
+     "E002-S03-0021"
+    ],
+    "opening_window": [
+     "E002-S02-0010",
+     "E002-S02-0013"
+    ]
+   },
+   "start_ms": 29540,
+   "start_timestamp": "00:29.54",
+   "structural": {
+    "clean_end_cut": false,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9472,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.618,
+     "ending": 0.35,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.618884,
+    "selection_reason": "best_in_region:3/3",
+    "start_anchors": [
+     "cue:intense_delivery",
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C002-0041290-0063650",
+   "coverage_alternative_of": "C002-0018770-0064650",
+   "coverage_rank": null,
+   "duration_ms": 22360,
+   "end_ms": 63650,
+   "end_timestamp": "01:03.65",
+   "episode_number": 2,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 22360,
+     "end_ms": 63650,
+     "end_timestamp": "01:03.65",
+     "index": 0,
+     "start_ms": 41290,
+     "start_timestamp": "00:41.29"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E002-S03-0023",
+     "E002-S03-0025",
+     "E002-S03-0026",
+     "E002-S03-0027"
+    ],
+    "opening_window": [
+     "E002-S02-0014",
+     "E002-S02-0017"
+    ]
+   },
+   "start_ms": 41290,
+   "start_timestamp": "00:41.29",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9009,
+     "boundary": 1.0,
+     "context": 1.0,
+     "duration": 1.0,
+     "ending": 0.65,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.747635,
+    "selection_reason": "best_in_region:1/3",
+    "start_anchors": [
+     "camera_cut",
+     "episode_start",
+     "scene_start"
+    ]
+   },
+   "candidate_id": "C003-0000000-0037000",
+   "coverage_alternative_of": null,
+   "coverage_rank": 6,
+   "duration_ms": 37000,
+   "end_ms": 37000,
+   "end_timestamp": "00:37.00",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 37000,
+     "end_ms": 37000,
+     "end_timestamp": "00:37.00",
+     "index": 0,
+     "start_ms": 0,
+     "start_timestamp": "00:00.00"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S02-0011",
+     "E003-S02-0013",
+     "E003-S02-0014"
+    ],
+    "opening_window": [
+     "E003-S01-0000",
+     "E003-S01-0001"
+    ]
+   },
+   "start_ms": 0,
+   "start_timestamp": "00:00.00",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.8904,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 1.0,
+     "ending": 0.65,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.723557,
+    "selection_reason": "alternative_cut_of:C003-0000000-0037000",
+    "start_anchors": [
+     "action_onset"
+    ]
+   },
+   "candidate_id": "C003-0004980-0037000",
+   "coverage_alternative_of": "C003-0000000-0037000",
+   "coverage_rank": null,
+   "duration_ms": 32020,
+   "end_ms": 37000,
+   "end_timestamp": "00:37.00",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 32020,
+     "end_ms": 37000,
+     "end_timestamp": "00:37.00",
+     "index": 0,
+     "start_ms": 4980,
+     "start_timestamp": "00:04.98"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S02-0011",
+     "E003-S02-0013",
+     "E003-S02-0014"
+    ],
+    "opening_window": [
+     "E003-S01-0000",
+     "E003-S01-0002",
+     "E003-S01-0003"
+    ]
+   },
+   "start_ms": 4980,
+   "start_timestamp": "00:04.98",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9285,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.9585,
+     "ending": 0.65,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_open_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.725128,
+    "selection_reason": "alternative_cut_of:C003-0000000-0037000",
+    "start_anchors": [
+     "cue:sound_fx",
+     "sound_onset"
+    ]
+   },
+   "candidate_id": "C003-0007830-0037000",
+   "coverage_alternative_of": "C003-0000000-0037000",
+   "coverage_rank": null,
+   "duration_ms": 29170,
+   "end_ms": 37000,
+   "end_timestamp": "00:37.00",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 29170,
+     "end_ms": 37000,
+     "end_timestamp": "00:37.00",
+     "index": 0,
+     "start_ms": 7830,
+     "start_timestamp": "00:07.83"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S02-0011",
+     "E003-S02-0013",
+     "E003-S02-0014"
+    ],
+    "opening_window": [
+     "E003-S01-0000",
+     "E003-S01-0003",
+     "E003-S01-0004"
+    ]
+   },
+   "start_ms": 7830,
+   "start_timestamp": "00:07.83",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9447,
+     "boundary": 1.0,
+     "context": 0.7,
+     "duration": 1.0,
+     "ending": 0.7,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.811711,
+    "selection_reason": "alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "camera_cut"
+    ]
+   },
+   "candidate_id": "C003-0013500-0058470",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 44970,
+   "end_ms": 58470,
+   "end_timestamp": "00:58.47",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 44970,
+     "end_ms": 58470,
+     "end_timestamp": "00:58.47",
+     "index": 0,
+     "start_ms": 13500,
+     "start_timestamp": "00:13.50"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0024",
+     "E003-S03-0025",
+     "E003-S03-0026"
+    ],
+    "opening_window": [
+     "E003-S01-0005",
+     "E003-S01-0006",
+     "E003-S01-0007",
+     "E003-S01-0008"
+    ]
+   },
+   "start_ms": 13500,
+   "start_timestamp": "00:13.50",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9756,
+     "boundary": 1.0,
+     "context": 0.7,
+     "duration": 0.923,
+     "ending": 0.5,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.758638,
+    "selection_reason": "fill_alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "camera_cut"
+    ]
+   },
+   "candidate_id": "C003-0013500-0060810",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 47310,
+   "end_ms": 60810,
+   "end_timestamp": "01:00.81",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 47310,
+     "end_ms": 60810,
+     "end_timestamp": "01:00.81",
+     "index": 0,
+     "start_ms": 13500,
+     "start_timestamp": "00:13.50"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0024",
+     "E003-S03-0026",
+     "E003-S03-0027",
+     "E003-S03-0028"
+    ],
+    "opening_window": [
+     "E003-S01-0005",
+     "E003-S01-0006",
+     "E003-S01-0007",
+     "E003-S01-0008"
+    ]
+   },
+   "start_ms": 13500,
+   "start_timestamp": "00:13.50",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9879,
+     "boundary": 1.0,
+     "context": 0.7,
+     "duration": 0.792,
+     "ending": 0.45,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.734885,
+    "selection_reason": "alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "camera_cut"
+    ]
+   },
+   "candidate_id": "C003-0013500-0064740",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 51240,
+   "end_ms": 64740,
+   "end_timestamp": "01:04.74",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 51240,
+     "end_ms": 64740,
+     "end_timestamp": "01:04.74",
+     "index": 0,
+     "start_ms": 13500,
+     "start_timestamp": "00:13.50"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0027",
+     "E003-S03-0028",
+     "E003-S03-0029",
+     "E003-S03-0030"
+    ],
+    "opening_window": [
+     "E003-S01-0005",
+     "E003-S01-0006",
+     "E003-S01-0007",
+     "E003-S01-0008"
+    ]
+   },
+   "start_ms": 13500,
+   "start_timestamp": "00:13.50",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9671,
+     "boundary": 1.0,
+     "context": 0.7,
+     "duration": 1.0,
+     "ending": 0.7,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.740061,
+    "selection_reason": "fill_alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "camera_cut"
+    ]
+   },
+   "candidate_id": "C003-0015650-0058470",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 42820,
+   "end_ms": 58470,
+   "end_timestamp": "00:58.47",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 42820,
+     "end_ms": 58470,
+     "end_timestamp": "00:58.47",
+     "index": 0,
+     "start_ms": 15650,
+     "start_timestamp": "00:15.65"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0024",
+     "E003-S03-0025",
+     "E003-S03-0026"
+    ],
+    "opening_window": [
+     "E003-S01-0007",
+     "E003-S01-0008"
+    ]
+   },
+   "start_ms": 15650,
+   "start_timestamp": "00:15.65",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9585,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 1.0,
+     "ending": 0.7,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.671271,
+    "selection_reason": "fill_alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C003-0020300-0058470",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 38170,
+   "end_ms": 58470,
+   "end_timestamp": "00:58.47",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 38170,
+     "end_ms": 58470,
+     "end_timestamp": "00:58.47",
+     "index": 0,
+     "start_ms": 20300,
+     "start_timestamp": "00:20.30"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0024",
+     "E003-S03-0025",
+     "E003-S03-0026"
+    ],
+    "opening_window": [
+     "E003-S01-0007",
+     "E003-S01-0009"
+    ]
+   },
+   "start_ms": 20300,
+   "start_timestamp": "00:20.30",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9937,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 1.0,
+     "ending": 0.5,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.626556,
+    "selection_reason": "fill_alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C003-0020300-0060810",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 40510,
+   "end_ms": 60810,
+   "end_timestamp": "01:00.81",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 40510,
+     "end_ms": 60810,
+     "end_timestamp": "01:00.81",
+     "index": 0,
+     "start_ms": 20300,
+     "start_timestamp": "00:20.30"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0024",
+     "E003-S03-0026",
+     "E003-S03-0027",
+     "E003-S03-0028"
+    ],
+    "opening_window": [
+     "E003-S01-0007",
+     "E003-S01-0009"
+    ]
+   },
+   "start_ms": 20300,
+   "start_timestamp": "00:20.30",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9926,
+     "boundary": 1.0,
+     "context": 1.0,
+     "duration": 0.515,
+     "ending": 0.0,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.625392,
+    "selection_reason": "fill_alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "cue:sound_fx",
+     "scene_start",
+     "sound_onset"
+    ]
+   },
+   "candidate_id": "C003-0023830-0044130",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 20300,
+   "end_ms": 44130,
+   "end_timestamp": "00:44.13",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 20300,
+     "end_ms": 44130,
+     "end_timestamp": "00:44.13",
+     "index": 0,
+     "start_ms": 23830,
+     "start_timestamp": "00:23.83"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S02-0015",
+     "E003-S02-0016",
+     "E003-S02-0017",
+     "E003-S02-0018"
+    ],
+    "opening_window": [
+     "E003-S02-0010",
+     "E003-S02-0011",
+     "E003-S02-0012"
+    ]
+   },
+   "start_ms": 23830,
+   "start_timestamp": "00:23.83",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": false,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9751,
+     "boundary": 1.0,
+     "context": 1.0,
+     "duration": 0.8155,
+     "ending": 0.35,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.740316,
+    "selection_reason": "fill_alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "cue:sound_fx",
+     "scene_start",
+     "sound_onset"
+    ]
+   },
+   "candidate_id": "C003-0023830-0050140",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 26310,
+   "end_ms": 50140,
+   "end_timestamp": "00:50.14",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 26310,
+     "end_ms": 50140,
+     "end_timestamp": "00:50.14",
+     "index": 0,
+     "start_ms": 23830,
+     "start_timestamp": "00:23.83"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S02-0019",
+     "E003-S02-0020",
+     "E003-S02-0021"
+    ],
+    "opening_window": [
+     "E003-S02-0010",
+     "E003-S02-0011",
+     "E003-S02-0012"
+    ]
+   },
+   "start_ms": 23830,
+   "start_timestamp": "00:23.83",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": false,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.933,
+     "boundary": 1.0,
+     "context": 1.0,
+     "duration": 1.0,
+     "ending": 0.7,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.839954,
+    "selection_reason": "best_in_region:2/3",
+    "start_anchors": [
+     "cue:sound_fx",
+     "scene_start",
+     "sound_onset"
+    ]
+   },
+   "candidate_id": "C003-0023830-0058470",
+   "coverage_alternative_of": null,
+   "coverage_rank": 1,
+   "duration_ms": 34640,
+   "end_ms": 58470,
+   "end_timestamp": "00:58.47",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 34640,
+     "end_ms": 58470,
+     "end_timestamp": "00:58.47",
+     "index": 0,
+     "start_ms": 23830,
+     "start_timestamp": "00:23.83"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0024",
+     "E003-S03-0025",
+     "E003-S03-0026"
+    ],
+    "opening_window": [
+     "E003-S02-0010",
+     "E003-S02-0011",
+     "E003-S02-0012"
+    ]
+   },
+   "start_ms": 23830,
+   "start_timestamp": "00:23.83",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": true
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9617,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 1.0,
+     "ending": 0.7,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.671752,
+    "selection_reason": "fill_alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "dialogue_onset"
+    ]
+   },
+   "candidate_id": "C003-0025980-0058470",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 32490,
+   "end_ms": 58470,
+   "end_timestamp": "00:58.47",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 32490,
+     "end_ms": 58470,
+     "end_timestamp": "00:58.47",
+     "index": 0,
+     "start_ms": 25980,
+     "start_timestamp": "00:25.98"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0024",
+     "E003-S03-0025",
+     "E003-S03-0026"
+    ],
+    "opening_window": [
+     "E003-S02-0011",
+     "E003-S02-0012"
+    ]
+   },
+   "start_ms": 25980,
+   "start_timestamp": "00:25.98",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": false,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9861,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.5285,
+     "ending": 0.35,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.615772,
+    "selection_reason": "fill_alternative_cut_of:C003-0023830-0058470",
+    "start_anchors": [
+     "action_onset"
+    ]
+   },
+   "candidate_id": "C003-0029570-0050140",
+   "coverage_alternative_of": "C003-0023830-0058470",
+   "coverage_rank": null,
+   "duration_ms": 20570,
+   "end_ms": 50140,
+   "end_timestamp": "00:50.14",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 20570,
+     "end_ms": 50140,
+     "end_timestamp": "00:50.14",
+     "index": 0,
+     "start_ms": 29570,
+     "start_timestamp": "00:29.57"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S02-0019",
+     "E003-S02-0020",
+     "E003-S02-0021"
+    ],
+    "opening_window": [
+     "E003-S02-0011",
+     "E003-S02-0013",
+     "E003-S02-0014"
+    ]
+   },
+   "start_ms": 29570,
+   "start_timestamp": "00:29.57",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": false,
+    "ends_at_episode_end": false,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9986,
+     "boundary": 0.55,
+     "context": 0.7,
+     "duration": 0.7535,
+     "ending": 0.45,
+     "opening": 0.4
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.590141,
+    "selection_reason": "alternative_cut_of:C003-0044130-0064740",
+    "start_anchors": [
+     "action_onset"
+    ]
+   },
+   "candidate_id": "C003-0039670-0064740",
+   "coverage_alternative_of": "C003-0044130-0064740",
+   "coverage_rank": null,
+   "duration_ms": 25070,
+   "end_ms": 64740,
+   "end_timestamp": "01:04.74",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 25070,
+     "end_ms": 64740,
+     "end_timestamp": "01:04.74",
+     "index": 0,
+     "start_ms": 39670,
+     "start_timestamp": "00:39.67"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0027",
+     "E003-S03-0028",
+     "E003-S03-0029",
+     "E003-S03-0030"
+    ],
+    "opening_window": [
+     "E003-S02-0015",
+     "E003-S02-0017",
+     "E003-S02-0018"
+    ]
+   },
+   "start_ms": 39670,
+   "start_timestamp": "00:39.67",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": false,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  },
+  {
+   "ai_alternative_of": null,
+   "ai_failure_reason": null,
+   "ai_rank": null,
+   "baseline": {
+    "components": {
+     "activity": 0.9852,
+     "boundary": 1.0,
+     "context": 0.7,
+     "duration": 0.5305,
+     "ending": 0.45,
+     "opening": 0.7
+    },
+    "end_anchors": [
+     "camera_cut",
+     "episode_end",
+     "scene_end",
+     "shot_end_after_line"
+    ],
+    "method": "heuristic_baseline_v1",
+    "priority": 0.70833,
+    "selection_reason": "best_in_region:3/3",
+    "start_anchors": [
+     "camera_cut"
+    ]
+   },
+   "candidate_id": "C003-0044130-0064740",
+   "coverage_alternative_of": null,
+   "coverage_rank": 7,
+   "duration_ms": 20610,
+   "end_ms": 64740,
+   "end_timestamp": "01:04.74",
+   "episode_number": 3,
+   "evaluation_status": "not_evaluated",
+   "segments": [
+    {
+     "duration_ms": 20610,
+     "end_ms": 64740,
+     "end_timestamp": "01:04.74",
+     "index": 0,
+     "start_ms": 44130,
+     "start_timestamp": "00:44.13"
+    }
+   ],
+   "source_events": {
+    "ending_window": [
+     "E003-S03-0027",
+     "E003-S03-0028",
+     "E003-S03-0029",
+     "E003-S03-0030"
+    ],
+    "opening_window": [
+     "E003-S02-0019",
+     "E003-S02-0020",
+     "E003-S02-0021"
+    ]
+   },
+   "start_ms": 44130,
+   "start_timestamp": "00:44.13",
+   "structural": {
+    "clean_end_cut": true,
+    "clean_start_cut": true,
+    "crosses_scene": true,
+    "ends_at_episode_end": true,
+    "ends_at_scene_end": true,
+    "starts_at_scene_start": false
+   }
+  }
+ ],
+ "coverage": {
+  "ai_evaluated": 0,
+  "cache": {
+   "cache_dir_present": false,
+   "entries_scanned": 0,
+   "invalid_on_revalidation": [],
+   "not_in_this_input": 0,
+   "other_profile_or_input": 0,
+   "source": "none",
+   "stale_prompt_version": 0,
+   "stale_prompt_versions_seen": [],
+   "used": 0
+  },
+  "candidate_coverage": 0.0,
+  "complete": false,
+  "episode_coverage": 0.0,
+  "episodes_with_ai": 0,
+  "episodes_without_ai": [
+   1,
+   2,
+   3
+  ],
+  "failed": 0,
+  "not_evaluated": 44,
+  "profile": {
+   "model": "openai/gpt-oss-120b",
+   "prompt_version": "promo-eval-v3",
+   "provider": "groq",
+   "reasoning_effort": "low",
+   "scoring_rules": "evidence-rules-v1"
+  },
+  "total_candidates": 44,
+  "total_episodes": 3
+ },
+ "episodes": [
+  {
+   "ai_evaluated_count": 0,
+   "best_ai_candidate_id": null,
+   "candidate_count": 12,
+   "continuity_notes": "Fictional sample written for PromoLens. Not derived from any real screenplay.",
+   "duration_ms": 73460,
+   "duration_timestamp": "01:13.46",
+   "episode_number": 1,
+   "event_range": [
+    0,
+    33
+   ],
+   "logline": "A lighthouse keeper hears a dead man's voice on the storm radio.",
+   "parse_warnings": 0,
+   "scenes": [
+    {
+     "end_ms": 30010,
+     "heading": "INT. LIGHTHOUSE LAMP ROOM \u2013 NIGHT",
+     "scene_number": 1,
+     "start_ms": 0
+    },
+    {
+     "end_ms": 53030,
+     "heading": "INT. LIGHTHOUSE STAIRS \u2013 NIGHT",
+     "scene_number": 2,
+     "start_ms": 30010
+    },
+    {
+     "end_ms": 73460,
+     "heading": "EXT. LIGHTHOUSE GALLERY \u2013 NIGHT",
+     "scene_number": 3,
+     "start_ms": 53030
+    }
+   ],
+   "source_name": "harbor-light-01.txt",
+   "top_coverage_candidate_id": "C001-0053030-0073460"
+  },
+  {
+   "ai_evaluated_count": 0,
+   "best_ai_candidate_id": null,
+   "candidate_count": 16,
+   "continuity_notes": "Fictional sample written for PromoLens. Not derived from any real screenplay.",
+   "duration_ms": 64650,
+   "duration_timestamp": "01:04.65",
+   "episode_number": 2,
+   "event_range": [
+    33,
+    62
+   ],
+   "logline": "A sealed letter suggests the harbor's wrecks were no accident.",
+   "parse_warnings": 0,
+   "scenes": [
+    {
+     "end_ms": 23030,
+     "heading": "INT. LIGHTHOUSE KITCHEN \u2013 NIGHT",
+     "scene_number": 1,
+     "start_ms": 0
+    },
+    {
+     "end_ms": 48810,
+     "heading": "EXT. HARBOR PIER \u2013 DAWN",
+     "scene_number": 2,
+     "start_ms": 23030
+    },
+    {
+     "end_ms": 64650,
+     "heading": "INT. HARBOR OFFICE \u2013 DAY",
+     "scene_number": 3,
+     "start_ms": 48810
+    }
+   ],
+   "source_name": "harbor-light-02.txt",
+   "top_coverage_candidate_id": "C002-0018770-0064650"
+  },
+  {
+   "ai_evaluated_count": 0,
+   "best_ai_candidate_id": null,
+   "candidate_count": 16,
+   "continuity_notes": "Fictional sample written for PromoLens. Not derived from any real screenplay.",
+   "duration_ms": 64740,
+   "duration_timestamp": "01:04.74",
+   "episode_number": 3,
+   "event_range": [
+    62,
+    93
+   ],
+   "logline": "Mara sets a trap in the dark lamp room as a ship drifts toward the reef.",
+   "parse_warnings": 0,
+   "scenes": [
+    {
+     "end_ms": 23830,
+     "heading": "INT. LIGHTHOUSE LAMP ROOM \u2013 DUSK",
+     "scene_number": 1,
+     "start_ms": 0
+    },
+    {
+     "end_ms": 50140,
+     "heading": "INT. LIGHTHOUSE STAIRS \u2013 NIGHT",
+     "scene_number": 2,
+     "start_ms": 23830
+    },
+    {
+     "end_ms": 64740,
+     "heading": "EXT. THE REEF \u2013 NIGHT",
+     "scene_number": 3,
+     "start_ms": 50140
+    }
+   ],
+   "source_name": "harbor-light-03.txt",
+   "top_coverage_candidate_id": "C003-0023830-0058470"
+  }
+ ],
+ "events": [
+  {
+   "annotations": [],
+   "end_ms": 5000,
+   "episode": 1,
+   "id": "E001-S01-0000",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 0,
+   "text": "Wide shot of the lamp room as the great lens turns slowly.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 3000,
+   "episode": 1,
+   "id": "E001-S01-0001",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 400,
+   "text": "Mara wipes salt spray from the glass with a rag.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [],
+   "end_ms": 4750,
+   "episode": 1,
+   "id": "E001-S01-0002",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 3250,
+   "text": "Thunder rolls across the bay.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [],
+   "end_ms": 9650,
+   "episode": 1,
+   "id": "E001-S01-0003",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 5000,
+   "text": "Close-up on Mara, exhausted, rain streaking the window behind her.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Tired"
+   ],
+   "end_ms": 9400,
+   "episode": 1,
+   "id": "E001-S01-0004",
+   "scene": 1,
+   "speaker": "MARA",
+   "start_ms": 5400,
+   "text": "\"Third storm this week. The lens won't last the winter.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 25750,
+   "episode": 1,
+   "id": "E001-S01-0005",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 9650,
+   "text": "Insert on the desk radio as its dial light flickers.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 11550,
+   "episode": 1,
+   "id": "E001-S01-0006",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 10050,
+   "text": "Static, then a faint voice breaking through.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [
+    "O.S., Distorted"
+   ],
+   "end_ms": 16460,
+   "episode": 1,
+   "id": "E001-S01-0007",
+   "scene": 1,
+   "speaker": "VOICE ON RADIO",
+   "start_ms": 11800,
+   "text": "\"Harbor Light, do you read? A boat is coming in without lights.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 19310,
+   "episode": 1,
+   "id": "E001-S01-0008",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 16710,
+   "text": "Mara snatches up the radio handset.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [
+    "Urgent"
+   ],
+   "end_ms": 22240,
+   "episode": 1,
+   "id": "E001-S01-0009",
+   "scene": 1,
+   "speaker": "MARA",
+   "start_ms": 19560,
+   "text": "\"Who is this? Identify your vessel.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [
+    "O.S."
+   ],
+   "end_ms": 25500,
+   "episode": 1,
+   "id": "E001-S01-0010",
+   "scene": 1,
+   "speaker": "VOICE ON RADIO",
+   "start_ms": 22490,
+   "text": "\"Tell Mara her brother is on board.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 30010,
+   "episode": 1,
+   "id": "E001-S01-0011",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 25750,
+   "text": "Extreme close-up on Mara's face, frozen.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Whispering"
+   ],
+   "end_ms": 29160,
+   "episode": 1,
+   "id": "E001-S01-0012",
+   "scene": 1,
+   "speaker": "MARA",
+   "start_ms": 26150,
+   "text": "\"Elias has been dead for six years.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 35010,
+   "episode": 1,
+   "id": "E001-S02-0013",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 30010,
+   "text": "Tracking shot as Mara runs down the spiral stairs.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 33010,
+   "episode": 1,
+   "id": "E001-S02-0014",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 30410,
+   "text": "Her lantern swings wildly against the stone walls.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [],
+   "end_ms": 34760,
+   "episode": 1,
+   "id": "E001-S02-0015",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 33260,
+   "text": "A heavy knock on the iron door below.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [],
+   "end_ms": 43790,
+   "episode": 1,
+   "id": "E001-S02-0016",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 35010,
+   "text": "Low angle on the door as rainwater pours beneath it.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Breathless"
+   ],
+   "end_ms": 36770,
+   "episode": 1,
+   "id": "E001-S02-0017",
+   "scene": 2,
+   "speaker": "MARA",
+   "start_ms": 35410,
+   "text": "\"Who's there?\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [
+    "O.S., Hoarse"
+   ],
+   "end_ms": 40690,
+   "episode": 1,
+   "id": "E001-S02-0018",
+   "scene": 2,
+   "speaker": "ELIAS",
+   "start_ms": 37020,
+   "text": "\"You kept the light burning. I knew you would.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 43540,
+   "episode": 1,
+   "id": "E001-S02-0019",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 40940,
+   "text": "Mara slides the bolt back with shaking hands.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [],
+   "end_ms": 49760,
+   "episode": 1,
+   "id": "E001-S02-0020",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 43790,
+   "text": "The door swings open on a soaked man holding a sealed envelope.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Quiet"
+   ],
+   "end_ms": 49510,
+   "episode": 1,
+   "id": "E001-S02-0021",
+   "scene": 2,
+   "speaker": "ELIAS",
+   "start_ms": 44190,
+   "text": "\"This was never meant for you. But you have to read it before dawn.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 53030,
+   "episode": 1,
+   "id": "E001-S02-0022",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 49760,
+   "text": "Close-up on the wax seal, pressed with the harbor master's crest.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Stunned"
+   ],
+   "end_ms": 52180,
+   "episode": 1,
+   "id": "E001-S02-0023",
+   "scene": 2,
+   "speaker": "MARA",
+   "start_ms": 50160,
+   "text": "\"That's Captain Rhee's seal.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 62800,
+   "episode": 1,
+   "id": "E001-S03-0024",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 53030,
+   "text": "Mara and Elias on the gallery as the storm begins to ease.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Shaken"
+   ],
+   "end_ms": 56440,
+   "episode": 1,
+   "id": "E001-S03-0025",
+   "scene": 3,
+   "speaker": "MARA",
+   "start_ms": 53430,
+   "text": "\"Where have you been all this time?\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [
+    "Evasive"
+   ],
+   "end_ms": 59700,
+   "episode": 1,
+   "id": "E001-S03-0026",
+   "scene": 3,
+   "speaker": "ELIAS",
+   "start_ms": 56690,
+   "text": "\"On the boats Rhee said were lost.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 62550,
+   "episode": 1,
+   "id": "E001-S03-0027",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 59950,
+   "text": "Elias rolls up his sleeve to show a rope-burn scar.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [],
+   "end_ms": 68870,
+   "episode": 1,
+   "id": "E001-S03-0028",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 62800,
+   "text": "Close-up on the scar, pale against his wet skin.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Low"
+   ],
+   "end_ms": 66870,
+   "episode": 1,
+   "id": "E001-S03-0029",
+   "scene": 3,
+   "speaker": "ELIAS",
+   "start_ms": 63200,
+   "text": "\"He keeps the crews quiet. One way or another.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 68620,
+   "episode": 1,
+   "id": "E001-S03-0030",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 67120,
+   "text": "A distant engine coughs out on the water.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [],
+   "end_ms": 73460,
+   "episode": 1,
+   "id": "E001-S03-0031",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 68870,
+   "text": "Mara turns toward the dark bay.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Alarmed"
+   ],
+   "end_ms": 72610,
+   "episode": 1,
+   "id": "E001-S03-0032",
+   "scene": 3,
+   "speaker": "MARA",
+   "start_ms": 69270,
+   "text": "\"Someone's out there right now. With no lights.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 11520,
+   "episode": 2,
+   "id": "E002-S01-0000",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 0,
+   "text": "Elias drips by the stove while Mara keeps the table between them.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Cold"
+   ],
+   "end_ms": 2750,
+   "episode": 2,
+   "id": "E002-S01-0001",
+   "scene": 1,
+   "speaker": "MARA",
+   "start_ms": 400,
+   "text": "\"Six years. Not one word.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [
+    "Defensive"
+   ],
+   "end_ms": 6670,
+   "episode": 2,
+   "id": "E002-S01-0002",
+   "scene": 1,
+   "speaker": "ELIAS",
+   "start_ms": 3000,
+   "text": "\"Rhee told everyone I drowned. It kept me alive.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 9520,
+   "episode": 2,
+   "id": "E002-S01-0003",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 6920,
+   "text": "Mara breaks the wax seal with her thumb.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [],
+   "end_ms": 11270,
+   "episode": 2,
+   "id": "E002-S01-0004",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 9770,
+   "text": "Paper tears.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [],
+   "end_ms": 18770,
+   "episode": 2,
+   "id": "E002-S01-0005",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 11520,
+   "text": "Insert on the letter: a column of ship names and dates.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Reading, Confused"
+   ],
+   "end_ms": 15260,
+   "episode": 2,
+   "id": "E002-S01-0006",
+   "scene": 1,
+   "speaker": "MARA",
+   "start_ms": 11920,
+   "text": "\"These are the boats lost on the reef.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [
+    "Grim"
+   ],
+   "end_ms": 18520,
+   "episode": 2,
+   "id": "E002-S01-0007",
+   "scene": 1,
+   "speaker": "ELIAS",
+   "start_ms": 15510,
+   "text": "\"They weren't lost. They were steered there.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 23030,
+   "episode": 2,
+   "id": "E002-S01-0008",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 18770,
+   "text": "Mara looks up at the lens turning in the dark above them.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Realising"
+   ],
+   "end_ms": 22180,
+   "episode": 2,
+   "id": "E002-S01-0009",
+   "scene": 1,
+   "speaker": "MARA",
+   "start_ms": 19170,
+   "text": "\"Someone dimmed the light on those nights.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 34120,
+   "episode": 2,
+   "id": "E002-S02-0010",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 23030,
+   "text": "Wide shot of the empty pier in grey morning light.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 26030,
+   "episode": 2,
+   "id": "E002-S02-0011",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 23430,
+   "text": "Captain Rhee walks the boards with his collar turned up.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [
+    "Friendly"
+   ],
+   "end_ms": 29290,
+   "episode": 2,
+   "id": "E002-S02-0012",
+   "scene": 2,
+   "speaker": "RHEE",
+   "start_ms": 26280,
+   "text": "\"Mara. You look like you haven't slept.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [
+    "Guarded"
+   ],
+   "end_ms": 33870,
+   "episode": 2,
+   "id": "E002-S02-0013",
+   "scene": 2,
+   "speaker": "MARA",
+   "start_ms": 29540,
+   "text": "\"The radio kept me up. A boat came in without lights.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 44880,
+   "episode": 2,
+   "id": "E002-S02-0014",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 34120,
+   "text": "Close-up on Rhee's hand tightening around his cane.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Too Calm"
+   ],
+   "end_ms": 38190,
+   "episode": 2,
+   "id": "E002-S02-0015",
+   "scene": 2,
+   "speaker": "RHEE",
+   "start_ms": 34520,
+   "text": "\"No boat came in last night. I'd have known.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 41040,
+   "episode": 2,
+   "id": "E002-S02-0016",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 38440,
+   "text": "Mara steps back toward the lighthouse path.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [
+    "Soft, Threatening"
+   ],
+   "end_ms": 44630,
+   "episode": 2,
+   "id": "E002-S02-0017",
+   "scene": 2,
+   "speaker": "RHEE",
+   "start_ms": 41290,
+   "text": "\"Whatever you found, burn it. For Elias's sake.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 48810,
+   "episode": 2,
+   "id": "E002-S02-0018",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 44880,
+   "text": "Extreme close-up on Mara as the gulls go quiet.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Whispering"
+   ],
+   "end_ms": 47960,
+   "episode": 2,
+   "id": "E002-S02-0019",
+   "scene": 2,
+   "speaker": "MARA",
+   "start_ms": 45280,
+   "text": "\"How do you know about Elias?\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 55980,
+   "episode": 2,
+   "id": "E002-S03-0020",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 48810,
+   "text": "Rhee's office, sea charts pinned to every wall.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 51810,
+   "episode": 2,
+   "id": "E002-S03-0021",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 49210,
+   "text": "Mara slips through the unlocked door and closes it softly.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [
+    "Whispering, To Herself"
+   ],
+   "end_ms": 55730,
+   "episode": 2,
+   "id": "E002-S03-0022",
+   "scene": 3,
+   "speaker": "MARA",
+   "start_ms": 52060,
+   "text": "\"A chart for every night a boat went down.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 60980,
+   "episode": 2,
+   "id": "E002-S03-0023",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 55980,
+   "text": "Insert on a chart: the reef circled in red ink.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 57880,
+   "episode": 2,
+   "id": "E002-S03-0024",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 56380,
+   "text": "Footsteps climb the wooden stairs outside.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [],
+   "end_ms": 60730,
+   "episode": 2,
+   "id": "E002-S03-0025",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 58130,
+   "text": "Mara folds the chart into her coat.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [],
+   "end_ms": 63650,
+   "episode": 2,
+   "id": "E002-S03-0026",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 60980,
+   "text": "The brass door handle begins to turn.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "O.S., Sharp"
+   ],
+   "end_ms": 63400,
+   "episode": 2,
+   "id": "E002-S03-0027",
+   "scene": 3,
+   "speaker": "RHEE",
+   "start_ms": 61380,
+   "text": "\"Who's in my office?\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 64650,
+   "episode": 2,
+   "id": "E002-S03-0028",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 63650,
+   "text": "Mara presses herself flat behind the door.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 13500,
+   "episode": 3,
+   "id": "E003-S01-0000",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 0,
+   "text": "Mara and Elias spread the letter beside the lamp controls.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Urgent"
+   ],
+   "end_ms": 4730,
+   "episode": 3,
+   "id": "E003-S01-0001",
+   "scene": 1,
+   "speaker": "ELIAS",
+   "start_ms": 400,
+   "text": "\"He'll come tonight. He still has a key to this room.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 7580,
+   "episode": 3,
+   "id": "E003-S01-0002",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 4980,
+   "text": "Mara wires a small brass bell to the trapdoor hinge.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [],
+   "end_ms": 9330,
+   "episode": 3,
+   "id": "E003-S01-0003",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 7830,
+   "text": "Wind howls through the iron gallery.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [
+    "Determined"
+   ],
+   "end_ms": 13250,
+   "episode": 3,
+   "id": "E003-S01-0004",
+   "scene": 1,
+   "speaker": "MARA",
+   "start_ms": 9580,
+   "text": "\"Then we let him think the light is his.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 15650,
+   "episode": 3,
+   "id": "E003-S01-0005",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 13500,
+   "text": "The lens slows as Mara pulls the main power lever.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 15400,
+   "episode": 3,
+   "id": "E003-S01-0006",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 13900,
+   "text": "The motor winds down into silence.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [],
+   "end_ms": 23830,
+   "episode": 3,
+   "id": "E003-S01-0007",
+   "scene": 1,
+   "speaker": null,
+   "start_ms": 15650,
+   "text": "Darkness. Only Elias's lantern glows.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Uneasy"
+   ],
+   "end_ms": 20050,
+   "episode": 3,
+   "id": "E003-S01-0008",
+   "scene": 1,
+   "speaker": "ELIAS",
+   "start_ms": 16050,
+   "text": "\"If a boat is out there, we just blinded it.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [
+    "Firm"
+   ],
+   "end_ms": 22980,
+   "episode": 3,
+   "id": "E003-S01-0009",
+   "scene": 1,
+   "speaker": "MARA",
+   "start_ms": 20300,
+   "text": "\"Two minutes. That's all we need.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 25330,
+   "episode": 3,
+   "id": "E003-S02-0010",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 23830,
+   "text": "The trapdoor bell rings once.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [],
+   "end_ms": 37000,
+   "episode": 3,
+   "id": "E003-S02-0011",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 25580,
+   "text": "Low angle as a figure climbs the stairs behind a lantern.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "O.S., Calling"
+   ],
+   "end_ms": 29320,
+   "episode": 3,
+   "id": "E003-S02-0012",
+   "scene": 2,
+   "speaker": "RHEE",
+   "start_ms": 25980,
+   "text": "\"Mara? The light's gone out. Let me help.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 32170,
+   "episode": 3,
+   "id": "E003-S02-0013",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 29570,
+   "text": "Mara steps into the lantern light, holding the letter.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [
+    "Steady"
+   ],
+   "end_ms": 36750,
+   "episode": 3,
+   "id": "E003-S02-0014",
+   "scene": 2,
+   "speaker": "MARA",
+   "start_ms": 32420,
+   "text": "\"Help the way you helped the Seabird? And the Northern Star?\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 44130,
+   "episode": 3,
+   "id": "E003-S02-0015",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 37000,
+   "text": "Rhee's face hardens.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Cold"
+   ],
+   "end_ms": 39420,
+   "episode": 3,
+   "id": "E003-S02-0016",
+   "scene": 2,
+   "speaker": "RHEE",
+   "start_ms": 37400,
+   "text": "\"Give me the letter.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 42270,
+   "episode": 3,
+   "id": "E003-S02-0017",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 39670,
+   "text": "Elias steps out of the shadows behind him.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [
+    "Quiet"
+   ],
+   "end_ms": 43880,
+   "episode": 3,
+   "id": "E003-S02-0018",
+   "scene": 2,
+   "speaker": "ELIAS",
+   "start_ms": 42520,
+   "text": "\"Hello, Captain.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 50140,
+   "episode": 3,
+   "id": "E003-S02-0019",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 44130,
+   "text": "Extreme close-up on Rhee as the lens flickers back to life.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 46030,
+   "episode": 3,
+   "id": "E003-S02-0020",
+   "scene": 2,
+   "speaker": null,
+   "start_ms": 44530,
+   "text": "A ship's horn blares close to the rocks.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [
+    "Alarmed"
+   ],
+   "end_ms": 49290,
+   "episode": 3,
+   "id": "E003-S02-0021",
+   "scene": 2,
+   "speaker": "MARA",
+   "start_ms": 46280,
+   "text": "\"That's a boat. Right on the reef.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 52290,
+   "episode": 3,
+   "id": "E003-S03-0022",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 50140,
+   "text": "A fishing boat drifts toward the rocks, its deck lamps dark.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 52040,
+   "episode": 3,
+   "id": "E003-S03-0023",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 50540,
+   "text": "Waves crash against the hull.",
+   "type": "SOUND_FX"
+  },
+  {
+   "annotations": [],
+   "end_ms": 58470,
+   "episode": 3,
+   "id": "E003-S03-0024",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 52290,
+   "text": "The lighthouse beam sweeps back across the water.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [],
+   "end_ms": 55290,
+   "episode": 3,
+   "id": "E003-S03-0025",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 52690,
+   "text": "The crew scramble to haul the wheel around.",
+   "type": "ACTION"
+  },
+  {
+   "annotations": [
+    "Shouting"
+   ],
+   "end_ms": 58220,
+   "episode": 3,
+   "id": "E003-S03-0026",
+   "scene": 3,
+   "speaker": "CREW MEMBER",
+   "start_ms": 55540,
+   "text": "\"Hard to port! The light's back!\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 60810,
+   "episode": 3,
+   "id": "E003-S03-0027",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 58470,
+   "text": "Wide shot as the boat slides past the reef with a metre to spare.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "O.S., Exhausted"
+   ],
+   "end_ms": 60560,
+   "episode": 3,
+   "id": "E003-S03-0028",
+   "scene": 3,
+   "speaker": "ELIAS",
+   "start_ms": 58870,
+   "text": "\"We made it.\"",
+   "type": "DIALOGUE"
+  },
+  {
+   "annotations": [],
+   "end_ms": 64740,
+   "episode": 3,
+   "id": "E003-S03-0029",
+   "scene": 3,
+   "speaker": null,
+   "start_ms": 60810,
+   "text": "Mara watches from the gallery, the letter still in her hand.",
+   "type": "CAMERA"
+  },
+  {
+   "annotations": [
+    "Quiet"
+   ],
+   "end_ms": 63890,
+   "episode": 3,
+   "id": "E003-S03-0030",
+   "scene": 3,
+   "speaker": "MARA",
+   "start_ms": 61210,
+   "text": "\"Not all of them. Not yet.\"",
+   "type": "DIALOGUE"
+  }
+ ],
+ "notes": [
+  "AI scores (ai_weighted_v1, 0-100) and heuristic priorities (heuristic_priority_v1, 0-1) are separate scoring systems; never rank them together.",
+  "Only candidates listed in ai_evaluations have AI judgements; nothing is synthesized.",
+  "This analysis made no model API calls. The uploaded file is processed by the hosting platform for this request and is not stored by PromoLens.",
+  "Times are milliseconds from episode start; clips are half-open [start, end)."
+ ],
+ "schema_version": "promolens-analysis-v1",
+ "summary": {
+  "ai_source": "none",
+  "analyzed_at": "2026-11-10T00:00:00+00:00",
+  "candidates": 44,
+  "episodes": 3,
+  "events": 93,
+  "input": {
+   "files": 3,
+   "kind": "files",
+   "name": "upload",
+   "sha256": "7328e713cc1c78e5b7f302d3b3e89fcc0c1211fa587c631988df705f6ddddec6",
+   "size_bytes": 10973
+  },
+  "live_ai_calls": 0,
+  "parse": {
+   "errors": 0,
+   "excluded_sources": [],
+   "info": 0,
+   "issue_codes": {},
+   "warnings": 0
+  },
+  "scenes": 9,
+  "timings_ms": {
+   "ai_cache_lookup": 0,
+   "candidates": 66,
+   "parse": 6,
+   "total": 72
+  },
+  "versions": {
+   "baseline": "heuristic_baseline_v1",
+   "promolens": "0.0.1",
+   "prompt": "promo-eval-v3",
+   "ranking": "ranking-v1",
+   "scoring_rules": "evidence-rules-v1"
+  }
+ },
+ "views": {
+  "ai": {
+   "label": "AI-reviewed recommendation (provisional: 0 of 44 candidates reviewed)",
+   "order": [],
+   "primaries": 0,
+   "provisional": true,
+   "provisional_reason": "AI evaluated 0 of 44 candidates in 0 of 3 episodes; rankings can change as coverage grows.",
+   "score_scale_max": 100.0,
+   "scoring_system": "ai_weighted_v1",
+   "view": "ai"
+  },
+  "coverage": {
+   "label": "Unverified candidate suggestion (heuristic baseline, not AI-reviewed)",
+   "order": [
+    "C003-0023830-0058470",
+    "C003-0013500-0058470",
+    "C003-0013500-0060810",
+    "C003-0023830-0050140",
+    "C003-0015650-0058470",
+    "C003-0013500-0064740",
+    "C003-0025980-0058470",
+    "C003-0020300-0058470",
+    "C003-0020300-0060810",
+    "C003-0023830-0044130",
+    "C003-0029570-0050140",
+    "C001-0053030-0073460",
+    "C001-0049760-0073460",
+    "C001-0025750-0073460",
+    "C001-0009650-0037020",
+    "C001-0000000-0056690",
+    "C001-0011800-0037020",
+    "C001-0016710-0037020",
+    "C001-0033260-0056690",
+    "C001-0035410-0056690",
+    "C002-0018770-0064650",
+    "C002-0009770-0064650",
+    "C002-0006920-0064650",
+    "C002-0015510-0064650",
+    "C002-0011920-0064650",
+    "C002-0026280-0048810",
+    "C002-0041290-0063650",
+    "C002-0029540-0052060",
+    "C003-0000000-0037000",
+    "C003-0007830-0037000",
+    "C003-0004980-0037000",
+    "C003-0044130-0064740",
+    "C003-0039670-0064740",
+    "C002-0000000-0034120",
+    "C002-0006920-0034120",
+    "C002-0009770-0034120",
+    "C002-0000000-0029540",
+    "C002-0000000-0023030",
+    "C002-0003000-0034120",
+    "C002-0011920-0034120",
+    "C002-0003000-0023030",
+    "C001-0000000-0025750",
+    "C001-0003250-0025750",
+    "C001-0022490-0049760"
+   ],
+   "primaries": 10,
+   "provisional": false,
+   "provisional_reason": null,
+   "score_scale_max": 1.0,
+   "scoring_system": "heuristic_priority_v1",
+   "view": "coverage"
+  }
+ }
+}

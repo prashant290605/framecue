@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/* PromoLens design tokens: warm paper surfaces, charcoal ink, one amber accent. */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+
+  --color-paper: #faf8f5;
+  --color-surface: #ffffff;
+  --color-sunken: #f4f1ec;
+  --color-line: #e8e3db;
+  --color-line-strong: #d9d2c7;
+  --color-ink: #1f1d1a;
+  --color-ink-soft: #3d3934;
+  --color-muted: #6b655d;
+  --color-faint: #958e84;
+
+  --color-amber-ink: #8f5a0b; /* text on white: 5.6:1 */
+  --color-amber: #c98a1e;
+  --color-amber-soft: #f6ead3;
+  --color-amber-wash: #fbf4e6;
+
+  --color-ok: #2f6f4b;
+  --color-ok-soft: #e3efe7;
+  --color-no: #a2392d;
+  --color-no-soft: #f6e3e0;
+
+  /* Event lanes: restrained, distinguishable tones. */
+  --color-ev-dialogue: #3b4656;
+  --color-ev-camera: #c9c1b5;
+  --color-ev-action: #8b7a63;
+  --color-ev-sound: #9b8fa8;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-card: 0 1px 2px rgb(31 29 26 / 0.04), 0 1px 1px rgb(31 29 26 / 0.03);
+  --shadow-pop: 0 8px 28px -8px rgb(31 29 26 / 0.18), 0 2px 6px rgb(31 29 26 / 0.06);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-paper font-sans text-[14px] leading-[1.5] text-ink;
+    font-feature-settings: "cv11", "ss01";
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--color-amber-soft);
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
