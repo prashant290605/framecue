@@ -112,7 +112,11 @@ describe("IndexedDB persistence", () => {
     const restored = await loadAnalysis();
     expect(restored?.meta.fileName).toBe("kept.zip");
     expect(restored?.reviews.z).toMatchObject({ decision: "later", note: "kept" });
-    expect((await indexedDB.databases()).map((d) => d.name)).not.toContain("earlier-name");
+    // the earlier database is left untouched, and the copy happens only once
+    expect((await indexedDB.databases()).map((d) => d.name)).toContain("earlier-name");
+    await deleteAnalysis(key);
+    resetConnectionForTests(); // reload
+    expect(await listAnalyses()).toEqual([]);
   });
 
   it("adopts a single-analysis (v1) database saved under an earlier name", async () => {

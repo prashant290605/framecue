@@ -1,4 +1,4 @@
-import { deleteDB, openDB, type DBSchema, type IDBPDatabase } from "idb";
+import { openDB, type DBSchema, type IDBPDatabase } from "idb";
 import type { AnalysisDocument, ViewName } from "@/api/types";
 import type { Decision, Filters, Reviews } from "./doc-index";
 import { validateDocument } from "./validate";
@@ -14,7 +14,7 @@ import { validateDocument } from "./validate";
  *
  * v1 kept a single analysis under the key "current"; upgrading moves it into the library
  * with its decisions intact. Work saved under an earlier database name on the same site is
- * moved into this database the first time it opens empty (see adoptEarlier).
+ * copied into this database the first time it opens empty (see adoptEarlier).
  *
  * Every failure is converted into a StorageError with a user-facing reason; callers keep the
  * analysis in memory and show the limitation instead of crashing.
@@ -158,10 +158,18 @@ function db(): Promise<IDBPDatabase<AppDB>> {
   return dbPromise;
 }
 
-/** Move saved work from an earlier database name on this site into this one, once: when
- *  this database is still empty and another database here has the same stores. */
+const ADOPTED = "adopted";
+
+/** Copy saved work from an earlier database name on this site into this one, once, when
+ *  this database starts empty. The earlier database is only read, never changed, so an
+ *  interrupted copy loses nothing; the marker stops deleted analyses from coming back. */
 async function adoptEarlier(target: IDBPDatabase<AppDB>): Promise<void> {
-  if (typeof indexedDB.databases !== "function" || (await target.count("library")) > 0) return;
+  if (typeof indexedDB.databases !== "function" || (await target.get("app", ADOPTED))) return;
+  if ((await target.count("library")) > 0) {
+    await target.put("app", "existing", ADOPTED);
+    return;
+  }
+  const copied: string[] = [];
   const names = (await indexedDB.databases())
     .map((d) => d.name)
     .filter((n): n is string => Boolean(n) && n !== DB_NAME);
@@ -190,17 +198,18 @@ async function adoptEarlier(target: IDBPDatabase<AppDB>): Promise<void> {
       const meta = withSummary(stored.meta, stored.doc);
       void tx.objectStore("analysis").put({ meta, doc: stored.doc }, meta.key);
       if (key === "current") {
-        // a v1 database: list its single analysis and reopen it after a refresh
+        // an earlier single-analysis database: list it and reopen it after a refresh
         void tx.objectStore("library").put(meta, meta.key);
         void tx.objectStore("app").put(meta.key, "last");
       }
     }
     for (const [key, value] of library) void tx.objectStore("library").put(value as AnalysisMeta, key);
     for (const [, value] of reviews) void tx.objectStore("review").put(value as StoredReview);
-    for (const [key, value] of app) if (typeof value === "string") void tx.objectStore("app").put(value, key);
+    for (const [key, value] of app) if (key !== ADOPTED && typeof value === "string") void tx.objectStore("app").put(value, key);
     await tx.done;
-    void deleteDB(name).catch(() => undefined);
+    copied.push(name);
   }
+  await target.put("app", copied.join(",") || "none", ADOPTED);
 }
 
 async function run<T>(work: (d: IDBPDatabase<AppDB>) => Promise<T>): Promise<T> {
