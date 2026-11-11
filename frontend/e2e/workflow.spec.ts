@@ -26,6 +26,9 @@ test.describe("desktop workflow", () => {
     await expect(page).toHaveURL(/\/review$/);
     await expect(page.getByRole("status")).toHaveText(/^\s*Saved$/);
 
+    // when the sample has published AI reviews, use the full show for the CSV checks below
+    const fullShow = page.getByRole("tab", { name: /Full show/ });
+    if (await fullShow.count()) await fullShow.click();
     const rows = page.getByRole("option");
     await expect(rows.first()).toBeVisible();
     await rows.nth(1).click();

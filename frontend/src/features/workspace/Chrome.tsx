@@ -467,11 +467,13 @@ export function SampleAiNote({ className }: { className?: string }) {
   const first = state.index ? Object.values(state.index.ai)[0] : undefined;
   const model = first?.model_reported ?? first?.model_requested ?? state.doc?.coverage.profile.model ?? "the model";
   const provider = first?.provider ?? state.doc?.coverage.profile.provider ?? "";
+  const cov = state.doc?.coverage;
   return (
     <span className={cn("block text-[12.5px] leading-relaxed text-muted", className)}>
       Genuine reviews by <span className="font-semibold text-ink-soft">{model}</span>
-      {provider ? ` via ${provider === "groq" ? "Groq (free tier)" : provider}` : ""}, generated offline for this fictional
-      sample. The site itself never calls a model.
+      {provider ? ` via ${provider === "groq" ? "Groq (free tier)" : provider}` : ""}
+      {cov ? ` for ${cov.ai_evaluated} of ${cov.total_candidates} candidates` : ""}, made offline for this
+      fictional sample.
     </span>
   );
 }

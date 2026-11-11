@@ -1046,6 +1046,12 @@ When no bundle was supplied, the popover now says so.
 - **Backup:** "Back up all" exports every analysis with decisions and notes
   (`framecue-backup-v1`); Import adds the ones not already saved.
 
+**Fictional sample with genuine AI reviews.** `frontend/public/sample/harbor-light.ai-bundle.json`
+holds 9 real Groq reviews (`openai/gpt-oss-120b`, prompt `promo-eval-v3`), 3 per episode.
+`sample/manifest.json` names it, so the page requests it only when it is published. The
+server re-validates each entry like any uploaded bundle; the sample opens on the AI-reviewed
+view with a label naming the model and the coverage (9 of 44).
+
 **Icons.** The favicon reuses the logo paths and colours, cropped to the mark, with a light
 variant for dark tab bars. PNG icons (180, 192, 512) and a 16/32/48 px ICO are rendered from
 the same paths in Edge; `site.webmanifest` lists them.

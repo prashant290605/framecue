@@ -77,7 +77,7 @@ describe("upload", () => {
     const sent = calls.find((c) => c.url === "/api/analyze")!.init!.body as FormData;
     expect((sent.get("ai_bundle") as File).name).toBe("harbor-light.ai-bundle.json");
     expect(screen.getByRole("tab", { name: /AI-reviewed/ })).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByText(/Genuine reviews by/)).toHaveTextContent(/generated offline for this fictional sample/);
+    expect(screen.getByText(/Genuine reviews by/)).toHaveTextContent(/candidates, made offline for this fictional sample/);
   });
 });
 

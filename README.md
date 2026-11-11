@@ -15,7 +15,7 @@ timestamps, ranks them, and gives an editor a workspace to review, annotate and 
 shortlist. It is meant for promo editors and marketing teams; the output is a starting point
 for editorial judgement, not a replacement for it.
 
-![FrameCue workspace with the fictional sample: ranked clips on the left, the selected clip's score, screenplay map and script on the right](docs/screenshot.png)
+![FrameCue workspace with the fictional sample: AI-reviewed clips on the left, the selected clip's AI score, judgement and screenplay map on the right](docs/screenshot.png)
 
 ## Features
 
@@ -118,8 +118,10 @@ cd frontend && npm run dev
 review is not available.
 
 **Try the sample.** Choose **Try the fictional sample**. It runs an invented three-episode
-story through the real API, together with any AI reviews published for it in
-`frontend/public/sample/`.
+story through the real API together with genuine AI reviews of 9 of its 44 candidates
+(`openai/gpt-oss-120b` on GroqCloud's free plan, made offline and published in
+`frontend/public/sample/`). The server re-validates them against the sample like any other
+uploaded bundle.
 
 **Add AI reviews.**
 
@@ -210,8 +212,8 @@ seconds from India.
 ## Limitations
 
 - **Partial AI coverage.** AI reviews exist only where the free quota allowed: 41 of the 788
-  candidates in the 50-episode assignment pack. The AI ranking is provisional, and the rest
-  are ranked by structure only.
+  candidates in the 50-episode assignment pack and 9 of the 44 in the fictional sample. The
+  AI ranking is provisional, and the rest are ranked by structure only.
 - **AI judgements are estimates.** Scores come from one model and were checked by rubric
   review, not by human labels or viewer data. Evidence IDs are validated; the wording of
   explanations is not.

@@ -619,9 +619,12 @@ added the `framecue-app.vercel.app` domain; rewrote the README; checked commit a
 - **Optional bundle request.** Fetching the sample's AI bundle when none was published logged
   a 404 and failed two end-to-end tests. The page now reads an always-published
   `sample/manifest.json` and requests a bundle only when it is listed.
-- **Free quota.** The sample's genuine AI reviews were not generated during this pass: the
-  local ledger for the UTC day was already past its budget, and no reviews were invented or
-  reused from an older prompt version (16 older reviews exist but the server rejects them as
-  stale).
+- **Free quota.** The sample's AI reviews waited for the next UTC day: the local ledger was
+  past its budget, and nothing was invented or reused from an older prompt version (16 older
+  reviews exist but the server rejects them as stale). On 2026-11-11 at 00:05 UTC a live run
+  reviewed 9 sample candidates (3 per episode) with `openai/gpt-oss-120b` on the Groq free
+  plan: 3 requests, 0 retries, 0 validation failures, 13,063 tokens, no cost. The exported
+  bundle holds only those 9 entries, and a test re-validates every one against the sample
+  through the server before release.
 - **Status regex.** An end-to-end check expected "Saved" exactly; the element text has a
   leading space from its icon, so the check now allows it.
